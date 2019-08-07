@@ -53,8 +53,8 @@ We are going to consider a sequential point of view for the disjointness problem
 \subsection{Related Work}
 \section{Preliminaries}
 \subsection{Notations}
-We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input.
-Let us define the following sets: $A_0 = [n]$, for $i \in [k]$ : $A_i = \cap^{i}_{j=1}X_j$. Using this notation, disjointness problem is whether $A_k = \emptyset$ or not. 
+We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
+Let us define the following sets: $A_0 := [n]$, for $i \in [k]$ : $A_i := \cap^{i}_{j=1}X_j ( = A_{i-1} \cap X_i)$. Using this notation, disjointness problem is whether $A_k = \emptyset$ or not. 
 \subsection{Properties}
 \begin{claim}
 Let $i \in [k]$ be the minimal index such that $\frac{|A_{i}|}{|A_{i-1}|} < \frac{1}{n^{1/k}}$. We assume such one exists and name it "the critical index". So for every $j < i$, $|A_j| \geq n^{1-\frac{j}{k}}$
@@ -73,6 +73,8 @@ Let us assume that $\forall_{i\in[k]} \frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{\
  $ |A_k| \geq 1$ in contradiction to the assumption that the sets are disjoint.
 \end{proof}
 \section{$O(kn^{1-1/k})$ Protocol}
+\subsection{Properties of Our Protocol}
+Our protocol is using random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-1/k})$ bits of communication between the players.
 \subsection{The Protocol}
 Our protocol is divided into rounds. In each round we find out some zeros of some player and then we ignore these indexes from now on and make our universe smaller. \newline
 Every round works like this: \newline
@@ -101,10 +103,10 @@ $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\fra
 Let us define $m : = |A_i|$ for the chosen $A_i$ for the specific round.
 We know that $|A_{i-1}| \geq |A_i| \cdot n^{1/k}$. In this round we discovered that $A_{i-1} \setminus A_i$ are zeros for player i. Pay attention $|A_{i-1} \setminus A_i| \overset{(1)}{=} |A_{i-1}| - |A_i| \geq |A_i|(n^{1/k} - 1) = m(n^{1/k} - 1)$ \newline
 So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + m$ and we discovered at least $m(n^{1/k} - 1)$ zeros. \newline
-$f(n) = k(\log(k) + \log(\frac{1}{\epsilon})) + m + f(n - m(n^{1/k} - 1))$ \newline 
+$f(n) = k(\log(k) + \log(\frac{1}{\epsilon}) + m) + f(n - m(n^{1/k} - 1))$ \newline 
 $f(n) \in O(kn^{1-1/k})$ \newline
 (1) $A_i \subseteq A_{i-1}$
-\subsection{Extra}
+\section{Extra}
 \paragraph{Binary Distribution}
 Let us consider a specific interesting distribution for $n = 2^{k-1}$. We think of $X_i \subseteq \{0, 1, ... , n-1\} $ \newline
 For $i \in [k-1]$
@@ -126,7 +128,25 @@ and for $i = k$
               \right.
   \]
 where $m_i$ is the $i$'th bit of m in binary representation. ($m_i \mathrel{\mathop:}= ( m \mathop{\&} 2^{i-1} ) \gg i-1 $). \\
-Let's pay attention for some simple properties. First of all $\forall_i |X_i| = \frac{n}{2}$. Moreover, it doesn't matter if we permute the players, for $i < k, |A_i| = 0.5|A_{i-1}|$ and generally for $i < k, |A_i| = 2^{k-1-i}$. $\Pr[DISJ] = 0.5$. The thing is that this distribution has a little entropy ($k$). 
+Let's pay attention for some simple properties. First of all $\forall_i |X_i| = \frac{n}{2}$. Moreover, it doesn't matter if we permute the players, for $i < k, |A_i| = 0.5|A_{i-1}|$ and generally for $i < k, |A_i| = 2^{k-1-i}$. $\Pr[DISJ] = 0.5$. The thing is that this distribution has a little entropy ($k$).
+\section{Appendix}
+\paragraph{Proof for $f(n) \in O(kn^{1-1/k})$}
+\begin{claim} 
+For $f(n) = k(\log(k) + \log(\frac{1}{\epsilon}) + m) + f(n - m(n^{1/k} - 1))$, it is true that $f(n) \in O(kn^{1-1/k})$ (when thinking of $\epsilon$ as a constant). \newline
+\end{claim}
+\begin{proof}
+We should find that $ \exists_{D\in\mathbb{R}} : \forall_{n \in \mathbb{N}} : f(n) \leq Dkn^{1-1/k}$. Let us prove by induction. The induction base is trivial (we can choose big enough $D$). The induction step: \newline
+We can think of $\epsilon$ as a constant. \newline
+$f(n) = k(\log(k) + m) + f(n - m(n^{1/k} - 1)) \leq k(\log(k) + m) + Dk(n - m(n^{1/k} - 1))^{1-1/k} \overset{?}{\leq} Dkn^{1-1/k}$ \newline
+
+\begin{align*}
+  k(\log(k) + m) &\overset{?}{\leq} Dkn^{1-1/k} -  Dk(n - m(n^{1/k} - 1))^{1-1/k}\\
+  (\log(k) + m) &\overset{?}{\leq} D(n^{1-1/k} -  (n - m(n^{1/k} - 1))^{1-1/k})\\
+  \frac{\log(k) + m}{n^{1-1/k} -  (n - m(n^{1/k} - 1))^{1-1/k}} & \overset{?}{\leq} D \\
+\end{align*}
+
+\end{proof}
+
 \subsection{TODO}
 Tough (est?) distribution\newline
 Make sure to rethink how does this protocol end \newline
