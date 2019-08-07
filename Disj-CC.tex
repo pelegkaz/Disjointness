@@ -54,34 +54,25 @@ We are going to consider a sequential point of view for the disjointness problem
 \section{Preliminaries}
 \subsection{Notations}
 We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input.
-Let us define the following sets: $A_0 = [n]$, for $i \in [k]$ : $A_i = \cap^{i}_{j=1}X_i$. Using this notation, disjointness problem is whether $A_k = \emptyset$ or not. 
+Let us define the following sets: $A_0 = [n]$, for $i \in [k]$ : $A_i = \cap^{i}_{j=1}X_j$. Using this notation, disjointness problem is whether $A_k = \emptyset$ or not. 
 \subsection{Properties}
 \begin{claim}
 Let $i \in [k]$ be the minimal index such that $\frac{|A_{i}|}{|A_{i-1}|} < \frac{1}{n^{1/k}}$. We assume such one exists and name it "the critical index". So for every $j < i$, $|A_j| \geq n^{1-\frac{j}{k}}$
 \end{claim}
 \begin{proof}
-By induction of $j$. Induction basis is for $j = 0$, $A_0 = n$ by definition. The induction step: $j < i$ so $\frac{|A_{j}|}{|A_{j-1}|} \geq \frac{1}{n^{1/k}}$. By induction assumption $|A_{j}| \geq \frac{n^{1-\frac{j-1}{k}}}{n^{1/k}} = n^{1-\frac{j}{k}}$ as needed.
+By induction of $j$. Induction basis is for $j = 0$, $A_0 = n$ by definition. The induction step: $j < i$ so $\frac{|A_{j}|}{|A_{j-1}|} \geq \frac{1}{n^{\frac{1}{k}}}$. By induction assumption $|A_{j}| \geq \frac{n^{1-\frac{j-1}{k}}}{n^{1/k}} = n^{1-\frac{j}{k}}$ as needed.
 \end{proof}
 \begin{claim}
 When the sets are disjoint, there is a critical index.
 \end{claim}
 \begin{proof}
-Since the sets are disjoint $|A_k| = 0$. Therefore, $\frac{|A_k|}{|A_{k-1}|} = 0$. So $i=k$ is such (if there is no smaller index).
+Proof by contradiction.
+Let us assume that $\forall_{i\in[k]} \frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{\frac{1}{k}}}$. So we get that: \\
+ $\frac{|A_k|}{|A_0|} = \frac{|A_k|}{|A_{k-1}|}\cdot\frac{|A_{k-1}|}{|A_{k-2}|}\cdot...\cdot\frac{|A_2|}{|A_1|}\cdot\frac{|A_1|}{|A_0|} \geq \left (  \frac{1}{n^{\frac{1}{k}}} \right )^k = \frac{1}{n} $ \\
+ $ \frac{|A_k|}{n} \geq \frac{1}{n}$ \\
+ $ |A_k| \geq 1$ in contradiction to the assumption that the sets are disjoint.
 \end{proof}
 \section{$O(kn^{1-1/k})$ Protocol}
-\subsection{Fun Facts}
-\begin{equation*}
- \frac{|A_k|}{|A_0|} = \frac{|A_k|}{|A_{k-1}|}\cdot\frac{|A_{k-1}|}{|A_{k-2}|}\cdot...\cdot\frac{|A_2|}{|A_1|}\cdot\frac{|A_1|}{|A_0|} \geq \left( \min_{j \in [k]}{  \frac{|A_{j}|}{|A_{j-1}|}}\right )^k 
-\end{equation*}
-\begin{equation*}
- \text{DISJ} = \biguplus_{i=1}^{k}\{DISJ \land \text{i is the critical index} \} 
-\end{equation*}
-\begin{equation*}
-    \epsilon \leq Pr[\text{DISJ}] = \sum\limits_{i=1}^k{Pr[\text{DISJ} \land \text{i is the critical index}]} \leq k \cdot \max_{1\leq i \leq k}{Pr[\text{DISJ} \land \text{i is the critical index}]} 
-\end{equation*}
-\begin{equation*}
-    \frac{\epsilon}{k} \leq \max_{1\leq i \leq k}{Pr[\text{DISJ} \land \text{i is the critical index}]}
-\end{equation*}
 \subsection{The Protocol}
 Our protocol is divided into rounds. In each round we find out some zeros of some player and then we ignore these indexes from now on and make our universe smaller. \newline
 Every round works like this: \newline
@@ -96,10 +87,23 @@ Note that knowing this information they all can deduce $A_i \setminus A_{i-1} \s
 For each leaf $L$ in our protocol tree (determined by X,Y), we are going to argue that we error for at most $\epsilon$. Therefore in overall we don't error more than $\epsilon$. (We consider the tree given specific random coins) \newline
 A leaf $L$ is a round in which we stop. \newline
 The only times we error is when we answer due to the probability calculations. The other leaves have 0 error.\newline
-$\Pr[ERROR | \text{Stopped at L}] = \Pr[ERROR \land DISJ | \text{Stopped at L}] = \sum\limits_{i=1}^k \Pr[ERROR \land \text{DISJ} \land \text{i is critical}| \text{Stopped at L}] = \sum\limits_{i=1}^k \mathop{\mathbb{E}}_{X_i=x_i}\Pr[ERROR \land \text{DISJ}\land \text{i is critical}| \text{Stopped at L} \land X_i=x_i] \leq \sum\limits_{i=1}^k \mathop{\mathbb{E}}_{X_i=x_i}\frac{\epsilon}{k} = \sum\limits_{i=1}^k \frac{\epsilon}{k} = \epsilon$ \newline
+$\Pr[ERROR | \text{Stopped at L}] \overset{(1)}{=} \Pr[ERROR \land DISJ | \text{Stopped at L}] \overset{(2)}{=} \sum\limits_{i=1}^k \Pr[ERROR \land \text{DISJ} \land \text{i is critical}| \text{Stopped at L}] \overset{(3)}{=} \sum\limits_{i=1}^k \underset{X_i=x_i}{\mathop{\mathbb{E}}}\Pr[ERROR \land \text{DISJ}\land \text{i is critical}| \text{Stopped at L} \land X_i=x_i] \leq \sum\limits_{i=1}^k \underset{X_i=x_i}{\mathop{\mathbb{E}}}[\frac{\epsilon}{k}] = \sum\limits_{i=1}^k \frac{\epsilon}{k} = \epsilon$ \newline
 \newline
-$\Pr[ERROR] = \mathop{\mathbb{E}}_{\text{L leaf}}[\left \Pr[ERROR | \text{Stopped at L}] \right] \leq \epsilon $
+$\Pr[ERROR] = \underset{\text{L leaf}}{\mathop{\mathbb{E}}} [\Pr[ERROR | \text{Stopped at L}] ] \leq \epsilon $ \newline
+(1) - The protocol errors only when the sets are disjoint (the protocol declares intersection). \newline
+(2) - $  \text{DISJ} = \biguplus_{i=1}^{k}\{DISJ \land \text{i is the critical index} \} $ \newline
+(3) - Law of total expectation
 \paragraph{Communication Analysis}
+We analyze round by round. For a single round, firstly we pay at most $k$ bits in order to find if some player has a chance to have critical index. After that the coordinator sends his identity to the others $k\log(k)$ bits. Then the protocol sends the sample index and $A_{i}$ to all of the players. Now we ask what is the expected value of the index. \newline
+This is a random variable which has a geometric distribution. \newline
+$ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[DISJ \land \text{i is critical} | X_i = x_i \land \text{We got this far in the protocol}]} \leq \frac{k}{\epsilon}$ \newline
+$\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$ \newline
+Let us define $m : = |A_i|$ for the chosen $A_i$ for the specific round.
+We know that $|A_{i-1}| \geq |A_i| \cdot n^{1/k}$. In this round we discovered that $A_{i-1} \setminus A_i$ are zeros for player i. Pay attention $|A_{i-1} \setminus A_i| \overset{(1)}{=} |A_{i-1}| - |A_i| \geq |A_i|(n^{1/k} - 1) = m(n^{1/k} - 1)$ \newline
+So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + m$ and we discovered at least $m(n^{1/k} - 1)$ zeros. \newline
+$f(n) = k(\log(k) + \log(\frac{1}{\epsilon})) + m + f(n - m(n^{1/k} - 1))$ \newline 
+$f(n) \in O(kn^{1-1/k})$ \newline
+(1) $A_i \subseteq A_{i-1}$
 \subsection{Extra}
 \paragraph{Binary Distribution}
 Let us consider a specific interesting distribution for $n = 2^{k-1}$. We think of $X_i \subseteq \{0, 1, ... , n-1\} $ \newline
@@ -124,9 +128,8 @@ and for $i = k$
 where $m_i$ is the $i$'th bit of m in binary representation. ($m_i \mathrel{\mathop:}= ( m \mathop{\&} 2^{i-1} ) \gg i-1 $). \\
 Let's pay attention for some simple properties. First of all $\forall_i |X_i| = \frac{n}{2}$. Moreover, it doesn't matter if we permute the players, for $i < k, |A_i| = 0.5|A_{i-1}|$ and generally for $i < k, |A_i| = 2^{k-1-i}$. $\Pr[DISJ] = 0.5$. The thing is that this distribution has a little entropy ($k$). 
 \subsection{TODO}
-Communcation analysis \newline
 Tough (est?) distribution\newline
-How does this protocol end \newline
+Make sure to rethink how does this protocol end \newline
 Does it help to permutate the players? \newline
 Do we have to tell every player everything? maybe we can get rid of the k factor? \newline
 \end{document}
