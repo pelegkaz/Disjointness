@@ -101,10 +101,12 @@ This is a random variable which has a geometric distribution. \newline
 $ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[DISJ \land \text{i is critical} | X_i = x_i \land \text{We got this far in the protocol}]} \leq \frac{k}{\epsilon}$ \newline
 $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$ \newline
 Let us define $m : = |A_i|$ for the chosen $A_i$ for the specific round.
+Pay attention that $|A_i| \cdot n^{-1/k} \geq |A_{i-1}| \geq n^{1-\frac{i-1}{k}}$ \newline
+$m \geq n^{1-\frac{i}{k}} \geq 1$ so $m \neq 0$\newline
 We know that $|A_{i-1}| \geq |A_i| \cdot n^{1/k}$. In this round we discovered that $A_{i-1} \setminus A_i$ are zeros for player i. Pay attention $|A_{i-1} \setminus A_i| \overset{(1)}{=} |A_{i-1}| - |A_i| \geq |A_i|(n^{1/k} - 1) = m(n^{1/k} - 1)$ \newline
-So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + m$ and we discovered at least $m(n^{1/k} - 1)$ zeros. \newline
-$f(n) = k(\log(k) + \log(\frac{1}{\epsilon}) + m) + f(n - m(n^{1/k} - 1))$ \newline 
-$f(n) \in O(kn^{1-1/k})$ \newline
+So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + km\log(n)$ and we discovered at least $m(n^{1/k} - 1)$ zeros. \newline
+$f(n) = k(\log(k) + \log(\frac{1}{\epsilon}) + m\log(n)) + f(n - m(n^{1/k} - 1))$ \newline 
+$f(n) \in O(kn^{1-\frac{1}{k}}\log(n))$ \newline
 (1) $A_i \subseteq A_{i-1}$
 \section{Extra}
 \paragraph{Binary Distribution}
@@ -144,10 +146,13 @@ $f(n) = k(\log(k) + m) + f(n - m(n^{1/k} - 1)) \leq k(\log(k) + m) + Dk(n - m(n^
   (\log(k) + m) &\overset{?}{\leq} D(n^{1-1/k} -  (n - m(n^{1/k} - 1))^{1-1/k})\\
   \frac{\log(k) + m}{n^{1-1/k} -  (n - m(n^{1/k} - 1))^{1-1/k}} & \overset{?}{\leq} D \\
 \end{align*}
-
+\newline
+Maybe we can just say that the worse case is when $m = 1$.
+In this case we have $n^{1-\frac{1}{k}}$ rounds where each one costs $k\log(k)$ so $kn^{1-\frac{1}{k}}\log(k)$
 \end{proof}
 
 \subsection{TODO}
+What if m=0? \newline
 Tough (est?) distribution\newline
 Make sure to rethink how does this protocol end \newline
 Does it help to permutate the players? \newline
