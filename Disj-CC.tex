@@ -25,13 +25,41 @@
 \author{Peleg Kazaz}
 \date{August 2019}
 
-\begin{document}
 
-\maketitle
-
-
-%Special macros
+%General math style
 \newcommand{\fnstyle}[1]{\mathsf{#1}}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\coloneq}{:=}
+\newcommand{\st}{\medspace \middle| \medspace}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\nat}{\mathbb{N}}
+\newcommand{\eps}{\epsilon}
+\newcommand{\norm}[1]{\left\| #1 \right\|}
+\newcommand{\prob}[1]{\ensuremath{\text{\textsc{#1}}}}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\DeclareMathOperator{\poly}{poly}
+
+%Comments, TODO, etc.
+\newcommand{\hide}[1]{ }
+\newcommand{\note}[1]{ { \color{blue} #1 } }
+\newcommand{\Rnote}[1]{ { \color{magenta} #1 } }
+\newcommand{\TODO}[1]{ {\color{red} #1 }}
+
+%Probability
+\newcommand{\Ber}{\mathsf{B}}
+\DeclareMathOperator*{\E}{E}
+\DeclareMathOperator*{\Var}{Var}
+\DeclareMathOperator*{\Cov}{Cov}
+\newcommand{\given}{\medspace \middle| \medspace}
+\newcommand{\rv}[1]{\mathbf{#1}}
+
+%Communication & information
+\newcommand{\CC}{\mathrm{CC}}
+\DeclareMathOperator*{\MI}{I}
+\DeclareMathOperator*{\CIC}{CIC}
+\DeclareMathOperator{\HH}{H}
+\providecommand{\Div}[2]{\mathsf{D}\left(\begin{array}{c} #1 \\ \hline  \hline  #2\end{array} \right)} 
+
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
@@ -48,31 +76,105 @@
 
 \renewcommand{\include}{\input}
 
+\begin{document}
+
+\maketitle
+
+
 \section{Introduction}
+\Rnote{Not touching this for now}
 We are going to consider a sequential point of view for the disjointness problem for k players. Let us imagine a process in which the players go one after another and intersect their sets with the result. Starting with the full set ($[n]$), after the last player plays, we end up with the intersection of all sets. Therefore our question is whether this set is empty or not. Moreover, if the last set is empty, one of the players must subtract a large amount of elements in this process. After he plays we get a set which is in smaller order of magnitude than the one before. The difference between those sets are included in the player's zeros. That is where we have an option to learn them using small amount of communication. 
 \subsection{Related Work}
 \section{Preliminaries}
+\Rnote{Not touching this for now}
 \subsection{Notations}
 We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
-Let us define the following sets: $A_0 := [n]$, for $i \in [k]$ : $A_i := \cap^{i}_{j=1}X_j ( = A_{i-1} \cap X_i)$. Using this notation, disjointness problem is whether $A_k = \emptyset$ or not. 
-\subsection{Properties}
-\begin{claim}
-Let $i \in [k]$ be the minimal index such that $\frac{|A_{i}|}{|A_{i-1}|} < \frac{1}{n^{1/k}}$. We assume such one exists and name it "the critical index". So for every $j < i$, $|A_j| \geq n^{1-\frac{j}{k}}$
-\end{claim}
+\section{$O(kn^{1-1/k})$-Bit Protocol}
+Throughout the protocol, we maintain a set $U \subseteq [n]$ of ``possible intersection elements'', with the property that $\bigcap_i X_i \subseteq U$.
+Initially we set $U = \emptyset$.
+The protocol operates in \emph{iterations};
+in each iteration, our goal is to find a player that can reduce $U$ significantly without using much communication.
+If we can find such a player, we use it to reduce $U$, and continue;
+if we cannot find such a player, this means that $\bigcap_i X_i \neq \emptyset$, so we can halt and output ``not disjoint''.
+
+Define  sets $[n] = A_0 \supseteq A_1 \supseteq \ldots \supseteq A_k$, as follows:
+for each $i = 0,\ldots,k$,
+\begin{equation*}
+	A_i \coloneq \cap_{j = 1}^i X_j,
+\end{equation*}
+so that for each $i \in [k]$ we have $A_i = A_{i-1} \cap X_i$.
+Our goal in the $\prob{Disj}$ problem is to determine whether or not $A_k = \emptyset$.
+
+\paragraph{Critical players.}
+We claim that if $\bigcap_i X_i = \emptyset$, then there is at least one player $i$ such that $A_i$ is significantly smaller than $A_{i - 1}$;
+in other words, $X_i$ eliminates a significant fraction of elements from consideration.
+\begin{lemma}
+	If $\bigcap_i X_i = \emptyset$,
+	then there is some player $i \in [k]$
+	with
+	\begin{equation*}
+		\frac{|A_{i}|}{|A_{i-1}|} < \frac{1}{n^{1/k}}.
+	\end{equation*}
+	\label{lemma:narrow}
+\end{lemma}
 \begin{proof}
-By induction of $j$. Induction basis is for $j = 0$, $A_0 = n$ by definition. The induction step: $j < i$ so $\frac{|A_{j}|}{|A_{j-1}|} \geq \frac{1}{n^{\frac{1}{k}}}$. By induction assumption $|A_{j}| \geq \frac{n^{1-\frac{j-1}{k}}}{n^{1/k}} = n^{1-\frac{j}{k}}$ as needed.
+	Assume for the sake of contradiction that for all $i \in [k]$ we have
+	\begin{equation*}
+		\frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{1/k}}.
+	\end{equation*}
+	Then we get that
+	\begin{align*}
+		\frac{|A_k|}{|A_0|} = 
+		\frac{|A_k|}{|A_{k-1}|} \cdot \frac{|A_{k-1}|}{|A_{k-2}|} \cdot \ldots \cdot \frac{|A_1|}{|A_0|}
+		\geq
+		\left(  \frac{1}{n^{1/k}} \right)^k
+		=
+		\frac{1}{n}.
+	\end{align*}
+	Since $|A_0| = n$, this implies that $|A_k| \geq 1$, i.e., $\bigcap_i X_i \neq \emptyset$, a contradiction.
 \end{proof}
-\begin{claim}
-When the sets are disjoint, there is a critical index.
-\end{claim}
-\begin{proof}
-Proof by contradiction.
-Let us assume that $\forall_{i\in[k]} \frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{\frac{1}{k}}}$. So we get that: \\
- $\frac{|A_k|}{|A_0|} = \frac{|A_k|}{|A_{k-1}|}\cdot\frac{|A_{k-1}|}{|A_{k-2}|}\cdot...\cdot\frac{|A_2|}{|A_1|}\cdot\frac{|A_1|}{|A_0|} \geq \left (  \frac{1}{n^{\frac{1}{k}}} \right )^k = \frac{1}{n} $ \\
- $ \frac{|A_k|}{n} \geq \frac{1}{n}$ \\
- $ |A_k| \geq 1$ in contradiction to the assumption that the sets are disjoint.
-\end{proof}
-\section{$O(kn^{1-1/k})$ Protocol}
+
+We say that player $i$ is \emph{critical} if $i$ is the smallest index such that $|A_i| / |A_{i-1}| < 1/n^{1/k}$.
+Note that player $i$ does not \emph{know} if it is critical or not, because it does not know $|A_{i-1}|$ (this depends on other players' inputs);
+but it can compute the probability that it is critical, and this is what we will use in the protocol.
+
+\paragraph{The protocol.}
+As we said, the protocol proceeds in iterations, $r = 1,\ldots,R$
+\TODO{replace $R$ with some concrete upper bound on the number of iterations}.
+All players maintain a \emph{global state}, which tracks the protocol's execution so far;
+after $r$ iterations, the state will have the form $S_r = (c_1,j_1,B_1),\ldots,(c_r, j_r, B_r) \in \left( [k] \times \nat \times 2^{[n]} \right)^r$.
+For convenience, let $S_0 = \lambda$, the empty string.
+
+For a player $i$, an iteration $r$ and a state $s$,
+let
+\begin{equation*}
+	\gamma_i^r(s) \coloneq \Pr_{(\rv{X}_1,\ldots,\rv{X}_k) \sim \mu}\left[ \text{$i$ is critical} \given \rv{X}_i = X_i, \rv{S}_{r} = s \right].
+\end{equation*}
+We say that player $i$ is \emph{significant} if $\gamma_i^r(s) \geq \eps / k$.
+\TODO{What is $\eps$?}
+
+In each iteration $r$, the coordinator asks each of the $k$ players whether or not they are significant.
+If no player is significant, the coordinator halts and outputs ``not disjoint''.
+If there is some significant player, the coordinator chooses the first player $i$ that is significant,
+and sends the index $i$ to all players; everyone now sets $c_r = i$.
+
+Next, using public randomness, the coordinator and the players sample
+iid sets $A_{i-1}^1, \ldots A_{i-1}^2,\ldots \sim \mu(\rv{A}_{i-1}|\rv{S}_{r-1} = s_{r-1})$, where $s_{r-1}$
+is the global state at the beginning of iteration $r$.
+Player $i$ finds the first index $j$ such that $|A_{i-1}^j \cap X_i| / |A_{i-1}^j| < 1/n^{1/k}$
+and sends it to the coordinator, along with the set $B = A_{i-1}^j \cap X_i$ to the coordinator.
+The coordinator disseminates $j, B$ to all the other players.
+
+Observe that $A_{i-1}^j \setminus B \subseteq \overline{X_i}$,
+so the elements of $A_{i-1}^j \setminus B$ can now be removed from the universe:
+\begin{equation*}
+	U_r \leftarrow U_{r-1} \setminus (A_{i-1}^j \setminus B).
+\end{equation*}
+
+\TODO{up to here}
+
+
+
 \subsection{Properties of Our Protocol}
 Our protocol is using random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-1/k})$ bits of communication between the players.
 \subsection{The Protocol}
