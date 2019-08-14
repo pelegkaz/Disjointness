@@ -156,7 +156,7 @@ and sends the index $i$ to all players.
 
 Next, using public randomness, the coordinator and the players sample
 iid sets $(X_1, \ldots , X_k)^1, \ldots (X_1, \ldots , X_k)^2,\ldots \sim \mu((\rv{X_1}, \ldots , \rv{X_k}))$.
-Player $i$ finds the first index $j$ such that he is critical in $(X_1, \ldots X_{i-1}, x_i, X_{i+1}, \ldots , X_k)^j$. In this set, $|A_{i-1}^j \cap x_i| / |A_{i-1}^j| < 1/n^{1/k}$. Now we split $A_{i-1}^j$ to sets of size $n^{1/k} - 1$ by order denoted $Z^{r}_1, \ldots , Z^{r}_m$. .By pigeonhole principle, one of them doesn't intersect with $A_{i-1}^j \cap x_i$ - let us denote its index by $l$. Player $i$ sends the index $j$ to the coordinator, along with the index $l$ for the right $Z^{r}_l$ to the coordinator.
+Player $i$ finds the first index $j$ such that he is critical in $(X_1, \ldots X_{i-1}, x_i, X_{i+1}, \ldots , X_k)^j$. In this set, $|A_{i-1}^j \cap x_i| / |A_{i-1}^j| < 1/n^{1/k}$. Now we split $A_{i-1}^j$ to sets of size $\frac{n^{1/k}}{2}$ by order denoted $Z^{r}_1, \ldots , Z^{r}_m$. .By pigeonhole principle, one of them doesn't intersect with $A_{i-1}^j \cap x_i$ - let us denote its index by $l$. Player $i$ sends the index $j$ to the coordinator, along with the index $l$ for the right $Z^{r}_l$ to the coordinator.
 The coordinator disseminates $j, l$ to all the other players.
 
 Observe that $Z^{r}_l \subseteq \overline{X_i}$,
@@ -200,7 +200,7 @@ Let us define $m : = |A_i|$ for the chosen $A_i$ for the specific round.
 Pay attention that $|A_i| \cdot n^{-1/k} \geq |A_{i-1}| \geq n^{1-\frac{i-1}{k}}$ \newline
 $m \geq n^{1-\frac{i}{k}} \geq 1$ so $m \neq 0$\newline
 We know that $|A_{i-1}| \geq |A_i| \cdot n^{1/k}$. In this round we discovered that $A_{i-1} \setminus A_i$ are zeros for player i. Pay attention $|A_{i-1} \setminus A_i| \overset{(1)}{=} |A_{i-1}| - |A_i| \geq |A_i|(n^{1/k} - 1) = m(n^{1/k} - 1)$ \newline
-So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + km\log(n)$ and we discovered at least $m(n^{1/k} - 1)$ zeros. \newline
+So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n)$ and we discovered $(n^{1/k} - 1)$ zeros. \newline
 $f(n) = k(\log(k) + \log(\frac{1}{\epsilon}) + m\log(n)) + f(n - m(n^{1/k} - 1))$ \newline 
 $f(n) \in O(kn^{1-\frac{1}{k}}\log(n))$ \newline
 (1) $A_i \subseteq A_{i-1}$
