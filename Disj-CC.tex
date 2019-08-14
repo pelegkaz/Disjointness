@@ -99,7 +99,7 @@ if we cannot find such a player, this means that $\bigcap_i X_i \neq \emptyset$,
 Define  sets $[n] = A_0 \supseteq A_1 \supseteq \ldots \supseteq A_k$, as follows:
 for each $i = 0,\ldots,k$,
 \begin{equation*}
-	A_i \coloneq \cap_{j = 1}^i X_j,
+  A_i \coloneq \cap_{j = 1}^i X_j,
 \end{equation*}
 so that for each $i \in [k]$ we have $A_i = A_{i-1} \cap X_i$.
 Our goal in the $\prob{Disj}$ problem is to determine whether or not $A_k = \emptyset$.
@@ -108,29 +108,29 @@ Our goal in the $\prob{Disj}$ problem is to determine whether or not $A_k = \emp
 We claim that if $\bigcap_i X_i = \emptyset$, then there is at least one player $i$ such that $A_i$ is significantly smaller than $A_{i - 1}$;
 in other words, $X_i$ eliminates a significant fraction of elements from consideration.
 \begin{lemma}
-	If $\bigcap_i X_i = \emptyset$,
-	then there is some player $i \in [k]$
-	with
-	\begin{equation*}
-		\frac{|A_{i}|}{|A_{i-1}|} < \frac{1}{n^{1/k}}.
-	\end{equation*}
-	\label{lemma:narrow}
+  If $\bigcap_i X_i = \emptyset$,
+  then there is some player $i \in [k]$
+  with
+  \begin{equation*}
+    \frac{|A_{i}|}{|A_{i-1}|} < \frac{1}{n^{1/k}}.
+  \end{equation*}
+  \label{lemma:narrow}
 \end{lemma}
 \begin{proof}
-	Assume for the sake of contradiction that for all $i \in [k]$ we have
-	\begin{equation*}
-		\frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{1/k}}.
-	\end{equation*}
-	Then we get that
-	\begin{align*}
-		\frac{|A_k|}{|A_0|} = 
-		\frac{|A_k|}{|A_{k-1}|} \cdot \frac{|A_{k-1}|}{|A_{k-2}|} \cdot \ldots \cdot \frac{|A_1|}{|A_0|}
-		\geq
-		\left(  \frac{1}{n^{1/k}} \right)^k
-		=
-		\frac{1}{n}.
-	\end{align*}
-	Since $|A_0| = n$, this implies that $|A_k| \geq 1$, i.e., $\bigcap_i X_i \neq \emptyset$, a contradiction.
+  Assume for the sake of contradiction that for all $i \in [k]$ we have
+  \begin{equation*}
+    \frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{1/k}}.
+  \end{equation*}
+  Then we get that
+  \begin{align*}
+    \frac{|A_k|}{|A_0|} = 
+    \frac{|A_k|}{|A_{k-1}|} \cdot \frac{|A_{k-1}|}{|A_{k-2}|} \cdot \ldots \cdot \frac{|A_1|}{|A_0|}
+    \geq
+    \left(  \frac{1}{n^{1/k}} \right)^k
+    =
+    \frac{1}{n}.
+  \end{align*}
+  Since $|A_0| = n$, this implies that $|A_k| \geq 1$, i.e., $\bigcap_i X_i \neq \emptyset$, a contradiction.
 \end{proof}
 
 We say that player $i$ is \emph{critical} if $i$ is the smallest index such that $|A_i| / |A_{i-1}| < 1/n^{1/k}$.
@@ -140,14 +140,11 @@ but it can compute the probability that it is critical, and this is what we will
 \paragraph{The protocol.}
 As we said, the protocol proceeds in iterations, $r = 1,\ldots,R$
 \TODO{replace $R$ with some concrete upper bound on the number of iterations}.
-All players maintain a \emph{global state}, which tracks the protocol's execution so far;
-after $r$ iterations, the state will have the form $S_r = (c_1,j_1,B_1),\ldots,(c_r, j_r, B_r) \in \left( [k] \times \nat \times 2^{[n]} \right)^r$.
-For convenience, let $S_0 = \lambda$, the empty string.
 
-For a player $i$, an iteration $r$ and a state $s$,
+For a player $i$, an iteration $r$,
 let
 \begin{equation*}
-	\gamma_i^r(s) \coloneq \Pr_{(\rv{X}_1,\ldots,\rv{X}_k) \sim \mu}\left[ \text{$i$ is critical} \given \rv{X}_i = X_i, \rv{S}_{r} = s \right].
+  \gamma_i^r(x_i) \coloneq \Pr_{(\rv{X}_1,\ldots,\rv{X}_k) \sim \mu}\left[ \text{ $i$ is critical in $U_{r-1}$} \land \text{DISJ} \given \rv{X}_i = x_i \right].
 \end{equation*}
 We say that player $i$ is \emph{significant} if $\gamma_i^r(s) \geq \eps / k$.
 \TODO{What is $\eps$?}
@@ -155,19 +152,17 @@ We say that player $i$ is \emph{significant} if $\gamma_i^r(s) \geq \eps / k$.
 In each iteration $r$, the coordinator asks each of the $k$ players whether or not they are significant.
 If no player is significant, the coordinator halts and outputs ``not disjoint''.
 If there is some significant player, the coordinator chooses the first player $i$ that is significant,
-and sends the index $i$ to all players; everyone now sets $c_r = i$.
+and sends the index $i$ to all players.
 
 Next, using public randomness, the coordinator and the players sample
-iid sets $A_{i-1}^1, \ldots A_{i-1}^2,\ldots \sim \mu(\rv{A}_{i-1}|\rv{S}_{r-1} = s_{r-1})$, where $s_{r-1}$
-is the global state at the beginning of iteration $r$.
-Player $i$ finds the first index $j$ such that $|A_{i-1}^j \cap X_i| / |A_{i-1}^j| < 1/n^{1/k}$
-and sends it to the coordinator, along with the set $B = A_{i-1}^j \cap X_i$ to the coordinator.
-The coordinator disseminates $j, B$ to all the other players.
+iid sets $(X_1, \ldots , X_k)^1, \ldots (X_1, \ldots , X_k)^2,\ldots \sim \mu((\rv{X_1}, \ldots , \rv{X_k}))$.
+Player $i$ finds the first index $j$ such that he is critical in $(X_1, \ldots X_{i-1}, x_i, X_{i+1}, \ldots , X_k)^j$. In this set, $|A_{i-1}^j \cap x_i| / |A_{i-1}^j| < 1/n^{1/k}$. Now we split $A_{i-1}^j$ to sets of size $n^{1/k} - 1$ by order denoted $Z^{r}_1, \ldots , Z^{r}_m$. .By pigeonhole principle, one of them doesn't intersect with $A_{i-1}^j \cap x_i$ - let us denote its index by $l$. Player $i$ sends the index $j$ to the coordinator, along with the index $l$ for the right $Z^{r}_l$ to the coordinator.
+The coordinator disseminates $j, l$ to all the other players.
 
-Observe that $A_{i-1}^j \setminus B \subseteq \overline{X_i}$,
-so the elements of $A_{i-1}^j \setminus B$ can now be removed from the universe:
+Observe that $Z^{r}_l \subseteq \overline{X_i}$,
+so the elements of $Z^{r}_l$ can now be removed from the universe:
 \begin{equation*}
-	U_r \leftarrow U_{r-1} \setminus (A_{i-1}^j \setminus B).
+  U_r \leftarrow U_{r-1} \setminus (Z^{r}_l).
 \end{equation*}
 
 \TODO{up to here}
