@@ -264,6 +264,27 @@ Maybe we can just say that the worse case is when $m = 1$.
 In this case we have $n^{1-\frac{1}{k}}$ rounds where each one costs $k\log(k)$ so $kn^{1-\frac{1}{k}}\log(k)$
 \end{proof}
 
+\begin{claim}
+\begin{equation*}
+    \lim_{n \rightarrow \infty} n^{1-\frac{1}{k}} - \left( n - n^{\frac{1}{k}} \right)^{1-\frac{1}{k}} = 1-\frac{1}{k}
+\end{equation*}
+\end{claim}
+\begin{proof}
+$$\lim_{n \rightarrow \infty} n^{1-\frac{1}{k}} - \left( n - n^{\frac{1}{k}} \right)^{1-\frac{1}{k}} = 
+\lim_{n \rightarrow \infty} n^{1-\frac{1}{k}} \left(1 - \frac{\left( n - n^{\frac{1}{k}} \right)^{1-\frac{1}{k}}}{n^{1-\frac{1}{k}}}\right) = 
+\lim_{n \rightarrow \infty} n^{1-\frac{1}{k}}\left(1 - \left( \frac{n - n^{\frac{1}{k}} }{n}\right)^{1-\frac{1}{k}}\right) = $$ \newline
+$$
+\lim_{n \rightarrow \infty} n^{1-\frac{1}{k}}\left(1 - \left( 1 - \frac{1 }{n^{1-\frac{1}{k}}}\right)^{1-\frac{1}{k}}\right) =
+\frac{1}{\lim_{n \rightarrow \infty} \frac{n^{-1+\frac{1}{k}}}{1 - \left( 1 - \frac{1 }{n^{1-\frac{1}{k}}}\right)^{1-\frac{1}{k}}}} \overset{(L)}{=} $$ \newline
+$$\frac{1}{\lim_{n \rightarrow \infty} \frac{\left(-1+\frac{1}{k}\right)n^{-2+\frac{1}{k}}}{-\left(1-\frac{1}{k}\right) \left( 1 - \frac{1 }{n^{1-\frac{1}{k}}}\right)^{-\frac{1}{k}} \cdot (-1) \cdot \left(-1+\frac{1}{k}\right)n^{-2+\frac{1}{k}}}} =
+\frac{1}{\lim_{n \rightarrow \infty} \frac{1}{\left(1-\frac{1}{k}\right) \left( 1 - \frac{1 }{n^{1-\frac{1}{k}}}\right)^{-\frac{1}{k}}}} =$$ \newline
+$$
+\frac{1}{\frac{1}{\left(1-\frac{1}{k}\right) \left( 1 - 0\right)^{-\frac{1}{k}}}} = \frac{1}{\frac{1}{\left(1-\frac{1}{k}\right)}} = 1-\frac{1}{k}. 
+$$
+
+(L) - L'Hôpital's rule
+\end{proof}
+
 \subsection{TODO}
 Add an universe set U. and pseudo code. 
 Tough (est?) distribution\newline
