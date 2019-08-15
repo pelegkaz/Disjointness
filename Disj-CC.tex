@@ -111,26 +111,43 @@ in other words, $X_i$ eliminates a significant fraction of elements from conside
   If $\bigcap_i X_i = \emptyset$,
   then there is some player $i \in [k]$
   with
-  \begin{equation*}
-    \frac{|A_{i}|}{|A_{i-1}|} < \frac{1}{n^{1/k}}.
-  \end{equation*}
+  \begin{align}
+    \frac{|A_{i}|}{|A_{i-1}|} < \frac{1}{n^{1/k}} \\
+    A_{i} \neq \emptyset
+  \end{align}
   \label{lemma:narrow}
 \end{lemma}
 \begin{proof}
-  Assume for the sake of contradiction that for all $i \in [k]$ we have
+    We first prove that there is such index only with the first property, and than we are going to show that the minimal one of the indexes with the first property has the second one also.
+
+  Let us denote by $j$ the maximal index where 
+  \begin{equation*}
+    A_{j-1} \neq \emptyset.
+  \end{equation*}
+  There is such because it is true for $j=1$. \newline
+  Because j is maximal, this property doesn't hold for $j+1$ so we know that $j=k$ or $A_j = \emptyset$. But $\bigcap_i X_i = A_k = \emptyset$ so we got $A_j = \emptyset$. 
+  Pay attention
+  \begin{equation*}
+    \frac{|A_j|}{|A_{j-1}|} = \frac{0}{|A_{j-1}|} = 0 < \frac{1}{n^{1/k}}
+  \end{equation*}
+  So we know that (1) holds for j.
+  
+  Let us denote $j^\star$ the minimal index which holds (1).
+  
+  We can see that for all $i \in [j^\star-1]$ we have
   \begin{equation*}
     \frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{1/k}}.
   \end{equation*}
   Then we get that
   \begin{align*}
-    \frac{|A_k|}{|A_0|} = 
-    \frac{|A_k|}{|A_{k-1}|} \cdot \frac{|A_{k-1}|}{|A_{k-2}|} \cdot \ldots \cdot \frac{|A_1|}{|A_0|}
+    \frac{|A_{j^\star}|}{|A_0|} = 
+    \frac{|A_{j^\star}|}{|A_{j^\star-1}|} \cdot \frac{|A_{j^\star-1}|}{|A_{j^\star-2}|} \cdot \ldots \cdot \frac{|A_1|}{|A_0|}
     \geq
-    \left(  \frac{1}{n^{1/k}} \right)^k
+    \left(  \frac{1}{n^{1/k}} \right)^{j^\star}
     =
-    \frac{1}{n}.
+    \frac{1}{n^{j^\star/k}}.
   \end{align*}
-  Since $|A_0| = n$, this implies that $|A_k| \geq 1$, i.e., $\bigcap_i X_i \neq \emptyset$, a contradiction.
+  Since $|A_0| = n$, this implies that $|A_{j^\star}| \geq n^{1-j^\star/k} \geq 1$. Therefore $A_{j^\star} \neq \emptyset$.
 \end{proof}
 
 We say that player $i$ is \emph{critical} if $i$ is the smallest index such that $|A_i| / |A_{i-1}| < 1/n^{1/k}$.
@@ -156,7 +173,7 @@ and sends the index $i$ to all players.
 
 Next, using public randomness, the coordinator and the players sample
 iid sets $(X_1, \ldots , X_k)^1, \ldots (X_1, \ldots , X_k)^2,\ldots \sim \mu((\rv{X_1}, \ldots , \rv{X_k}))$.
-Player $i$ finds the first index $j$ such that he is critical in $(X_1, \ldots X_{i-1}, x_i, X_{i+1}, \ldots , X_k)^j$. In this set, $|A_{i-1}^j \cap x_i| / |A_{i-1}^j| < 1/n^{1/k}$. Now we split $A_{i-1}^j$ to sets of size $\frac{n^{1/k}}{2}$ by order denoted $Z^{r}_1, \ldots , Z^{r}_m$. .By pigeonhole principle, one of them doesn't intersect with $A_{i-1}^j \cap x_i$ - let us denote its index by $l$. Player $i$ sends the index $j$ to the coordinator, along with the index $l$ for the right $Z^{r}_l$ to the coordinator.
+Player $i$ finds the first index $j$ such that he is critical in $(X_1, \ldots X_{i-1}, x_i, X_{i+1}, \ldots , X_k)^j$. In this set, $|A_{i-1}^j \cap x_i| / |A_{i-1}^j| < 1/n^{1/k}$. Now we split $A_{i-1}^j$ to sets of size $\frac{n^{1/k}}{2}$ by order denoted $Z^{r}_1, \ldots , Z^{r}_m$. .By counting argument, one of them doesn't intersect with $A_{i-1}^j \cap x_i$ - let us denote its index by $l$. Player $i$ sends the index $j$ to the coordinator, along with the index $l$ for the right $Z^{r}_l$ to the coordinator.
 The coordinator disseminates $j, l$ to all the other players.
 
 Observe that $Z^{r}_l \subseteq \overline{X_i}$,
