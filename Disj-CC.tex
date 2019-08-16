@@ -221,6 +221,32 @@ So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\
 $f(n) = k(\log(k) + \log(\frac{1}{\epsilon}) + m\log(n)) + f(n - m(n^{1/k} - 1))$ \newline 
 $f(n) \in O(kn^{1-\frac{1}{k}}\log(n))$ \newline
 (1) $A_i \subseteq A_{i-1}$
+\section{k-n relation analysis}
+\paragraph{$k < \log(n)$:}
+For this case $k$ is pretty small. meaning $kn^{1/k} \approx n^{1/k}$. So we are pretty tight (our lower bound is almost like our upper one).
+\paragraph{$k = \alpha\log(n)$:}
+\begin{equation*}
+    n^{1/k} = n^{\frac{1}{\alpha\log(n)}} = 2^{\frac{\log(n)}{\alpha\log(n)}} = 2^{1/\alpha}
+\end{equation*}
+so
+\begin{equation*}
+    n^{1-1/k} > n/2
+\end{equation*}
+Moreover, in this scenario:
+\begin{equation*}
+    p = \frac{1}{n^{1/k}} = \frac{1}{2^{\frac{1}{\alpha}}} 
+\end{equation*}
+\begin{equation*}
+    h(p) = c 
+\end{equation*}
+\begin{equation*}
+    h(\rv{X}) = cnk
+\end{equation*}
+So our lower bound may also be fine.
+\paragraph{$k >> \log(n)$:}
+This is an interesting case. Most of the elements in our input should be 1. I'm still thinking about a protocol for this case.
+\paragraph{$k = \frac{1}{\alpha}n$:}
+In this case the average player has at least $\frac{n}{k} = \alpha$ zeros.
 \section{Extra}
 \paragraph{Binary Distribution}
 Let us consider a specific interesting distribution for $n = 2^{k-1}$. We think of $X_i \subseteq \{0, 1, ... , n-1\} $ \newline
