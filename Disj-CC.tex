@@ -243,8 +243,36 @@ Moreover, in this scenario:
     h(\rv{X}) = cnk
 \end{equation*}
 So our lower bound may also be fine.
-\paragraph{$k >> \log(n)$:}
-This is an interesting case. Most of the elements in our input should be 1. I'm still thinking about a protocol for this case.
+\paragraph{$k \in \omega(\log(n))$:}
+This is an interesting case. Most of the elements in our input should be 1. 
+Let us denote:
+\begin{equation*}
+    p_{ij} = \Pr[i \in X_j]
+\end{equation*}
+\begin{equation*}
+    \Pr[\neg \text{DISJ}] \leq \Sigma_{i=1}^{n}\Pr[i \in \cap_{j=1}^{k}X_j] = \Sigma_{i=1}^{n}\Pi_{j=1}^{k}p_{ij}
+\end{equation*}
+Let us look at a specific coordinate $i$. Assume $\Pi_{j=1}^{k}p_{ij} \geq \frac{\epsilon}{n}$.
+By lagrange multipliers we can know that $\Sigma_{j=1}^{k}p_{ij} \geq k(\frac{\epsilon}{n})^{\frac{1}{k}}$.
+Pay attention that:
+\begin{equation*}
+    \mathop{\mathbb{E}}[\text{Zeros in i}] = k - \Sigma_{j=1}^{k}p_{ij} \leq k \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right)
+\end{equation*}
+\begin{equation*}
+    \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right) = \left(1 - e^{\frac{\log(\frac{\epsilon}{n})}{k}}\right) = \left(1 - e^{\frac{\log(\epsilon) -\log(n)}{k}}\right)
+\end{equation*}
+If $k = \log(n) \alpha(n)$
+\begin{equation*}
+    \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right) \sim \left(1 - e^{\frac{1}{\alpha(n)}}\right) \sim \frac{1}{\alpha(n)}
+\end{equation*}
+We can conclude that
+\begin{equation*}
+    \mathop{\mathbb{E}}[\text{Zeros}] = nk\left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right) \sim \frac{nk}{\alpha(n)} = n\log(n)
+\end{equation*}
+So if our protocol just think about the important indexes (the one which has probability to be in the intersection) and just ask every player to send the indexes of his zeros.
+\begin{equation*}
+    \text{CC} = k + n\log^2(n)
+\end{equation*}
 \paragraph{$k = \frac{1}{\alpha}n$:}
 In this case the average player has at least $\frac{n}{k} = \alpha$ zeros.
 \section{Extra}
