@@ -273,7 +273,29 @@ So if our protocol just think about the important indexes (the one which has pro
 \begin{equation*}
     \text{CC} = k + n\log^2(n)
 \end{equation*}
-\section{$O(k + n\log(n))$-Protocol}
+\section{$O(k + n\log^2(n))$-Protocol}
+Let us pay attention that for big amount of players, the situation is opposite about the distribution of 0-1. If there are a lot of players ($k \in \omega(\log(n))$, most of the bits should be 1's.
+\paragraph{Critical Coordinates}
+Let us denote a coordinate $i$ critical if:
+\begin{equation*}
+    \Pr[i \in \bigcap^{k}_{j=1}{X_j}] > \frac{\epsilon}{n}
+\end{equation*}
+\subsection{The Protocol}
+Every one of the players are calculating what are the important coordinates.
+Every player (one by one) sends the indexes of his zeros which are in important coordinates to the coordinator.
+If there is an important coordinate with no zero - the coordinatore declares intersection.
+Otherwise, declare - disjointness.
+\paragraph{Communication}
+We are going to talk to all of the players $k$.
+Now we should ask about the expected numbers of zeros in the important coordinates. We are going to pay $\log(n)$ for each one of them.
+The expected number of zeros is:
+\begin{equation*}
+    nk\left(1-\left(\frac{\epsilon}{n}\right)^{1/k}\right) = nk\left(1-e^{\frac{\log{\frac{\epsilon}{n}}}{k}}\right) \sim nk\frac{\log{\frac{n}{\epsilon}}}{k} = n\log{\frac{n}{\epsilon}}
+\end{equation*}
+So total expected communication complexity for this protocol is
+\begin{equation*}
+    k + n\log{\frac{n}{\epsilon}}\log n
+\end{equation*}
 \begin{claim}
 For $p_1, p_2, ... , p_k \in [0,1]$ \newline
 If
