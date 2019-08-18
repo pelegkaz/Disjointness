@@ -296,6 +296,12 @@ So total expected communication complexity for this protocol is
 \begin{equation*}
     k + n\log{\frac{n}{\epsilon}}\log n
 \end{equation*}
+\paragraph{Error}
+We error only when declaring disjoitness and there is an intersection in unimportant coordinate.
+\begin{equation*}
+    \Pr[\text{ERROR}] = \Pr[\text{i unimportant} \land i \in \bigcap_j X_j] \leq \Sigma_i \Pr[\text{i unimportant} \land i \in \bigcap
+    _j X_j] \leq n\frac{\epsilon}{n} = \epsilon
+\end{equation*}
 \begin{claim}
 For $p_1, p_2, ... , p_k \in [0,1]$ \newline
 If
