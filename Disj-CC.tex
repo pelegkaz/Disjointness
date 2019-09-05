@@ -443,7 +443,7 @@ If $\lambda_i(\pi) \geq \pi$, for big enough $n$:
 $D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \geq \frac{\mu(1)}{4} $
 \paragraph{Part 3 - Information Summary}
 \begin{equation*}
-    I(X;\Pi) = \overset{k+i}{\underset{j=i+1}{\Sigma } } I[X_{j mod k}, \Pi | X_{<(j \mod k)}] \geq I(X_i;\Pi | X_{-i}) = \mathbb{E}_{x, \pi \sim \mu} \left( D\left(\frac{X_i | \pi, X_{-i}}{X_i | X_{-i}} \right) \right) \geq
+    I(X;\Pi) = \overset{k+i}{\underset{j=i+1}{\Sigma } } I[X_{j \% k}, \Pi | X_{<(j \% k)}] \geq I(X_i;\Pi | X_{-i}) = \mathbb{E}_{x, \pi \sim \mu} \left( D\left(\frac{X_i | \pi, X_{-i}}{X_i | X_{-i}} \right) \right) \geq
 \end{equation*}
 \begin{equation*}
     \geq \mu(0^k) \mathbb{E}_{\pi \sim x = 0^k} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq 
