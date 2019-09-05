@@ -436,7 +436,11 @@ $ \frac{\log(\lambda_i(\pi)\mu(0) + \mu(1))}{\lambda_i(\pi)\mu(0) + \mu(1)} < \f
 To conclude this part:
 $\frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)} \log\left( \frac{1}{\lambda_i(\pi)\mu(0) + \mu(1)}\right) \geq -\mu(1) \frac{1}{8}$
 \paragraph{Part 2 of the divergence:}
-
+$\frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}\log\left(\frac{1}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}\right) \geq \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\alpha}}\log\left(\frac{1}{\mu(0) + \frac{\mu(1)}{\alpha}}\right) = \frac{\mu(0)}{1 - \mu(1) + \frac{\mu(1)}{\alpha}}\log\left(\frac{1}{1 - \mu(1) + \frac{\mu(1)}{\alpha}}\right) = \frac{\mu(0)}{1 - \mu(1)(1 -\frac{1}{\alpha})}\log\left(\frac{1}{1 - \mu(1)(1 -\frac{1}{\alpha})}\right) = \frac{\mu(0)}{1 - \mu(1)(1 -\frac{1}{\alpha})}\log\left(1 + \frac{\mu(1)(1 -\frac{1}{\alpha})}{1 - \mu(1)(1 -\frac{1}{\alpha})}\right) \geq \frac{\mu(0)(\mu(1)(1 -\frac{1}{\alpha}))}{2\left(1 - \mu(1)(1 -\frac{1}{\alpha})\right)^2} \geq \frac{\mu(1)}{4}$ \newline
+$\log(1+x) \sim x$ for $x \rightarrow 0$
+\paragraph{Conclude Divergence part}
+If $\lambda_i(\pi) \geq \pi$, for big enough $n$:
+$D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \geq \frac{\mu(1)}{4} $
 \paragraph{Part 3 - Information Summary}
 \begin{equation*}
     I(X;\Pi) = \overset{k+i}{\underset{j=i+1}{\Sigma } } I[X_{j mod k}, \Pi | X_{<(j \mod k)}] \geq I(X_i;\Pi | X_{-i}) = \mathbb{E}_{x, \pi \sim \mu} \left( D\left(\frac{X_i | \pi, X_{-i}}{X_i | X_{-i}} \right) \right) \geq
@@ -445,7 +449,7 @@ $\frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)} \log\left( \frac{1}{\lambda_i(\pi)
     \geq \mu(0^k) \mathbb{E}_{\pi \sim x = 0^k} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq 
 \end{equation*}
 \begin{equation*}
-\mu(0^k) \Pr[A_{i}^\complement| x = 0^k] \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq \left (1 - n^{-\frac{1}{k}} \right)^{k} \cdot \frac{1 - \epsilon (1 + \alpha ^k)}{k} 
+\mu(0^k) \Pr[A_{i}^\complement| x = 0^k] \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq \left (1 - n^{-\frac{1}{k}} \right)^{k} \cdot \frac{1 - \epsilon (1 + \alpha ^k)}{k} \frac{\mu(1)}{4} \in \Omega\left(\frac{n^{-\frac{1}{k}}}{k}\right)
 \end{equation*}
 \section{Extra}
 \paragraph{Binary Distribution}
