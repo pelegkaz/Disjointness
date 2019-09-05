@@ -355,7 +355,7 @@ For input $X'_i \in \{0, 1\}$, the players use the public randomness in order to
 
 \paragraph{Error Analysis}
 Our protocol errors in one of two cases: The original protocol errors, or the inputs that the player sampled has intersection and the given doesn't. \newline
-$\Pr[Error] \leq \epsilon + \Pr[\underset{j \in [k]}{\bigcap } X^j_{-i} \neq \emptyset] = \epsilon + 1 - (1 - \frac{c}{n})^{n-1}$ \newline
+$\Pr[Error] \leq \epsilon + \Pr[\underset{j \in [k]}{\bigcap } X^j_{-i} \neq \emptyset] = \epsilon + 1 - (1 - \frac{c}{n})^{n-1} \approx \epsilon + 1 - \frac{1}{\sqrt[c]{e}}$ \newline
 Here we have a big obstacle since the error is huge (the one coordinate chance to be disjoint is $\frac{1}{n}$ which alone is problematic since it goes smaller). This hints us that we can not use a constant $\epsilon$ for $AND_k$ and our distribution.
 
 \paragraph{Information Analysis}
@@ -364,6 +364,24 @@ $I(X, \Pi) = \underset{j\in[k]}{\Sigma} I[X_j, \Pi | X_{<j}] \overset{(1)}{\geq 
 $I(X', \Pi ') = \underset{j \in [k]}{\mathbb{E}}[I(X_j, \Pi] = \frac{1}{n}\underset{j\in[k]}{\Sigma} I[X_j, \Pi] \leq \frac{1}{n}I(X, \Pi)$ \newline
 (1) - Since the coordinates are independent
 
+\subsection{$\text{AND}_k$ Information Cost}
+\paragraph{Introduction}
+We are going to bound the information cost for a protocol which solves $AND_k$. Our analysis is divided into three blocks: \newline
+1 - Using the error of the protocol in order to conclude it must know some information about specific player's input. \newline
+2 - Distinguishing this input is leaking some information (specificly KL-Divergence) \newline
+3 - Concluding this for the general information cost of the protocol \newline
+\paragraph{Definitions}
+\begin{definition}
+$D(a || b) = \underset{x}{\Sigma}a(x)\log(\frac{a(x)}{b(x)})$
+\end{definition}
+\paragraph{Protocol properties}
+For a transcript $\pi$ and player $i$ there is a function $q_i(\pi, x_i) \in [0,1]$ where \newline
+$Pr[\pi | x] = \underset{i}{\Pi}q_i(\pi, x_i )$
+\begin{definition}
+$\lambda _i (\pi) = \frac{q_i(\pi, 0)}{q_i(\pi, 1)}$
+\end{definition}
+We should think about this as how much this transcript prefers that $x_i = 0$ over $x_i = 1$.
+\paragraph{Part 1 - }
 \section{Extra}
 \paragraph{Binary Distribution}
 Let us consider a specific interesting distribution for $n = 2^{k-1}$. We think of $X_i \subseteq \{0, 1, ... , n-1\} $ \newline
