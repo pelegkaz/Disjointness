@@ -364,11 +364,11 @@ $I(X, \Pi) = \underset{j\in[k]}{\Sigma} I[X_j, \Pi | X_{<j}] \overset{(1)}{\geq 
 $I(X', \Pi ') = \underset{j \in [k]}{\mathbb{E}}[I(X_j, \Pi] = \frac{1}{n}\underset{j\in[k]}{\Sigma} I[X_j, \Pi] \leq \frac{1}{n}I(X, \Pi)$ \newline
 (1) - Since the coordinates are independent
 
-\subsection{$\text{AND}_k$ Information Cost}
+\subsection{$AND_k$ Information Cost}
 \paragraph{Introduction}
 We are going to bound the information cost for a protocol which solves $AND_k$. Our analysis is divided into three blocks: \newline
 1 - Using the error of the protocol in order to conclude it must know some information about specific player's input. \newline
-2 - Distinguishing this input is leaking some information (specificly KL-Divergence) \newline
+2 - Distinguishing this input is leaking some information (specifically KL-Divergence) \newline
 3 - Concluding this for the general information cost of the protocol \newline
 \paragraph{Definitions}
 \begin{definition}
@@ -398,9 +398,54 @@ $\Pr[A \bigcap T_1 | x = 0^k] \leq \Pr[T_1 | x = 0^k] = \Pr[\text{ERROR} | x = 0
 This is since the right answer for $0^k$ is 0 so $T_1$ is error. \newline 
 $\Pr[A \bigcap T_0 | x = 0^k] \leq \alpha ^k \Pr[A \bigcap T_0 | x = 1^k] \leq \alpha ^k \Pr[\text{ERROR} | x = 1^k] \leq \alpha ^k \Pr[T_0| x = 1^k] \leq \alpha ^k \epsilon$ \newline
 $\Pr[A| x = 0^k] \leq \epsilon (1 + \alpha ^k) $ \newline
-The set in which the protocol 
+The set in which the transcripts don't really prefer 0 over 1 isn't very common under $x = 0^k$. \newline
+We can also see that $\Pr[A^\complement| x = 0^k] \geq 1 - \epsilon (1 + \alpha ^k) $ \newline
+Pay attention that $A^\complement = \{\pi | \exists_i \lambda_i(\pi) \geq \alpha\}$. \newline
+If we define $A_{i}^\complement = \{\pi | \lambda_i(\pi) \geq \alpha\}$, we can see that $A^\complement = \bigcup_{i} A_{i}^\complement$.
+Using this fact and union bound, there exists $i$ such that 
 \begin{equation*}
-    a
+    \Pr[A_{i}^\complement| x = 0^k] \geq \frac{1 - \epsilon (1 + \alpha ^k)}{k}
+\end{equation*}
+That is the finish line of this part. We got a set of transcripts which has nice probability under $x = 0^k$ where the transcripts prefer strongly 0 over 1 for some index. We may use this technique in different ways depends on our distribution of inputs. For small $k$ our distribution give high probability for $0^k$ which is pretty convenient. For other distribution we may want to modify this method. \newline
+This is a rough method in order to use the fact that the protocol has to be "biased" in terms of $\lambda_i$ in order to have a low error. \newline
+\paragraph{Part 2 - Divergence}
+In this part, we are going to show that the set we found in the last part is contributing high enough divergence. This will be enough since $x = 0^k$ has high probability under our distribution. \newline
+Let us analyze the connection between $\lambda_i(\pi)$ to its divergence. \newline
+Pay attention to this: \newline
+\begin{equation*}
+    \Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi] \overset{(1)}{=} \frac{\Pr[\pi | X=0^k]\Pr[X_i=0|X_{-i}=0^{k-1}]}{Pr[\pi|X_{-i} = 0^{k-1}]} = 
+\end{equation*}
+\begin{equation*}
+    = \frac{\Pr[\pi | X=0^k]\Pr[X_i=0|X_{-i}=0^{k-1}]}{\Pr[\pi | X=0^k]\Pr[X_i=0|X_{-i}=0^{k-1}] + \Pr[\pi | X=0^{i-1}10^{k-i}]\Pr[X_i=1|X_{-i}=0^{k-1}]}
+\end{equation*}
+\begin{equation*}
+ =  \frac{\mu(0)}{\mu(0) + \frac{\Pr[\pi | X=0^{i-1}10^{k-i}]}{\Pr[\pi | X=0^k]}\mu(1)} = \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}} 
+\end{equation*} 
+(1) - by Bayes \newline
+We can also conclude: \newline
+\begin{equation*}
+\Pr[X_i = 1 | X_{-i}=0^{k-1}, \pi]  = \frac{\frac{\mu(1)}{\lambda_i(\pi)}}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}} = \frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)}
+\end{equation*}
+The brave part now (analysing two parts of the divergence): \newline
+\paragraph{Part 1 of the divergence:}
+$\frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)} \log\left( \frac{1}{\lambda_i(\pi)\mu(0) + \mu(1)}\right) = -\mu(1) \frac{\log(\lambda_i(\pi)\mu(0) + \mu(1))}{\lambda_i(\pi)\mu(0) + \mu(1)}$ \newline
+It is true that $\frac{logx}{x} \rightarrow 0$ for $x \rightarrow \infty$ \newline
+For small k, $\mu(0) \rightarrow 1$. We can choose big enough $\alpha$ such that for big n, if $\lambda_i(\pi) \geq \alpha$ it is true that: \newline
+$\lambda_i(\pi)\mu(0) + \mu(1) \geq \lambda_i(\pi)\mu(0) \geq \frac{\lambda_i(\pi)}{2} \geq \frac{\alpha}{2}$ \newline
+$ \frac{\log(\lambda_i(\pi)\mu(0) + \mu(1))}{\lambda_i(\pi)\mu(0) + \mu(1)} < \frac{1}{8}$ \newline
+To conclude this part:
+$\frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)} \log\left( \frac{1}{\lambda_i(\pi)\mu(0) + \mu(1)}\right) \geq -\mu(1) \frac{1}{8}$
+\paragraph{Part 2 of the divergence:}
+
+\paragraph{Part 3 - Information Summary}
+\begin{equation*}
+    I(X;\Pi) = \overset{k+i}{\underset{j=i+1}{\Sigma } } I[X_{j mod k}, \Pi | X_{<(j \mod k)}] \geq I(X_i;\Pi | X_{-i}) = \mathbb{E}_{x, \pi \sim \mu} \left( D\left(\frac{X_i | \pi, X_{-i}}{X_i | X_{-i}} \right) \right) \geq
+\end{equation*}
+\begin{equation*}
+    \geq \mu(0^k) \mathbb{E}_{\pi \sim x = 0^k} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq 
+\end{equation*}
+\begin{equation*}
+\mu(0^k) \Pr[A_{i}^\complement| x = 0^k] \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq \left (1 - n^{-\frac{1}{k}} \right)^{k} \cdot \frac{1 - \epsilon (1 + \alpha ^k)}{k} 
 \end{equation*}
 \section{Extra}
 \paragraph{Binary Distribution}
