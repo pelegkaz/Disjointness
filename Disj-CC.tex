@@ -381,7 +381,27 @@ $Pr[\pi | x] = \underset{i}{\Pi}q_i(\pi, x_i )$
 $\lambda _i (\pi) = \frac{q_i(\pi, 0)}{q_i(\pi, 1)}$
 \end{definition}
 We should think about this as how much this transcript prefers that $x_i = 0$ over $x_i = 1$.
-\paragraph{Part 1 - }
+\paragraph{Part 1 - Protocol Error Analysis}
+\begin{lemma}
+For any $x \in \{0,1\}^k$, any transcript $\pi$ \newline
+Denote $Z(x) = {i \in k | x_i = 0}$ so \newline
+$\frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \Pi_{i \in Z(x)} \lambda_i (\pi)$
+\end{lemma}
+\begin{proof}
+$\frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \frac{\Pi_{i \in [k]} q_i (\pi, x_i)}{\Pi_{i \in [k]} q_i (\pi, 1)} = \Pi_{i \in Z(x)} \frac{q_i (\pi, 0)}{q_i (\pi, 1)} = \Pi_{i \in Z(x)} \lambda_i (\pi)$
+\end{proof}
+Let there be $\alpha \in \mathbb{R}, \alpha \geq 1$ \newline
+Let us define a set of transcripts $A = \{\pi | \forall_i \lambda_i (\pi) < \alpha \}$. 
+Denote two more sets: $T_1$ - transcripts which are ended with positive answer (there is an intersection). $T_0$ - transcripts which are ended with negative answer (there is no intersection). \newline
+Let us pay attention: \newline
+$\Pr[A \bigcap T_1 | x = 0^k] \leq \Pr[T_1 | x = 0^k] = \Pr[\text{ERROR} | x = 0^k] \leq \epsilon$ \newline
+This is since the right answer for $0^k$ is 0 so $T_1$ is error. \newline 
+$\Pr[A \bigcap T_0 | x = 0^k] \leq \alpha ^k \Pr[A \bigcap T_0 | x = 1^k] \leq \alpha ^k \Pr[\text{ERROR} | x = 1^k] \leq \alpha ^k \Pr[T_0| x = 1^k] \leq \alpha ^k \epsilon$ \newline
+$\Pr[A| x = 0^k] \leq \epsilon (1 + \alpha ^k) $ \newline
+The set in which the protocol 
+\begin{equation*}
+    a
+\end{equation*}
 \section{Extra}
 \paragraph{Binary Distribution}
 Let us consider a specific interesting distribution for $n = 2^{k-1}$. We think of $X_i \subseteq \{0, 1, ... , n-1\} $ \newline
