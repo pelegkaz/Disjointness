@@ -341,6 +341,29 @@ By (2):
     f_{\text{min}} = k\left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}
 \end{align*}
 \end{proof}
+\section{Lower Bound}
+\paragraph{Introduction}
+Usually in lower bound using information theory techniques, we firstly move to the problem of disjointness where $n=1$ denoted as $\text{AND}_k$ which is the problem where every player has one bit and they need to answer whether they all got 1 or not. After moving to this problem, we calculate how much information is needed in order to solve it.
+\subsection{Direct Sum}
+\begin{theorem}
+Given a protocol $A$ which solves $DISJ^n_k$ with error $\epsilon$ (for every input). There is a protocol $B$ which solves $AND_k$ with error $\epsilon + ??$ such that \newline
+For $X \sim \mu^n, \Pi \sim A(X), X' \sim \mu, \Pi ' \sim B(X') $ \newline
+$I(\Pi, X) \geq n I(\Pi ', X')$
+\end{theorem}
+\paragraph{The Protocol}
+For input $X'_i \in \{0, 1\}$, the players use the public randomness in order to find a random index $j \in [k]$ in which they are gonna insert the original input. For the other indexes, every player uses the private randomness in order to sample the other indexes from $\mu$. Then they just run the protocol $A$ for their inputs. They answer the output of $A$. 
+
+\paragraph{Error Analysis}
+Our protocol errors in one of two cases: The original protocol errors, or the inputs that the player sampled has intersection and the given doesn't. \newline
+$\Pr[Error] \leq \epsilon + \Pr[\underset{j \in [k]}{\bigcap } X^j_{-i} \neq \emptyset] = \epsilon + 1 - (1 - \frac{c}{n})^{n-1}$ \newline
+Here we have a big obstacle since the error is huge (the one coordinate chance to be disjoint is $\frac{1}{n}$ which alone is problematic since it goes smaller). This hints us that we can not use a constant $\epsilon$ for $AND_k$ and our distribution.
+
+\paragraph{Information Analysis}
+$X_j - \text{Input for all of the players in coordinate j}$ \newline
+$I(X, \Pi) = \underset{j\in[k]}{\Sigma} I[X_j, \Pi | X_{<j}] \overset{(1)}{\geq } \underset{j\in[k]}{\Sigma} I[X_j, \Pi]$ \newline
+$I(X', \Pi ') = \underset{j \in [k]}{\mathbb{E}}[I(X_j, \Pi] = \frac{1}{n}\underset{j\in[k]}{\Sigma} I[X_j, \Pi] \leq \frac{1}{n}I(X, \Pi)$ \newline
+(1) - Since the coordinates are independent
+
 \section{Extra}
 \paragraph{Binary Distribution}
 Let us consider a specific interesting distribution for $n = 2^{k-1}$. We think of $X_i \subseteq \{0, 1, ... , n-1\} $ \newline
