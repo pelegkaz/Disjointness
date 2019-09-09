@@ -222,9 +222,10 @@ $\Pr[ERROR] \overset{(5)}{\leq} \underset{\text{r round}}{\mathop{\mathbb{E}}} [
 (4) - No player was significant \newline
 (5) - If the protocol didn't guess, there was no error
 \paragraph{Communication Analysis}
-We analyze round by round. For a single round, firstly we pay at most $k$ bits in order to find if some player has a chance to have critical index. After that the coordinator sends his identity to the others $k\log(k)$ bits. Then the protocol sends the sample index and $A_{i}$ to all of the players. Now we ask what is the expected value of the index. \newline
+We analyze round by round. For a single round which isn't the last one, firstly we pay at most $k$ bits in order to find a significant player. After that the coordinator sends his identity to the others $k\log(k)$ bits. Then the protocol sends $j$ and $l$ to all of the players. $l$ is at most $log(n_{r-1})$
+Let us analyze how big is $j$ \newline
 This is a random variable which has a geometric distribution. \newline
-$ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[DISJ \land \text{i is critical} | X_i = x_i \land \text{We got this far in the protocol}]} \leq \frac{k}{\epsilon}$ \newline
+$ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} | X_i = x_i]} \leq \frac{k}{\epsilon}$ \newline
 $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$ \newline
 Let us define $m : = |A_i|$ for the chosen $A_i$ for the specific round.
 Pay attention that $|A_i| \cdot n^{-1/k} \geq |A_{i-1}| \geq n^{1-\frac{i-1}{k}}$ \newline
