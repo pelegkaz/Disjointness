@@ -156,6 +156,10 @@ in other words, $X_i$ eliminates a significant fraction of elements from conside
 We say that player $i$ is \emph{critical} if $i$ is the smallest index that satisfies the lemma conditions.
 
 \subsection{The Protocol}
+\TODO{verify properties:}
+For a specific product distribution $\mu$, let us describe a protocol that errors with probability of $\epsilon$. Our protocol uses public randomness and uses $kn^{1-1/k}$ bits of expected communication.
+\newline
+
 Throughout the protocol, we maintain a set $U \subseteq [n]$ of ``possible intersection elements'', with the property that $\bigcap_i X_i \subseteq U$.
 Initially we set $U = [n]$.
 The protocol operates in \emph{iterations};
