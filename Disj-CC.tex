@@ -92,16 +92,9 @@ We are going to consider a sequential point of view for the disjointness problem
 \subsection{Notations}
 \Rnote{Not touching this for now}
 We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
-\subsection{The Protocol}
-Throughout the protocol, we maintain a set $U \subseteq [n]$ of ``possible intersection elements'', with the property that $\bigcap_i X_i \subseteq U$.
-Initially we set $U = \emptyset$.
-The protocol operates in \emph{iterations};
-in each iteration, our goal is to find a player that can reduce $U$ significantly without using much communication.
-If we can find such a player, we use it to reduce $U$, and continue;
-if we cannot find such a player, this means that $\bigcap_i X_i \neq \emptyset$, so we can halt and output ``not disjoint''.
-
-Define  sets $[n] = A_0 \supseteq A_1 \supseteq \ldots \supseteq A_k$, as follows:
-for each $i = 0,\ldots,k$,
+\subsection{Sequential Point of View}
+Define sets $[n] = A_0 \supseteq A_1 \supseteq \ldots \supseteq A_k$, as follows:
+for each $i = 1,\ldots,k$,
 \begin{equation*}
   A_i \coloneq \cap_{j = 1}^i X_j,
 \end{equation*}
@@ -122,23 +115,25 @@ in other words, $X_i$ eliminates a significant fraction of elements from conside
   \label{lemma:narrow}
 \end{lemma}
 \begin{proof}
-    We first prove that there is such index only with the first property, and than we are going to show that the minimal one of the indexes with the first property has the second one also.
+    We first prove that there is an index $j$ which satisfies the first property, and than we are going to show that the minimal one of the indexes with the first property has the second one also.
 
   Let us denote by $j$ the maximal index where 
   \begin{equation*}
     A_{j-1} \neq \emptyset.
   \end{equation*}
   There is such because it is true for $j=1$. \newline
-  Because j is maximal, this property doesn't hold for $j+1$ so we know that $j=k$ or $A_j = \emptyset$. But $\bigcap_i X_i = A_k = \emptyset$ so we got $A_j = \emptyset$. 
+  Because j is maximal, it is true that this property doesn't hold for $j+1$ or that $j=k$. We claim that anyway $A_j = \emptyset$.
+  If the property doesn't hold for $j+1$ it means that $A_j = \emptyset$.
+  If $j=k$, we pay attention that $\bigcap_i X_i = A_k = \emptyset$ so we got $A_j = \emptyset$. 
   Pay attention
   \begin{equation*}
     \frac{|A_j|}{|A_{j-1}|} = \frac{0}{|A_{j-1}|} = 0 < \frac{1}{n^{1/k}}
   \end{equation*}
   So we know that (1) holds for j.
   
-  Let us denote $j^\star$ the minimal index which holds (1).
+  Let us denote $j^\star$ the minimal index which satisfies (1).
   
-  We can see that for all $i \in [j^\star-1]$ we have
+  Because of its minimality, for all $i \in [j^\star-1]$ we have
   \begin{equation*}
     \frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{1/k}}.
   \end{equation*}
@@ -151,16 +146,29 @@ in other words, $X_i$ eliminates a significant fraction of elements from conside
     =
     \frac{1}{n^{j^\star/k}}.
   \end{align*}
-  Since $|A_0| = n$, this implies that $|A_{j^\star}| \geq n^{1-j^\star/k} \geq 1$. Therefore $A_{j^\star} \neq \emptyset$.
+  Since $|A_0| = n$, 
+  \begin{align*}
+      |A_{j^\star}| \geq n^{1 - j^\star/k} \geq 1
+  \end{align*}
+    Therefore $A_{j^\star} \neq \emptyset$.
 \end{proof}
 
-We say that player $i$ is \emph{critical} if $i$ is the smallest index such that $|A_i| / |A_{i-1}| < 1/n^{1/k}$.
-Note that player $i$ does not \emph{know} if it is critical or not, because it does not know $|A_{i-1}|$ (this depends on other players' inputs);
-but it can compute the probability that it is critical, and this is what we will use in the protocol.
+We say that player $i$ is \emph{critical} if $i$ is the smallest index that satisfies the lemma conditions.
 
-\paragraph{The protocol.}
+\subsection{The Protocol}
+Throughout the protocol, we maintain a set $U \subseteq [n]$ of ``possible intersection elements'', with the property that $\bigcap_i X_i \subseteq U$.
+Initially we set $U = [n]$.
+The protocol operates in \emph{iterations};
+in each iteration, our goal is to find a player that can reduce $U$ significantly without using much communication.
+If we can find such a player, we use it to reduce $U$, and continue;
+if we cannot find such a player, this means that $\bigcap_i X_i \neq \emptyset$, so we can halt and output ``not disjoint''.
+
 As we said, the protocol proceeds in iterations, $r = 1,\ldots,R$
 \TODO{replace $R$ with some concrete upper bound on the number of iterations}.
+\TODO{
+
+Note that player $i$ does not \emph{know} if it is critical or not, because it does not know $|A_{i-1}|$ (this depends on other players' inputs);
+but it can compute the probability that it is critical, and this is what we will use in the protocol.}
 
 For a player $i$, an iteration $r$,
 let
