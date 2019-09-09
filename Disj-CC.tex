@@ -153,7 +153,7 @@ in other words, $X_i$ eliminates a significant fraction of elements from conside
     Therefore $A_{j^\star} \neq \emptyset$.
 \end{proof}
 
-We say that player $i$ is \emph{critical} if $i$ is the smallest index that satisfies the lemma conditions.
+We say that player $i$ is \emph{critical} if $i$ satisfies the lemma conditions.
 
 \subsection{The Protocol}
 \TODO{verify properties:}
@@ -165,13 +165,12 @@ Initially we set $U = [n]$.
 The protocol operates in \emph{iterations};
 in each iteration, our goal is to find a player that can reduce $U$ significantly without using much communication.
 If we can find such a player, we use it to reduce $U$, and continue;
-if we cannot find such a player, this means that $\bigcap_i X_i \neq \emptyset$, so we can halt and output ``not disjoint''.
+if we cannot find such a player, this means that with high probability $\bigcap_i X_i \neq \emptyset$, so we can halt and output ``not disjoint''.
 
-As we said, the protocol proceeds in iterations, $r = 1,\ldots,R$
+As we said, the protocol proceeds in iterations, $r = 1,\ldots,R$.
+Denote $U_r$ the universe of the $r$'s iteration. Denote $n_r = |U_r|$. \newline
 \TODO{replace $R$ with some concrete upper bound on the number of iterations}.
-\TODO{
-
-Note that player $i$ does not \emph{know} if it is critical or not, because it does not know $|A_{i-1}|$ (this depends on other players' inputs);
+\TODO{Note that player $i$ does not \emph{know} if it is critical or not, because it does not know $|A_{i-1}|$ (this depends on other players' inputs);
 but it can compute the probability that it is critical, and this is what we will use in the protocol.}
 
 For a player $i$, an iteration $r$,
@@ -179,17 +178,16 @@ let
 \begin{equation*}
   \gamma_i^r(x_i) \coloneq \Pr_{(\rv{X}_1,\ldots,\rv{X}_k) \sim \mu}\left[ \text{ $i$ is critical in $U_{r-1}$} \land \text{DISJ} \given \rv{X}_i = x_i \right].
 \end{equation*}
-We say that player $i$ is \emph{significant} if $\gamma_i^r(s) \geq \eps / k$.
-\TODO{What is $\eps$?}
+We say that player $i$ is \emph{significant} if $\gamma_i^r(x_i) \geq \eps / k$.
 
 In each iteration $r$, the coordinator asks each of the $k$ players whether or not they are significant.
 If no player is significant, the coordinator halts and outputs ``not disjoint''.
 If there is some significant player, the coordinator chooses the first player $i$ that is significant,
 and sends the index $i$ to all players.
 
-Next, using public randomness, the coordinator and the players sample
-iid sets $(X_1, \ldots , X_k)^1, \ldots (X_1, \ldots , X_k)^2,\ldots \sim \mu((\rv{X_1}, \ldots , \rv{X_k}))$.
-Player $i$ finds the first index $j$ such that he is critical in $(X_1, \ldots X_{i-1}, x_i, X_{i+1}, \ldots , X_k)^j$. In this set, $|A_{i-1}^j \cap x_i| / |A_{i-1}^j| < 1/n^{1/k}$. Now we split $A_{i-1}^j$ to sets of size $\frac{n^{1/k}}{2}$ by order denoted $Z^{r}_1, \ldots , Z^{r}_m$. .By counting argument, one of them doesn't intersect with $A_{i-1}^j \cap x_i$ - let us denote its index by $l$. Player $i$ sends the index $j$ to the coordinator, along with the index $l$ for the right $Z^{r}_l$ to the coordinator.
+Next, using public randomness, the coordinator and the players sample inputs from $\mu$ i.e iid sets $(X_1, \ldots , X_k)^1, \ldots (X_1, \ldots , X_k)^2,\ldots \sim \mu((\rv{X_1}, \ldots , \rv{X_k}))$.
+Player $i$ finds the first index $j$ such that he is critical in $(X_1, \ldots X_{i-1}, x_i, X_{i+1}, \ldots , X_k)^j$. \newline
+We use this sample in order to find elements in $[n] \setminus x_i$ as following: Critical property claims that $|A_{i-1}^j \cap x_i| / |A_{i-1}^j| < 1/n_{r-1}^{1/k}$. Now we split $A_{i-1}^j$ to sets of size $\frac{n_{r-1}^{1/k}}{2}$ by order denoted $Z^{r}_1, \ldots , Z^{r}_m$. .By counting argument, one of them doesn't intersect with $A_{i-1}^j \cap x_i$ - let us denote its index by $l$. Player $i$ sends the index $j$ to the coordinator, along with the index $l$ for the right $Z^{r}_l$ to the coordinator.
 The coordinator disseminates $j, l$ to all the other players.
 
 Observe that $Z^{r}_l \subseteq \overline{X_i}$,
