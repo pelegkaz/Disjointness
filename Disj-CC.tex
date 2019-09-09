@@ -196,32 +196,31 @@ so the elements of $Z^{r}_l$ can now be removed from the universe:
   U_r \leftarrow U_{r-1} \setminus (Z^{r}_l).
 \end{equation*}
 
+If $n_r \leq n^{1-1/k}$, every player sends his input to the coordinator which calculate the disjointness and sends the output to every player.
+
+\paragraph{Clarifications}
+We strongly use the fact that this is a product distribution where everyone can sample the inputs and parse them and the critical player's input doesn't affect the distribution. \newline
+For specific inputs, one of the player must be critical if there is an intersection (as proved in the lemma) but it is not easy to know which one of them is critical. 
 \TODO{up to here}
 
 
 
 \subsection{Properties of Our Protocol}
 Our protocol is using random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-1/k})$ bits of communication between the players.
-\subsection{The Protocol}
-Our protocol is divided into rounds. In each round we find out some zeros of some player and then we ignore these indexes from now on and make our universe smaller. \newline
-Every round works like this: \newline
-The coordinator asks the players one by one whether $\Pr[DISJ \land \text{i is critical} | X_i = x_i \land \text{We got this far in the protocol}] \geq \frac{\epsilon}{k}$. \newline
-If all of them answer negative - declare intersection. \newline
-Otherwise, choose the first one to take out indexes by the following protocol: \newline
-First the coordinator sends his identity ($i$) to all of the players. \newline
-Now all of them parse the public random coins as samples of $A_{i-1}$ (Every player knows to parse it). Player $i$ finds a sample in which he is critical. Then he sends its index to the coordinator and after that he sends $A_i (=A_{i-1} \cap x_i)$ index by index. The coordinator sends this information to every other player.
-Note that knowing this information they all can deduce $A_i \setminus A_{i-1} \subseteq X^{c}_i$ which are zeros of player $i$. They all take these zeros out (making the universe smaller $U := U \cap (A_i \setminus A_{i-1})$). If $|U| \leq n^{1-1/k}$, everyone sends their inputs to the coordinator which calculate the answer and declares accordingly.
 \subsection{Analysis}
 \paragraph{Error Analysis}
-For each leaf $L$ in our protocol tree (determined by X,Y), we are going to argue that we error for at most $\epsilon$. Therefore in overall we don't error more than $\epsilon$. (We consider the tree given specific random coins) \newline
-A leaf $L$ is a round in which we stop. \newline
-The only times we error is when we answer due to the probability calculations. The other leaves have 0 error.\newline
-$\Pr[ERROR | \text{Stopped at L}] \overset{(1)}{=} \Pr[ERROR \land DISJ | \text{Stopped at L}] \overset{(2)}{=} \sum\limits_{i=1}^k \Pr[ERROR \land \text{DISJ} \land \text{i is critical}| \text{Stopped at L}] \overset{(3)}{=} \sum\limits_{i=1}^k \underset{X_i=x_i}{\mathop{\mathbb{E}}}\Pr[ERROR \land \text{DISJ}\land \text{i is critical}| \text{Stopped at L} \land X_i=x_i] \leq \sum\limits_{i=1}^k \underset{X_i=x_i}{\mathop{\mathbb{E}}}[\frac{\epsilon}{k}] = \sum\limits_{i=1}^k \frac{\epsilon}{k} = \epsilon$ \newline
-\newline
-$\Pr[ERROR] = \underset{\text{L leaf}}{\mathop{\mathbb{E}}} [\Pr[ERROR | \text{Stopped at L}] ] \leq \epsilon $ \newline
+Given that the protocol stopped at round $r$, we are going to argue that we error for at most $\epsilon$. Therefore in overall we don't error more than $\epsilon$.
+We only error when we stopped because the protocol guessed the output, i.e no player was significant and actually the players' inputs are disjoint. The other ending of the protocol is when everyone sends their inputs to the coordinator which calculates the exact output and there is no possible error. \newline
+$\Pr[ERROR | \text{Guessed at round r}] \overset{(1)}{=} \Pr[DISJ | \text{Guessed at round r}] \overset{(2)}{\leq} $\newline
+$\sum\limits_{i=1}^k \Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ}| \text{Guessed at round r}] \overset{(3)}{=} $ \newline
+$\sum\limits_{i=1}^k \underset{X_i=x_i}{\mathop{\mathbb{E}}}\Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ}| \text{Guessed at round r} \land X_i=x_i] \overset{(4)}{\leq} \sum\limits_{i=1}^k \underset{X_i=x_i}{\mathop{\mathbb{E}}}[\frac{\epsilon}{k}] = \sum\limits_{i=1}^k \frac{\epsilon}{k} = \epsilon$ \newline
+
+$\Pr[ERROR] \overset{(5)}{\leq} \underset{\text{r round}}{\mathop{\mathbb{E}}} [\Pr[ERROR | \text{Guessed at L}] ] \leq \epsilon $ \newline
 (1) - The protocol errors only when the sets are disjoint (the protocol declares intersection). \newline
-(2) - $  \text{DISJ} = \biguplus_{i=1}^{k}\{DISJ \land \text{i is the critical index} \} $ \newline
-(3) - Law of total expectation
+(2) - $  \text{DISJ} = \bigcup_{i=1}^{k}\{\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} \} $ (using lemma 3.1) \newline
+(3) - Law of total expectation \newline
+(4) - No player was significant \newline
+(5) - If the protocol didn't guess, there was no error
 \paragraph{Communication Analysis}
 We analyze round by round. For a single round, firstly we pay at most $k$ bits in order to find if some player has a chance to have critical index. After that the coordinator sends his identity to the others $k\log(k)$ bits. Then the protocol sends the sample index and $A_{i}$ to all of the players. Now we ask what is the expected value of the index. \newline
 This is a random variable which has a geometric distribution. \newline
