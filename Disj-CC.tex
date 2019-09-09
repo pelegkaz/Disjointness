@@ -81,14 +81,18 @@
 
 
 \section{Introduction}
-\Rnote{Not touching this for now}
-We are going to consider a sequential point of view for the disjointness problem for k players. Let us imagine a process in which the players go one after another and intersect their sets with the result. Starting with the full set ($[n]$), after the last player plays, we end up with the intersection of all sets. Therefore our question is whether this set is empty or not. Moreover, if the last set is empty, one of the players must subtract a large amount of elements in this process. After he plays we get a set which is in smaller order of magnitude than the one before. The difference between those sets are included in the player's zeros. That is where we have an option to learn them using small amount of communication. 
+
 \subsection{Related Work}
 \section{Preliminaries}
-\Rnote{Not touching this for now}
-\subsection{Notations}
-We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
+
 \section{$O(kn^{1-1/k})$-Bit Protocol}
+\subsection{The Idea}
+\Rnote{Not touching this for now}
+We are going to consider a sequential point of view for the disjointness problem for k players. Let us imagine a process in which we start with the set of all points ([n]). The players go one after another and intersect their sets with the result. After the last player plays, we end up with the intersection of all sets. Therefore our question is whether this set is empty or not. Moreover, if the last set is empty, one of the players must have subtracted a large amount of elements in this process. We use this fact in order to learn large amount of elements which are not in this player's input. Those elements could not be in the intersection of all of the inputs, so we can ignore them from now on. 
+\subsection{Notations}
+\Rnote{Not touching this for now}
+We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
+\subsection{The Protocol}
 Throughout the protocol, we maintain a set $U \subseteq [n]$ of ``possible intersection elements'', with the property that $\bigcap_i X_i \subseteq U$.
 Initially we set $U = \emptyset$.
 The protocol operates in \emph{iterations};
