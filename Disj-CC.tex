@@ -222,19 +222,16 @@ $\Pr[ERROR] \overset{(5)}{\leq} \underset{\text{r round}}{\mathop{\mathbb{E}}} [
 (4) - No player was significant \newline
 (5) - If the protocol didn't guess, there was no error
 \paragraph{Communication Analysis}
-We analyze round by round. For a single round which isn't the last one, firstly we pay at most $k$ bits in order to find a significant player. After that the coordinator sends his identity to the others $k\log(k)$ bits. Then the protocol sends $j$ and $l$ to all of the players. $l$ is at most $log(n_{r-1})$
+We analyze round by round. \newline
+For a single round which isn't the last one, firstly we pay at most $k$ bits in order to find a significant player. After that the coordinator sends his identity to the others: $k\log(k)$ bits. Then the protocol sends $j$ and $l$ to all of the players. $l$ is at most $log(n_{r-1})$
 Let us analyze how big is $j$ \newline
 This is a random variable which has a geometric distribution. \newline
 $ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} | X_i = x_i]} \leq \frac{k}{\epsilon}$ \newline
 $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$ \newline
-Let us define $m : = |A_i|$ for the chosen $A_i$ for the specific round.
-Pay attention that $|A_i| \cdot n^{-1/k} \geq |A_{i-1}| \geq n^{1-\frac{i-1}{k}}$ \newline
-$m \geq n^{1-\frac{i}{k}} \geq 1$ so $m \neq 0$\newline
-We know that $|A_{i-1}| \geq |A_i| \cdot n^{1/k}$. In this round we discovered that $A_{i-1} \setminus A_i$ are zeros for player i. Pay attention $|A_{i-1} \setminus A_i| \overset{(1)}{=} |A_{i-1}| - |A_i| \geq |A_i|(n^{1/k} - 1) = m(n^{1/k} - 1)$ \newline
-So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n)$ and we discovered $(n^{1/k} - 1)$ zeros. \newline
-$f(n) = k(\log(k) + \log(\frac{1}{\epsilon}) + m\log(n)) + f(n - m(n^{1/k} - 1))$ \newline 
-$f(n) \in O(kn^{1-\frac{1}{k}}\log(n))$ \newline
-(1) $A_i \subseteq A_{i-1}$
+So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n) \in O(k(\log(n) + \log(\frac{1}{\epsilon}))$ and we discovered $(n^{\frac{1}{k}}/2)$ zeros. \newline
+There are at most $\frac{n}{n^{\frac{1}{k}}/2} = 2n^{1-\frac{1}{k}}$ rounds. \newline
+For the last round we pay $kn^{1-\frac{1}{k}} \log(n)$ \newline
+So the total communication cost is  $O(kn^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(n)))$.
 \section{k-n relation analysis}
 \paragraph{$k < \log(n)$:}
 For this case $k$ is pretty small. meaning $kn^{1/k} \approx n^{1/k}$. So we are pretty tight (our lower bound is almost like our upper one).
