@@ -105,12 +105,13 @@ Our goal in the $\prob{Disj}$ problem is to determine whether or not $A_k = \emp
 We claim that if $\bigcap_i X_i = \emptyset$, then there is at least one player $i$ such that $A_i$ is significantly smaller than $A_{i - 1}$;
 in other words, $X_i$ eliminates a significant fraction of elements from consideration.
 \begin{lemma}
+    Let there be a universe $U_r$ (subset of $[n]$). Denote $n_r = |U_r|$. \newline
   If $\bigcap_i X_i = \emptyset$,
   then there is some player $i \in [k]$
   with
   \begin{align}
-    \frac{|A_{i}|}{|A_{i-1}|} < \frac{1}{n^{1/k}} \\
-    A_{i} \neq \emptyset
+    \frac{|A_{i} \cap U_r|}{|A_{i-1} \cap U_r|} < \frac{1}{n_r^{1/k}} \\
+    A_{i} \cap U_r \neq \emptyset
   \end{align}
   \label{lemma:narrow}
 \end{lemma}
@@ -119,15 +120,15 @@ in other words, $X_i$ eliminates a significant fraction of elements from conside
 
   Let us denote by $j$ the maximal index where 
   \begin{equation*}
-    A_{j-1} \neq \emptyset.
+    A_{j-1} \cap U_r \neq \emptyset.
   \end{equation*}
   There is such because it is true for $j=1$. \newline
-  Because j is maximal, it is true that this property doesn't hold for $j+1$ or that $j=k$. We claim that anyway $A_j = \emptyset$.
-  If the property doesn't hold for $j+1$ it means that $A_j = \emptyset$.
-  If $j=k$, we pay attention that $\bigcap_i X_i = A_k = \emptyset$ so we got $A_j = \emptyset$. 
+  Because j is maximal, it is true that this property doesn't hold for $j+1$ or that $j=k$. We claim that anyway $A_j  \cap U_r = \emptyset$.
+  If the property doesn't hold for $j+1$ it means that $A_j \cap U_r = \emptyset$.
+  If $j=k$, we pay attention that $\bigcap_i X_i  \cap U_r = A_k  \cap U_r = \emptyset$ so we got $A_j \cap U_r = \emptyset$. 
   Pay attention
   \begin{equation*}
-    \frac{|A_j|}{|A_{j-1}|} = \frac{0}{|A_{j-1}|} = 0 < \frac{1}{n^{1/k}}
+    \frac{|A_j \cap U_r|}{|A_{j-1} \cap U_r|} = \frac{0}{|A_{j-1} \cap U_r|} = 0 < \frac{1}{n_r^{1/k}}
   \end{equation*}
   So we know that (1) holds for j.
   
@@ -135,25 +136,25 @@ in other words, $X_i$ eliminates a significant fraction of elements from conside
   
   Because of its minimality, for all $i \in [j^\star-1]$ we have
   \begin{equation*}
-    \frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{1/k}}.
+    \frac{|A_i \cap U_r|}{|A_{i-1} \cap U_r|} \geq \frac{1}{n_r^{1/k}}.
   \end{equation*}
   Then we get that
   \begin{align*}
-    \frac{|A_{j^\star}|}{|A_0|} = 
-    \frac{|A_{j^\star}|}{|A_{j^\star-1}|} \cdot \frac{|A_{j^\star-1}|}{|A_{j^\star-2}|} \cdot \ldots \cdot \frac{|A_1|}{|A_0|}
+    \frac{|A_{j^\star} \cap U_r|}{|A_0 \cap U_r|} = 
+    \frac{|A_{j^\star} \cap U_r|}{|A_{j^\star-1} \cap U_r|} \cdot \frac{|A_{j^\star-1} \cap U_r|}{|A_{j^\star-2} \cap U_r|} \cdot \ldots \cdot \frac{|A_1 \cap U_r|}{|A_0 \cap U_r|}
     \geq
-    \left(  \frac{1}{n^{1/k}} \right)^{j^\star}
+    \left(  \frac{1}{n_r^{1/k}} \right)^{j^\star}
     =
-    \frac{1}{n^{j^\star/k}}.
+    \frac{1}{n_r^{j^\star/k}}.
   \end{align*}
-  Since $|A_0| = n$, 
+  Since $|A_0 \cap U_r| = n_r$, 
   \begin{align*}
-      |A_{j^\star}| \geq n^{1 - j^\star/k} \geq 1
+      |A_{j^\star} \cap U_r| \geq n_r^{1 - j^\star/k} \geq 1
   \end{align*}
-    Therefore $A_{j^\star} \neq \emptyset$.
+    Therefore $A_{j^\star} \cap U_r \neq \emptyset$.
 \end{proof}
 
-We say that player $i$ is \emph{critical} if $i$ satisfies the lemma conditions.
+We say that player $i$ is \emph{critical} in $U_r$ if $i$ satisfies the lemma conditions.
 
 \subsection{The Protocol}
 \TODO{verify properties:}
@@ -228,8 +229,8 @@ Let us analyze how big is $j$ \newline
 This is a random variable which has a geometric distribution. \newline
 $ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} | X_i = x_i]} \leq \frac{k}{\epsilon}$ \newline
 $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$ \newline
-So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n) \in O(k(\log(n) + \log(\frac{1}{\epsilon}))$ and we discovered $(n^{\frac{1}{k}}/2)$ zeros. \newline
-There are at most $\frac{n}{n^{\frac{1}{k}}/2} = 2n^{1-\frac{1}{k}}$ rounds. \newline
+So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n) \in O(k(\log(n) + \log(\frac{1}{\epsilon}))$ and we discovered $(n_r^{\frac{1}{k}}/2)$ zeros. \newline
+In the appendix - there are $O(n^{1-1/k})$ rounds.
 For the last round we pay $kn^{1-\frac{1}{k}} \log(n)$ \newline
 So the total communication cost is  $O(kn^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(n)))$.
 \section{k-n relation analysis}
@@ -486,6 +487,27 @@ and for $i = k$
 where $m_i$ is the $i$'th bit of m in binary representation. ($m_i \mathrel{\mathop:}= ( m \mathop{\&} 2^{i-1} ) \gg i-1 $). \\
 Let's pay attention for some simple properties. First of all $\forall_i |X_i| = \frac{n}{2}$. Moreover, it doesn't matter if we permute the players, for $i < k, |A_i| = 0.5|A_{i-1}|$ and generally for $i < k, |A_i| = 2^{k-1-i}$. $\Pr[DISJ] = 0.5$. The thing is that this distribution has a little entropy ($k$).
 \section{Appendix}
+\paragraph{Rounds analysis for upper bound}
+\begin{claim}
+    Let us define the function $f(n)$ - rounds for the protocol starting with $n$ bits.
+    $f(n) = 1 + f(n - n^{\frac{1}{k}}/2)$ \newline
+    We claim that $f(n) \in n^{1-\frac{1}{k}}$
+\end{claim}
+\begin{proof}
+We should find that $ \exists_{D\in\mathbb{R}} : \forall_{n \in \mathbb{N}} : f(n) \leq Dn^{1-\frac{1}{k}}$. Let us prove by induction. The induction base is trivial (we can choose big enough $D$). The induction step: \newline
+We can think of $\epsilon$ as a constant. \newline
+$f(n) = 1 + f(n - n^{\frac{1}{k}}/2) \leq 1 + D(n - n^{\frac{1}{k}}/2)^{1-\frac{1}{k}} \overset{?}{\leq} Dn^{1-\frac{1}{k}}$ \newline
+
+\begin{align*}
+  1 &\overset{?}{\leq} Dn^{1-\frac{1}{k}} -  D(n - n^{\frac{1}{k}}/2)^{1-\frac{1}{k}}\\
+  1 &\overset{?}{\leq} D(n^{1-\frac{1}{k}} -  n^{\frac{1}{k}}/2)^{1-\frac{1}{k}})\\
+  \frac{1}{n^{1-\frac{1}{k}} -  (n - n^{\frac{1}{k}}/2)^{1-\frac{1}{k}}} & \overset{?}{\leq} D \\
+  \frac{n^{-1+\frac{1}{k}}}{1 -  (1 - \frac{1}{2n^{1 - \frac{1}{k}}})^{1-\frac{1}{k}}} & \overset{?}{\leq} D \\  
+\end{align*}
+$\lim_{n \rightarrow \infty} \frac{n^{1-\frac{1}{k}}}{1 -  (1 - \frac{1}{2n^{1 - \frac{1}{k}}})^{1-\frac{1}{k}}} \overset{(L)}{=} $
+\newline
+(L) - L'Hôpital's rule
+\end{proof}
 \paragraph{Proof for $f(n) \in O(kn^{1-1/k})$}
 \begin{claim} 
 For $f(n) = k(\log(k) + \log(\frac{1}{\epsilon}) + m) + f(n - m(n^{1/k} - 1))$, it is true that $f(n) \in O(kn^{1-1/k})$ (when thinking of $\epsilon$ as a constant). \newline
