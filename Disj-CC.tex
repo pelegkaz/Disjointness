@@ -90,7 +90,7 @@
 We are going to consider a sequential point of view for the disjointness problem for k players. Let us imagine a process in which we start with the set of all points ([n]). The players go one after another and intersect their sets with the result. After the last player plays, we end up with the intersection of all sets. Therefore our question is whether this set is empty or not. Moreover, if the last set is empty, one of the players must have subtracted a large amount of elements in this process. We use this fact in order to learn large amount of elements which are not in this player's input. Those elements could not be in the intersection of all of the inputs, so we can ignore them from now on. 
 \subsection{Notations}
 \Rnote{Not touching this for now}
-We use the popular notation: We are going to have $k$ players. For $i \in [k], x_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $x_i$ as a subset of $[n]$ where $x_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$.
+We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
 
 \subsection{Overview of the Protocol}
 Throughout the protocol, we maintain a \emph{universe}, $U \subseteq [n]$,
@@ -98,8 +98,8 @@ with the property that $\bigcap_i x_i \subseteq U$.
 We initially have $U = [n]$.
 The protocol operates in \emph{iterations}, where each iteration has two possible outcomes:
 \begin{enumerate}[I.]
-	\item We eliminate at least a $1/\Theta(|U|^{1/k})$-fraction of elements from $U$, or
-	\item We halt and guess that $\bigcap_i x_i \neq \emptyset$. This guess is correct with high probability over the inputs.
+  \item We eliminate at least a $1/\Theta(|U|^{1/k})$-fraction of elements from $U$, or
+  \item We halt and guess that $\bigcap_i x_i \neq \emptyset$. This guess is correct with high probability over the inputs.
 \end{enumerate}
 After at most $n^{1 - 1/k}$ iterations, if we have not yet halted,
 then $U = \emptyset$, and at this point we announce that $\bigcap_i x_i = \emptyset$.
@@ -111,7 +111,7 @@ without communicating a lot.
 Define sets $[n] = A_0 \supseteq A_1 \supseteq \ldots \supseteq A_k$, as follows:
 for each $i = 1,\ldots,k$,
 \begin{equation*}
-  A_i \coloneq \cap_{j = 1}^i X_j,
+  A_i \coloneq \cap_{j = 1}^i x_j,
 \end{equation*}
 so that for each $i \in [k]$ we have $A_i = A_{i-1} \cap x_i$.
 Our goal in the $\prob{Disj}$ problem is to determine whether or not $A_k = \emptyset$.
@@ -120,13 +120,14 @@ Our goal in the $\prob{Disj}$ problem is to determine whether or not $A_k = \emp
 We claim that if $\bigcap_i x_i = \emptyset$, then there is at least one player $i$ such that $A_i$ is significantly smaller than $A_{i - 1}$;
 in other words, $x_i$ eliminates a significant fraction of elements from consideration.
 \begin{lemma}
+    Let there be a universe $U_r$ (subset of $[n]$). Denote $n_r = |U_r|$. \newline
   If $\bigcap_i x_i = \emptyset$,
   then there is some player $i \in [k]$
   with
   \begin{enumerate}
-	  \item 
-		  $|A_{i}| / {|A_{i-1}|} < 1 / n^{1/k}$, and,
-	  \item $A_i \neq \emptyset$.
+    \item 
+      $|A_{i} \cap U_r| / {|A_{i-1} \cap U_r|} < 1 / n_r^{1/k}$, and,
+    \item $A_i \neq \emptyset$.
   \end{enumerate}
   \label{lemma:narrow}
 \end{lemma}
@@ -134,76 +135,75 @@ in other words, $x_i$ eliminates a significant fraction of elements from conside
 	We first prove that there is an index $j$ which satisfies the first property, and then we show
 	that the minimal such $j$ also has the second property.
 
-	Let $j$ be the largest index such that 
+  Let $j$ be the largest index such that 
   \begin{equation*}
-    A_{j-1} \neq \emptyset.
+    A_{j-1} \cap U_r \neq \emptyset.
   \end{equation*}
-  There is such a $j$, because $A_0 = [n]$.
+  There is such a $j$, because $A_0 \cap U_r = U_r \neq \emptyset$.
 
-  We claim that $A_{j} = \emptyset$.
+  We claim that $A_{j} \cap U_r = \emptyset$.
   If $j \neq k$, then this must be true, because $j$ is the maximal index such that $A_{j-1} \neq \emptyset$;
   and if $j = k$, then $A_j = A_k = \bigcap_i x_i = \emptyset$ by assumption.
   Thus,
   \begin{equation*}
-    \frac{|A_j|}{|A_{j-1}|} = \frac{0}{|A_{j-1}|} = 0 < \frac{1}{n^{1/k}}
+    \frac{|A_j \cap U_r|}{|A_{j-1} \cap U_r|} = \frac{0}{|A_{j-1} \cap U_r|} = 0 < \frac{1}{n_r^{1/k}}
   \end{equation*}
   So we know that (1) holds for $j$.
-  
   Let us denote $j^\star$ the minimal index which satisfies (1).
   Because of its minimality, for all $i \in [j^\star-1]$ we have
   \begin{equation*}
-    \frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{1/k}}.
+    \frac{|A_i \cap U_r|}{|A_{i-1} \cap U_r|} \geq \frac{1}{n_r^{1/k}}.
   \end{equation*}
   Then we get that
   \begin{align*}
-    \frac{|A_{j^\star}|}{|A_0|} = 
-    \frac{|A_{j^\star}|}{|A_{j^\star-1}|} \cdot \frac{|A_{j^\star-1}|}{|A_{j^\star-2}|} \cdot \ldots \cdot \frac{|A_1|}{|A_0|}
+    \frac{|A_{j^\star} \cap U_r|}{|A_0 \cap U_r|} = 
+    \frac{|A_{j^\star} \cap U_r|}{|A_{j^\star-1} \cap U_r|} \cdot \frac{|A_{j^\star-1} \cap U_r|}{|A_{j^\star-2} \cap U_r|} \cdot \ldots \cdot \frac{|A_1 \cap U_r|}{|A_0 \cap U_r|}
     \geq
-    \left(  \frac{1}{n^{1/k}} \right)^{j^\star}
+    \left(  \frac{1}{n_r^{1/k}} \right)^{j^\star}
     =
-    \frac{1}{n^{j^\star/k}}.
+    \frac{1}{n_r^{j^\star/k}}.
   \end{align*}
-  Since $|A_0| = n$, 
+  Since $|A_0 \cap U_r| = n_r$, 
   \begin{align*}
-      |A_{j^\star}| \geq n^{1 - j^\star/k} \geq 1
+      |A_{j^\star} \cap U_r| \geq n_r^{1 - j^\star/k} \geq 1
   \end{align*}
-    Therefore $A_{j^\star} \neq \emptyset$.
+    Therefore $A_{j^\star} \cap U_r \neq \emptyset$.
 \end{proof}
 
-We say that player $i$ is \emph{critical} if $i$ satisfies the conditions of the lemma.
+We say that player $i$ is \emph{critical} in $U_r$ if $i$ satisfies the conditions of the lemma.
 If player $i$ is critical, then it can efficiently communicate many elements that are not in $A_i$, as shown
 by the following simple counting argument:
 \begin{lemma}
-	Let $Y,Z \subseteq U$ be sets such that $Y \cap Z \neq \emptyset$ and
-	\begin{equation*}
-		|Y \cap Z| < \frac{|Y|}{n^{1/k}}.
-	\end{equation*}
-	Let
-	\begin{equation*}
-		m = \left\lfloor \frac{2|Y|}{n^{1/k}} \right\rfloor.
-	\end{equation*}
-	Partition the first $m \cdot (n^{1/k}/2)$ elements of $Y$ into sets $Y_1,\ldots,Y_m$,
-	each of size $n^{1/k}/2$.
-	Then there is some $j \in [m]$ such that $Y_j \cap Z = \emptyset$.
-	\label{lemma:reduce}
+  Let $Y,Z \subseteq U$ be sets such that $Y \cap Z \neq \emptyset$ and
+  \begin{equation*}
+    |Y \cap Z| < \frac{|Y|}{n^{1/k}}.
+  \end{equation*}
+  Let
+  \begin{equation*}
+    m = \left\lfloor \frac{2|Y|}{n^{1/k}} \right\rfloor.
+  \end{equation*}
+  Partition the first $m \cdot (n^{1/k}/2)$ elements of $Y$ into sets $Y_1,\ldots,Y_m$,
+  each of size $n^{1/k}/2$.
+  Then there is some $j \in [m]$ such that $Y_j \cap Z = \emptyset$.
+  \label{lemma:reduce}
 \end{lemma}  
 \begin{proof}
-	Suppose for the sake of contradiction that $Y_j \cap Z \neq \emptyset$ for each $j = 1,\ldots,m$.
-	Since the $Y_j$'s are disjoint,
-	and $Y_1,\ldots,Y_j \subseteq Y$,
-	this means that $|Y \cap Z| \geq m$.
-	Thus,
-	\begin{equation*}
-		|Y \cap Z| \geq m = \left\lfloor \frac{2|Y|}{n^{1/k}} \right\rfloor
-		\geq
-		2\frac{|Y|}{n^{1/k}} - 1.
-	\end{equation*}
-	By assumption, we have $1 \leq |Y \cap Z| < |Y| / n^{1/k}$.
-	This implies that
-	\begin{equation*}
-		\frac{2|Y|}{n^{1/k}} - 1 > \frac{|Y|}{n^{1/k}}.
-	\end{equation*}
-	Together, we have that $|Y \cap Z| > |Y| / n^{1/k}$, a contradiction.
+  Suppose for the sake of contradiction that $Y_j \cap Z \neq \emptyset$ for each $j = 1,\ldots,m$.
+  Since the $Y_j$'s are disjoint,
+  and $Y_1,\ldots,Y_j \subseteq Y$,
+  this means that $|Y \cap Z| \geq m$.
+  Thus,
+  \begin{equation*}
+    |Y \cap Z| \geq m = \left\lfloor \frac{2|Y|}{n^{1/k}} \right\rfloor
+    \geq
+    2\frac{|Y|}{n^{1/k}} - 1.
+  \end{equation*}
+  By assumption, we have $1 \leq |Y \cap Z| < |Y| / n^{1/k}$.
+  This implies that
+  \begin{equation*}
+    \frac{2|Y|}{n^{1/k}} - 1 > \frac{|Y|}{n^{1/k}}.
+  \end{equation*}
+  Together, we have that $|Y \cap Z| > |Y| / n^{1/k}$, a contradiction.
 \end{proof}
 The lemma shows that if $i$ is critical, then by communicating the index $j$ of the set $Z_j$ such that $Z_j \cap x_i = \emptyset$,
 we can remove at least $n^{1/k}/2$ elements from consideration.
@@ -214,10 +214,9 @@ but each player can compute the \emph{probability} that it is critical, given it
 For a player $i$,
 let
 \begin{equation*}
-	\gamma_i \coloneq \Pr_{(\rv{X}_1,\ldots,\rv{X}_k) \sim \mu}\left[ \text{ $i$ is critical} \land \bigcap_i \rv{X}_i = \emptyset \given \rv{X}_i = x_i \right].
+  \gamma_i \coloneq \Pr_{(\rv{X}_1,\ldots,\rv{X}_k) \sim \mu}\left[ \text{ $i$ is critical} \land \bigcap_i \rv{X}_i = \emptyset \given \rv{X}_i = x_i \right].
 \end{equation*}
 We say that player $i$ is \emph{significant} if $\gamma_i \geq \eps / k$.
-
 
 \subsection{The Protocol}
 For a given product distribution $\mu : \left(\set{0,1}^N\right)^k \rightarrow [0,1]$, we describe a protocol that errs with probability $\epsilon$.
@@ -225,41 +224,41 @@ Our protocol uses public randomness and has $\tilde{O}(kN^{1-1/k})$ bits of expe
 
 Initially, $U = \set{1,\ldots,N}$, and $n = N$.
 \begin{enumerate}[(1)]
-	\item If $|U| \leq N^{1 - 1/k}$, each player $i$ sends $x_i$ to the coordinator, who computes and outputs the answer.
-	\item Otherwise, the coordinator asks each player $i$ whether $i$ is significant (i.e., whether $\gamma_i \geq \eps / k$).
-	\item If no player is significant, the coordinator outputs ``not disjoint''. Otherwise, let $i$ be the
-		first significant player. The coordinator informs player $i$ that it has been selected.
-	\item The coordinator and the players use the public randomness to sample \TODO{how many needed?}
-		sets $A_{i-1}^{(1)},\ldots$ from the distribution of $\rv{A}_{i-1}$.
-	\item Player $i$ finds the index $j$ of the first set $A_{i-1}^{(j)}$ such that
-		\begin{equation*}
-			|A_{i-1}^{(j)} \cap X_i| \leq \frac{|A_{i-1}^{(j)}|}{n^{1/k}}.
-		\end{equation*}
-		It sends the index $j$ to the coordinator, who forwards it to the other players.
-	\item All participants set $Y = A_{i-1}^{(j)}$, $m = \lfloor 2|Y| / n^{1/k} \rfloor$,
-		and let $Y_1,\ldots,Y_m$ be as in Lemma~\ref{lemma:reduce}.
-		Player $i$ sets $Z = x_i$, and finds the index $\ell \in \set{1,\ldots,m}$
-		such that $Y_j \cap Z = \emptyset$ (the existence of this index is guaranteed by Lemma~\ref{lemma:reduce}).
-		Player $i$ sends index $\ell$ to the coordinator, who forwards it to the other players.
-	\item All participants set:
-		\begin{itemize}
-			\item $U \leftarrow U \setminus Z_{\ell}$,
-			\item $n \leftarrow |U|$,
-			\item $x_i \leftarrow x_i \cap Y$,
-			\item \TODO{how are the priors updated.}
-		\end{itemize}
+  \item If $|U| \leq N^{1 - 1/k}$, each player $i$ sends $x_i$ to the coordinator, who computes and outputs the answer.
+  \item Otherwise, the coordinator asks each player $i$ whether $i$ is significant (i.e., whether $\gamma_i \geq \eps / k$).
+  \item If no player is significant, the coordinator outputs ``not disjoint''. Otherwise, let $i$ be the
+    first significant player. The coordinator informs player $i$ that it has been selected.
+  \item The coordinator and the players use the public randomness to sample \TODO{how many needed?}
+    sets $A_{i-1}^{(1)},\ldots$ from the distribution of $\rv{A}_{i-1}$.
+  \item Player $i$ finds the index $j$ of the first set $A_{i-1}^{(j)}$ such that
+    \begin{equation*}
+      |A_{i-1}^{(j)} \cap X_i| \leq \frac{|A_{i-1}^{(j)}|}{n^{1/k}}.
+    \end{equation*}
+    It sends the index $j$ to the coordinator, who forwards it to the other players.
+  \item All participants set $Y = A_{i-1}^{(j)}$, $m = \lfloor 2|Y| / n^{1/k} \rfloor$,
+    and let $Y_1,\ldots,Y_m$ be as in Lemma~\ref{lemma:reduce}.
+    Player $i$ sets $Z = x_i$, and finds the index $\ell \in \set{1,\ldots,m}$
+    such that $Y_j \cap Z = \emptyset$ (the existence of this index is guaranteed by Lemma~\ref{lemma:reduce}).
+    Player $i$ sends index $\ell$ to the coordinator, who forwards it to the other players.
+  \item All participants set:
+    \begin{itemize}
+      \item $U \leftarrow U \setminus Z_{\ell}$,
+      \item $n \leftarrow |U|$,
+      \item $x_i \leftarrow x_i \cap Y$,
+      \item \TODO{how are the priors updated.}
+    \end{itemize}
 \end{enumerate}
 
 %\begin{algorithm}[H]
-	%\SetAlgoLined
-	%initialization\;
-	%\While{not at end of this document}
-	%{
-		%read current\;
-		%\eIf{understand}{go to next section\;current section becomes this one\;}
-		%{go back to the beginning of current section\;}
-	%}
-	%\caption{How to write algorithms}
+  %\SetAlgoLined
+  %initialization\;
+  %\While{not at end of this document}
+  %{
+    %read current\;
+    %\eIf{understand}{go to next section\;current section becomes this one\;}
+    %{go back to the beginning of current section\;}
+  %}
+  %\caption{How to write algorithms}
 %\end{algorithm}
 
 
@@ -292,6 +291,7 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
 %\TODO{up to here}
 
 
+
 \subsection{Properties of Our Protocol}
 Our protocol is using random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-1/k})$ bits of communication between the players.
 \subsection{Analysis}
@@ -309,19 +309,16 @@ $\Pr[ERROR] \overset{(5)}{\leq} \underset{\text{r round}}{\mathop{\mathbb{E}}} [
 (4) - No player was significant \newline
 (5) - If the protocol didn't guess, there was no error
 \paragraph{Communication Analysis}
-We analyze round by round. For a single round which isn't the last one, firstly we pay at most $k$ bits in order to find a significant player. After that the coordinator sends his identity to the others $k\log(k)$ bits. Then the protocol sends $j$ and $l$ to all of the players. $l$ is at most $log(n_{r-1})$
+We analyze round by round. \newline
+For a single round which isn't the last one, firstly we pay at most $k$ bits in order to find a significant player. After that the coordinator sends his identity to the others: $k\log(k)$ bits. Then the protocol sends $j$ and $l$ to all of the players. $l$ is at most $log(n_{r-1})$
 Let us analyze how big is $j$ \newline
 This is a random variable which has a geometric distribution. \newline
 $ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} | X_i = x_i]} \leq \frac{k}{\epsilon}$ \newline
 $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$ \newline
-Let us define $m : = |A_i|$ for the chosen $A_i$ for the specific round.
-Pay attention that $|A_i| \cdot n^{-1/k} \geq |A_{i-1}| \geq n^{1-\frac{i-1}{k}}$ \newline
-$m \geq n^{1-\frac{i}{k}} \geq 1$ so $m \neq 0$\newline
-We know that $|A_{i-1}| \geq |A_i| \cdot n^{1/k}$. In this round we discovered that $A_{i-1} \setminus A_i$ are zeros for player i. Pay attention $|A_{i-1} \setminus A_i| \overset{(1)}{=} |A_{i-1}| - |A_i| \geq |A_i|(n^{1/k} - 1) = m(n^{1/k} - 1)$ \newline
-So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n)$ and we discovered $(n^{1/k} - 1)$ zeros. \newline
-$f(n) = k(\log(k) + \log(\frac{1}{\epsilon}) + m\log(n)) + f(n - m(n^{1/k} - 1))$ \newline 
-$f(n) \in O(kn^{1-\frac{1}{k}}\log(n))$ \newline
-(1) $A_i \subseteq A_{i-1}$
+So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n) \in O(k(\log(n) + \log(\frac{1}{\epsilon}))$ and we discovered $(n_r^{\frac{1}{k}}/2)$ zeros. \newline
+In the appendix - there are $O(n^{1-1/k})$ rounds.
+For the last round we pay $kn^{1-\frac{1}{k}} \log(n)$ \newline
+So the total communication cost is  $O(kn^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(n)))$.
 \section{k-n relation analysis}
 \paragraph{$k < \log(n)$:}
 For this case $k$ is pretty small. meaning $kn^{1/k} \approx n^{1/k}$. So we are pretty tight (our lower bound is almost like our upper one).
@@ -576,6 +573,27 @@ and for $i = k$
 where $m_i$ is the $i$'th bit of m in binary representation. ($m_i \mathrel{\mathop:}= ( m \mathop{\&} 2^{i-1} ) \gg i-1 $). \\
 Let's pay attention for some simple properties. First of all $\forall_i |X_i| = \frac{n}{2}$. Moreover, it doesn't matter if we permute the players, for $i < k, |A_i| = 0.5|A_{i-1}|$ and generally for $i < k, |A_i| = 2^{k-1-i}$. $\Pr[DISJ] = 0.5$. The thing is that this distribution has a little entropy ($k$).
 \section{Appendix}
+\paragraph{Rounds analysis for upper bound}
+\begin{claim}
+    Let us define the function $f(n)$ - rounds for the protocol starting with $n$ bits.
+    $f(n) = 1 + f(n - n^{\frac{1}{k}}/2)$ \newline
+    We claim that $f(n) \in n^{1-\frac{1}{k}}$
+\end{claim}
+\begin{proof}
+We should find that $ \exists_{D\in\mathbb{R}} : \forall_{n \in \mathbb{N}} : f(n) \leq Dn^{1-\frac{1}{k}}$. Let us prove by induction. The induction base is trivial (we can choose big enough $D$). The induction step: \newline
+We can think of $\epsilon$ as a constant. \newline
+$f(n) = 1 + f(n - n^{\frac{1}{k}}/2) \leq 1 + D(n - n^{\frac{1}{k}}/2)^{1-\frac{1}{k}} \overset{?}{\leq} Dn^{1-\frac{1}{k}}$ \newline
+
+\begin{align*}
+  1 &\overset{?}{\leq} Dn^{1-\frac{1}{k}} -  D(n - n^{\frac{1}{k}}/2)^{1-\frac{1}{k}}\\
+  1 &\overset{?}{\leq} D(n^{1-\frac{1}{k}} -  n^{\frac{1}{k}}/2)^{1-\frac{1}{k}})\\
+  \frac{1}{n^{1-\frac{1}{k}} -  (n - n^{\frac{1}{k}}/2)^{1-\frac{1}{k}}} & \overset{?}{\leq} D \\
+  \frac{n^{-1+\frac{1}{k}}}{1 -  (1 - \frac{1}{2n^{1 - \frac{1}{k}}})^{1-\frac{1}{k}}} & \overset{?}{\leq} D \\  
+\end{align*}
+$\lim_{n \rightarrow \infty} \frac{n^{1-\frac{1}{k}}}{1 -  (1 - \frac{1}{2n^{1 - \frac{1}{k}}})^{1-\frac{1}{k}}} \overset{(L)}{=} $
+\newline
+(L) - L'Hôpital's rule
+\end{proof}
 \paragraph{Proof for $f(n) \in O(kn^{1-1/k})$}
 \begin{claim} 
 For $f(n) = k(\log(k) + \log(\frac{1}{\epsilon}) + m) + f(n - m(n^{1/k} - 1))$, it is true that $f(n) \in O(kn^{1-1/k})$ (when thinking of $\epsilon$ as a constant). \newline
