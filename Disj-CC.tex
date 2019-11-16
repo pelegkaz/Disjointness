@@ -119,21 +119,23 @@ Our goal in the $\prob{Disj}$ problem is to determine whether or not $A_k = \emp
 \paragraph{Critical players.}
 We claim that if $\bigcap_i x_i = \emptyset$, then there is at least one player $i$ such that $A_i$ is significantly smaller than $A_{i - 1}$;
 in other words, $x_i$ eliminates a significant fraction of elements from consideration.
+
+\TODO{decide how this lemma should be written}
 \begin{lemma}
-    Let there be a universe $U_r$ (subset of $[n]$). Denote $n_r = |U_r|$. \newline
+    Let there be a universe $U \subseteq [N]$ ($U \neq \emptyset$). Denote $n = |U|$. \newline
   If $\bigcap_i x_i = \emptyset$,
   then there is some player $i \in [k]$
   with
   \begin{enumerate}
     \item 
-      $|A_{i} \cap U_r| / {|A_{i-1} \cap U_r|} < 1 / n_r^{1/k}$, and,
+      $|A_{i}| / {|A_{i-1}|} < 1 / n^{1/k}$, and,
     \item $A_i \neq \emptyset$.
   \end{enumerate}
   \label{lemma:narrow}
 \end{lemma}
 \begin{proof}
-	We first prove that there is an index $j$ which satisfies the first property, and then we show
-	that the minimal such $j$ also has the second property.
+  We first prove that there is an index $j$ which satisfies the first property, and then we show
+  that the minimal such $j$ also has the second property.
 
   Let $j$ be the largest index such that 
   \begin{equation*}
@@ -298,9 +300,9 @@ Our protocol is using random coins and is described in the coordinator model. It
 \paragraph{Error Analysis}
 Given that the protocol stopped at round $r$, we are going to argue that we error for at most $\epsilon$. Therefore in overall we don't error more than $\epsilon$.
 We only error when we stopped because the protocol guessed the output, i.e no player was significant and actually the players' inputs are disjoint. The other ending of the protocol is when everyone sends their inputs to the coordinator which calculates the exact output and there is no possible error. \newline
-$\Pr[ERROR | \text{Guessed at round r}] \overset{(1)}{=} \Pr[DISJ | \text{Guessed at round r}] \overset{(2)}{\leq} $\newline
-$\sum\limits_{i=1}^k \Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ}| \text{Guessed at round r}] \overset{(3)}{=} $ \newline
-$\sum\limits_{i=1}^k \underset{X_i=x_i}{\mathop{\mathbb{E}}}\Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ}| \text{Guessed at round r} \land X_i=x_i] \overset{(4)}{\leq} \sum\limits_{i=1}^k \underset{X_i=x_i}{\mathop{\mathbb{E}}}[\frac{\epsilon}{k}] = \sum\limits_{i=1}^k \frac{\epsilon}{k} = \epsilon$ \newline
+$\mu(ERROR | \text{Guessed at round r}) \overset{(1)}{=} \mu(DISJ | \text{Guessed at round r}) \overset{(2)}{\leq} $\newline
+$\sum\limits_{i=1}^k \mu(\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ}| \text{Guessed at round r}) \overset{(3)}{=} $ \newline
+$\sum\limits_{i=1}^k \underset{x_i \sim \mu}{\mathop{\mathbb{E}}}[\mu[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ}| \text{Guessed at round r} \land X_i=x_i]] \overset{(4)}{\leq} \sum\limits_{i=1}^k \underset{X_i=x_i}{\mathop{\mathbb{E}}}[\frac{\epsilon}{k}] = \sum\limits_{i=1}^k \frac{\epsilon}{k} = \epsilon$ \newline
 
 $\Pr[ERROR] \overset{(5)}{\leq} \underset{\text{r round}}{\mathop{\mathbb{E}}} [\Pr[ERROR | \text{Guessed at L}] ] \leq \epsilon $ \newline
 (1) - The protocol errors only when the sets are disjoint (the protocol declares intersection). \newline
@@ -575,63 +577,23 @@ Let's pay attention for some simple properties. First of all $\forall_i |X_i| = 
 \section{Appendix}
 \paragraph{Rounds analysis for upper bound}
 \begin{claim}
-    Let us define the function $f(n)$ - rounds for the protocol starting with $n$ bits.
-    $f(n) = 1 + f(n - n^{\frac{1}{k}}/2)$ \newline
-    We claim that $f(n) \in n^{1-\frac{1}{k}}$
+    $n^{1 - 1/k} - (n-\frac{n^{1/k}}{2})^{1-1/k} \geq 0.25$
 \end{claim}
 \begin{proof}
-We should find that $ \exists_{D\in\mathbb{R}} : \forall_{n \in \mathbb{N}} : f(n) \leq Dn^{1-\frac{1}{k}}$. Let us prove by induction. The induction base is trivial (we can choose big enough $D$). The induction step: \newline
-We can think of $\epsilon$ as a constant. \newline
-$f(n) = 1 + f(n - n^{\frac{1}{k}}/2) \leq 1 + D(n - n^{\frac{1}{k}}/2)^{1-\frac{1}{k}} \overset{?}{\leq} Dn^{1-\frac{1}{k}}$ \newline
-
-\begin{align*}
-  1 &\overset{?}{\leq} Dn^{1-\frac{1}{k}} -  D(n - n^{\frac{1}{k}}/2)^{1-\frac{1}{k}}\\
-  1 &\overset{?}{\leq} D(n^{1-\frac{1}{k}} -  n^{\frac{1}{k}}/2)^{1-\frac{1}{k}})\\
-  \frac{1}{n^{1-\frac{1}{k}} -  (n - n^{\frac{1}{k}}/2)^{1-\frac{1}{k}}} & \overset{?}{\leq} D \\
-  \frac{n^{-1+\frac{1}{k}}}{1 -  (1 - \frac{1}{2n^{1 - \frac{1}{k}}})^{1-\frac{1}{k}}} & \overset{?}{\leq} D \\  
-\end{align*}
-$\lim_{n \rightarrow \infty} \frac{n^{1-\frac{1}{k}}}{1 -  (1 - \frac{1}{2n^{1 - \frac{1}{k}}})^{1-\frac{1}{k}}} \overset{(L)}{=} $
-\newline
-(L) - L'Hôpital's rule
+    Let us define a function $f(x) = x^{1-1/k}$. We want to analyze $f(n) - f(n-\frac{n^{1/k}}{2})$. By Lagrange's theorem, there exists a $c \in [0, \frac{n^{1/k}}{2}]$ such that $f(n) - f(n-\frac{n^{1/k}}{2}) = \frac{n^{1/k}}{2} f'(n-c)$. By calculation: $f'(x) = (1-1/k)x^{-1/k}$. Therefore $f(n) -  f(n-n^{1/k}) = \frac{n^{1/k}}{2} (1-1/k) (n-c)^{-1/k} = \frac{(1-1/k)}{2} (\frac{n}{n-c})^{1/k} \geq (1-1/k)/2 \geq 0.25$ for $k \geq 2$ 
 \end{proof}
-\paragraph{Proof for $f(n) \in O(kn^{1-1/k})$}
-\begin{claim} 
-For $f(n) = k(\log(k) + \log(\frac{1}{\epsilon}) + m) + f(n - m(n^{1/k} - 1))$, it is true that $f(n) \in O(kn^{1-1/k})$ (when thinking of $\epsilon$ as a constant). \newline
-\end{claim}
-\begin{proof}
-We should find that $ \exists_{D\in\mathbb{R}} : \forall_{n \in \mathbb{N}} : f(n) \leq Dkn^{1-1/k}$. Let us prove by induction. The induction base is trivial (we can choose big enough $D$). The induction step: \newline
-We can think of $\epsilon$ as a constant. \newline
-$f(n) = k(\log(k) + m) + f(n - m(n^{1/k} - 1)) \leq k(\log(k) + m) + Dk(n - m(n^{1/k} - 1))^{1-1/k} \overset{?}{\leq} Dkn^{1-1/k}$ \newline
-
-\begin{align*}
-  k(\log(k) + m) &\overset{?}{\leq} Dkn^{1-1/k} -  Dk(n - m(n^{1/k} - 1))^{1-1/k}\\
-  (\log(k) + m) &\overset{?}{\leq} D(n^{1-1/k} -  (n - m(n^{1/k} - 1))^{1-1/k})\\
-  \frac{\log(k) + m}{n^{1-1/k} -  (n - m(n^{1/k} - 1))^{1-1/k}} & \overset{?}{\leq} D \\
-\end{align*}
-\newline
-Maybe we can just say that the worse case is when $m = 1$.
-In this case we have $n^{1-\frac{1}{k}}$ rounds where each one costs $k\log(k)$ so $kn^{1-\frac{1}{k}}\log(k)$
-\end{proof}
-
 \begin{claim}
-\begin{equation*}
-    \lim_{n \rightarrow \infty} n^{1-\frac{1}{k}} - \left( n - n^{\frac{1}{k}} \right)^{1-\frac{1}{k}} = 1-\frac{1}{k}
-\end{equation*}
+    Let us define the function $f(n)$ - rounds for the protocol starting with $n$ bits with $k$ players. As described in the protocol we know the equation 
+    $f(n) = 1 + f(n - \frac{n^{1/k}}{2})$ \newline
+    We claim that $f(n) \in O(n^{1-\frac{1}{k}})$
 \end{claim}
 \begin{proof}
-$$\lim_{n \rightarrow \infty} n^{1-\frac{1}{k}} - \left( n - n^{\frac{1}{k}} \right)^{1-\frac{1}{k}} = 
-\lim_{n \rightarrow \infty} n^{1-\frac{1}{k}} \left(1 - \frac{\left( n - n^{\frac{1}{k}} \right)^{1-\frac{1}{k}}}{n^{1-\frac{1}{k}}}\right) = 
-\lim_{n \rightarrow \infty} n^{1-\frac{1}{k}}\left(1 - \left( \frac{n - n^{\frac{1}{k}} }{n}\right)^{1-\frac{1}{k}}\right) = $$ \newline
-$$
-\lim_{n \rightarrow \infty} n^{1-\frac{1}{k}}\left(1 - \left( 1 - \frac{1 }{n^{1-\frac{1}{k}}}\right)^{1-\frac{1}{k}}\right) =
-\frac{1}{\lim_{n \rightarrow \infty} \frac{n^{-1+\frac{1}{k}}}{1 - \left( 1 - \frac{1 }{n^{1-\frac{1}{k}}}\right)^{1-\frac{1}{k}}}} \overset{(L)}{=} $$ \newline
-$$\frac{1}{\lim_{n \rightarrow \infty} \frac{\left(-1+\frac{1}{k}\right)n^{-2+\frac{1}{k}}}{-\left(1-\frac{1}{k}\right) \left( 1 - \frac{1 }{n^{1-\frac{1}{k}}}\right)^{-\frac{1}{k}} \cdot (-1) \cdot \left(-1+\frac{1}{k}\right)n^{-2+\frac{1}{k}}}} =
-\frac{1}{\lim_{n \rightarrow \infty} \frac{1}{\left(1-\frac{1}{k}\right) \left( 1 - \frac{1 }{n^{1-\frac{1}{k}}}\right)^{-\frac{1}{k}}}} =$$ \newline
-$$
-\frac{1}{\frac{1}{\left(1-\frac{1}{k}\right) \left( 1 - 0\right)^{-\frac{1}{k}}}} = \frac{1}{\frac{1}{\left(1-\frac{1}{k}\right)}} = 1-\frac{1}{k}. 
-$$
-
-(L) - L'Hôpital's rule
+We should find that $ \exists_{D\in\mathbb{R}} : \forall_{n, k \in \mathbb{N}} : f(n) \leq Dn^{1-\frac{1}{k}}$. Let us prove by induction. The induction base is trivial (we can choose big enough $D$). The induction step: \newline
+We can think of $\epsilon$ as a constant. \newline
+$f(n) = 1 + f(n - \frac{n^{1/k}}{2}) \overset{(1)}{\leq} 1 + D(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \overset{(2)}{\leq} 1 + D(n^{1-\frac{1}{k}}-0.25) \overset{(3)}{\leq} Dn^{1-\frac{1}{k}}$ \newline
+(1) - By induction. \\
+(2) - By previous claim. \\
+(3) - If we choose $4 \leq D$
 \end{proof}
 
 \subsection{TODO}
