@@ -577,7 +577,7 @@ Let's pay attention for some simple properties. First of all $\forall_i |X_i| = 
 \section{Appendix}
 \paragraph{Rounds analysis for upper bound}
 \begin{claim}
-    $n^{1 - 1/k} - (n-\frac{n^{1/k}}{2})^{1-1/k} \geq 0.25$
+    For $k \geq 2$ and every $n$: $n^{1 - \frac{1}{k}} - (n-\frac{n^{1/k}}{2})^{1-\frac{1}{k}} \geq 0.25$
 \end{claim}
 \begin{proof}
     Let us define a function $f(x) = x^{1-1/k}$. We want to analyze $f(n) - f(n-\frac{n^{1/k}}{2})$. By Lagrange's theorem, there exists a $c \in [0, \frac{n^{1/k}}{2}]$ such that $f(n) - f(n-\frac{n^{1/k}}{2}) = \frac{n^{1/k}}{2} f'(n-c)$. By calculation: $f'(x) = (1-1/k)x^{-1/k}$. Therefore $f(n) -  f(n-n^{1/k}) = \frac{n^{1/k}}{2} (1-1/k) (n-c)^{-1/k} = \frac{(1-1/k)}{2} (\frac{n}{n-c})^{1/k} \geq (1-1/k)/2 \geq 0.25$ for $k \geq 2$ 
@@ -589,7 +589,6 @@ Let's pay attention for some simple properties. First of all $\forall_i |X_i| = 
 \end{claim}
 \begin{proof}
 We should find that $ \exists_{D\in\mathbb{R}} : \forall_{n, k \in \mathbb{N}} : f(n) \leq Dn^{1-\frac{1}{k}}$. Let us prove by induction. The induction base is trivial (we can choose big enough $D$). The induction step: \newline
-We can think of $\epsilon$ as a constant. \newline
 $f(n) = 1 + f(n - \frac{n^{1/k}}{2}) \overset{(1)}{\leq} 1 + D(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \overset{(2)}{\leq} 1 + D(n^{1-\frac{1}{k}}-0.25) \overset{(3)}{\leq} Dn^{1-\frac{1}{k}}$ \newline
 (1) - By induction. \\
 (2) - By previous claim. \\
