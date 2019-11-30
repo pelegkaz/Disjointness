@@ -317,8 +317,8 @@ Let us analyze how big is $j$ \newline
 This is a random variable which has a geometric distribution. \newline
 $ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} | X_i = x_i]} \leq \frac{k}{\epsilon}$ \newline
 $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$ \newline
-So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n) \in O(k(\log(n) + \log(\frac{1}{\epsilon}))$ and we discovered $(n_r^{\frac{1}{k}}/2)$ zeros. \newline
-In the appendix - there are $O(n^{1-1/k})$ rounds.
+So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n) \in O(k(\log(n) + \log(\frac{1}{\epsilon}))$ and we eliminated $(n_r^{\frac{1}{k}}/2)$ zeros. \newline
+As can be seen in the appendix - there are $O(n^{1-1/k})$ rounds.
 For the last round we pay $kn^{1-\frac{1}{k}} \log(n)$ \newline
 So the total communication cost is  $O(kn^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(n)))$.
 \section{k-n relation analysis}
