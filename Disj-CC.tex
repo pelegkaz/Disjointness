@@ -5,6 +5,7 @@
 \usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{bbm}
 \usepackage{times}
 \usepackage{paralist}
 \usepackage[usenames]{color}
@@ -247,7 +248,7 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
       \item $U \leftarrow U \setminus Z_{\ell}$,
       \item $n \leftarrow |U|$,
       \item $x_i \leftarrow x_i \cap Y$,
-      \item \TODO{how are the priors updated.}
+      \item $\mu \leftarrow \mu | \Pi$
     \end{itemize}
 \end{enumerate}
 
@@ -298,28 +299,27 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
 Our protocol is using random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-1/k})$ bits of communication between the players.
 \subsection{Analysis}
 \paragraph{Error Analysis}
-Given that the protocol stopped at round $r$, we are going to argue that we error for at most $\epsilon$. Therefore in overall we don't error more than $\epsilon$.
-We only error when we stopped because the protocol guessed the output, i.e no player was significant and actually the players' inputs are disjoint. The other ending of the protocol is when everyone sends their inputs to the coordinator which calculates the exact output and there is no possible error. \newline
-$\mu(ERROR | \text{Guessed at round r}) \overset{(1)}{=} \mu(DISJ | \text{Guessed at round r}) \overset{(2)}{\leq} $\newline
-$\sum\limits_{i=1}^k \mu(\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ}| \text{Guessed at round r}) \overset{(3)}{=} $ \newline
-$\sum\limits_{i=1}^k \underset{x_i \sim \mu}{\mathop{\mathbb{E}}}[\mu[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ}| \text{Guessed at round r} \land X_i=x_i]] \overset{(4)}{\leq} \sum\limits_{i=1}^k \underset{X_i=x_i}{\mathop{\mathbb{E}}}[\frac{\epsilon}{k}] = \sum\limits_{i=1}^k \frac{\epsilon}{k} = \epsilon$ \newline
+Let us denote $\Pi$ - the transcript except for the last round.
+$\mu(\text{i signficant} \land \gamma_i < \frac{\epsilon}{k}|\Pi) = \underset{x_i \sim \mu|\Pi}{\mathop{\mathbb{E}}}[\mu(\text{i signficant} \land \gamma_i < \frac{\epsilon}{k} | x_i, \Pi)] =$
+$\underset{x_i \sim \mu|\Pi}{\mathop{\mathbb{E}}}[\mu(\text{i signficant} | x_i, \Pi) \mathbbm{1}_{\gamma_i < \frac{\epsilon}{k}}]
+\leq \frac{\epsilon}{k}$
+We claim that $\mu(Err | \Pi) \leq \epsilon$. \newline
+$\mu(Err | \Pi) = \mu(DISJ \land \bigcap \{ \gamma_i < \epsilon / k\} | \Pi) \overset{(1)}{\leq} \sum\limits_{i=1}^k \mu(\text{i signficant} \land \bigcap \{ \gamma_i < \epsilon / k\} | \Pi) \leq \epsilon $\newline
 
-$\Pr[ERROR] \overset{(5)}{\leq} \underset{\text{r round}}{\mathop{\mathbb{E}}} [\Pr[ERROR | \text{Guessed at L}] ] \leq \epsilon $ \newline
-(1) - The protocol errors only when the sets are disjoint (the protocol declares intersection). \newline
-(2) - $  \text{DISJ} = \bigcup_{i=1}^{k}\{\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} \} $ (using lemma 3.1) \newline
-(3) - Law of total expectation \newline
-(4) - No player was significant \newline
-(5) - If the protocol didn't guess, there was no error
+We only error when we stopped because the protocol guessed the output, i.e no player was significant and actually the players' inputs are disjoint. The other ending of the protocol is when everyone sends their inputs to the coordinator which calculates the exact output and there is no possible error. \newline
+
+$ \mu[Err] \overset{(2)}{\leq} \underset{\Pi}{\mathop{\mathbb{E}}} [\mu[Er | \Pi] ] \leq \epsilon $ \newline
+(1) - $  \text{DISJ} = \bigcup_{i=1}^{k}\{\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} \} $ (using lemma 3.1) \newline
+(2) - Law of total expectation
 \paragraph{Communication Analysis}
 We analyze round by round. \newline
-For a single round which isn't the last one, firstly we pay at most $k$ bits in order to find a significant player. After that the coordinator sends his identity to the others: $k\log(k)$ bits. Then the protocol sends $j$ and $l$ to all of the players. $l$ is at most $log(n_{r-1})$
-Let us analyze how big is $j$ \newline
+For a single round which isn't the last one: firstly we pay at most $k$ bits in order to find a significant player. After that the coordinator sends his identity to the others: $k\log(k)$ bits. Then the protocol sends $j$ and $l$ to all of the players. $l$ is at most $log(n_{r-1})$. Let us analyze how big is $j$. \newline
 This is a random variable which has a geometric distribution. \newline
 $ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} | X_i = x_i]} \leq \frac{k}{\epsilon}$ \newline
-$\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$ \newline
+By Jensen's inequality, $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$.  \newline
 So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n) \in O(k(\log(n) + \log(\frac{1}{\epsilon}))$ and we eliminated $(n_r^{\frac{1}{k}}/2)$ zeros. \newline
 As can be seen in the appendix - there are $O(n^{1-1/k})$ rounds.
-For the last round we pay $kn^{1-\frac{1}{k}} \log(n)$ \newline
+For the last round we pay at most $kn^{1-\frac{1}{k}} \log(n)$. \newline
 So the total communication cost is  $O(kn^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(n)))$.
 \section{k-n relation analysis}
 \paragraph{$k < \log(n)$:}
