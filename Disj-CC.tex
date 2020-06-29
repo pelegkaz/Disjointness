@@ -81,8 +81,12 @@
 
 
 \section{Introduction}
+The world of communication complexity discuss the settings in which there are many nodes (sometimes called players). Each node has its own input. The goal is to find a protocol in which the nodes calculate a function over the whole input (e.g all of the nodes' inputs) together using minimum communication. \newline
+In this world, one of the most important problems (sometimes called "mother of problems") is the Set Disjointness problem. In this problem, every node gets a n-bit array and they are asked whether there is an index $i$ where the $i$'th bit is turned on in all of their inputs. \newline
+There are many different settings in which this protocol can be made. The communication between players can be broadcast (shared blackboard model) or unicast (the coordinator). Moreover, the protocol may use randomness or not. The inputs of the players may be drawn using a distribution and in this case we can ask what is the expected error over this distribution (instead of worst case for each input). \newline
+In this paper, we are going to discuss the case in which the inputs are drawn from a product distribution. In this case the inputs are independent and we are asked to design a protocol which doesn't error typically. \newline
 
-\subsection{Related Work}
+
 \section{Preliminaries}
 
 \section{$O(kn^{1-1/k})$-Bit Protocol}
