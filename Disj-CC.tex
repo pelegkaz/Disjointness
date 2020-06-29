@@ -87,11 +87,20 @@ There are many different settings in which this protocol can be made. The commun
 In this paper, we are going to discuss the case in which the inputs are drawn from a product distribution. In this case the inputs are independent and we are asked to design a protocol which doesn't error typically. \newline
 
 
-\section{Preliminaries}
-
+\section{Holding The Universe}
+Let us describe a point of view for the set distjoiness problem: we are going to hold a universe $U \subseteq [n]$. The universe is the set of indexes we do care about them e.g the indexes where there might be a intersection over the inputs (maintaining $\bigcap_i x_i \subseteq U$). Set Distjointness problem asks whether $\bigcap_i x_i = \emptyset$ but knowing $\bigcap_i x_i \subseteq U$, says we can easily consider only the question whether $(\bigcap_i x_i) \cap U = \emptyset$. The protocol is going to act in rounds where in each round it \emph{reveals indexes} which don't hold an intersection and get rid of them (thus reducing the universe's size). Such indexes are the indexes which some player has 0 on them. The protocol is going to focus about revealing zeros in the players' input efficiently. \newline
+\subsection{Simple Case} 
+Let us first examine a protocol which helps a single player to reveal many zeros using small communication.
+\begin{lemma}
+    For $A \subseteq [n] $, $k$ players, where player $i$ holds the set $A_i$. Also $|A_i| \leq \frac{|A|}{n^{1/k}}, A_i \subseteq A$. There is a protocol that reveals $\frac{n^{1/k}}{2}$ zeros and costs $log{n}$. 
+\end{lemma}
+\begin{proof}
+    Let us divide $A$ to $|A_i| + 1$ groups sized $\frac{n^{1/k}}{2}$: $B_1, B_2, ...$. (It is possible since $(|A_i| + 1)(\frac{n^{1/k}}{2}) \leq |A|$). Due to the pigeonhole principle, there is a group $B_j$ which is disjoint to $A_i$. \newline
+    Since the division is public, player $i$ simply sends $j$ to the other players. Every player understands $B_j$ and know that $A_i \cap B_j = \emptyset$. 
+    The only communication used is $j \in [n]$, therefore $log{n}$. 
+\end{proof}
 \section{$O(kn^{1-1/k})$-Bit Protocol}
-\subsection{The Idea}
-\Rnote{Not touching this for now}
+\subsection{Sequential Point Of View}
 We are going to consider a sequential point of view for the disjointness problem for k players. Let us imagine a process in which we start with the set of all points ([n]). The players go one after another and intersect their sets with the result. After the last player plays, we end up with the intersection of all sets. Therefore our question is whether this set is empty or not. Moreover, if the last set is empty, one of the players must have subtracted a large amount of elements in this process. We use this fact in order to learn large amount of elements which are not in this player's input. Those elements could not be in the intersection of all of the inputs, so we can ignore them from now on. 
 \subsection{Notations}
 \Rnote{Not touching this for now}
