@@ -152,7 +152,7 @@ in other words, $x_i$ eliminates a significant fraction of elements from conside
     \frac{|A_{j^\star - 1} \cap U_r|}{|A_0 \cap U_r|} = 
     \frac{|A_{j^\star - 1} \cap U_r|}{|A_{j^\star-2} \cap U_r|} \cdot \frac{|A_{j^\star-2} \cap U_r|}{|A_{j^\star-3} \cap U_r|} \cdot \ldots \cdot \frac{|A_1 \cap U_r|}{|A_0 \cap U_r|}
     \geq
-    \left(  \frac{1}{n_r^{1/k}} \right)^{j^\star}
+    \left(  \frac{1}{n_r^{1f/k}} \right)^{j^\star}
     =
     \frac{1}{n_r^{\frac{j^\star - 1}{k}}}.
   \end{align*}
@@ -206,7 +206,7 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
   \item If $|U| \leq N^{1 - 1/k}$, each player $i$ sends $x_i$ to the coordinator, who computes and outputs the answer.
   \item Otherwise, the coordinator asks each player $i$ whether $i$ is significant (i.e., whether $\gamma_i \geq \eps / k$).
   \item If no player is significant, the coordinator outputs ``not disjoint''. Otherwise, let $i$ be the
-    first significant player. The coordinator informs player $i$ that it has been selected.
+    first significant player. The coordinator informs every player that player $i$ has been selected.
   \item The coordinator and the players use the public randomness to sample \TODO{how many needed?}
     sets $A_{i-1}^{(1)},\ldots$ from the distribution of $\rv{A}_{i-1}$.
   \item Player $i$ finds the index $j$ of the first set $A_{i-1}^{(j)}$ such that
@@ -214,16 +214,12 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
       |A_{i-1}^{(j)} \cap X_i| \leq \frac{|A_{i-1}^{(j)}|}{n^{1/k}}.
     \end{equation*}
     It sends the index $j$ to the coordinator, who forwards it to the other players.
-  \item All participants set $Y = A_{i-1}^{(j)}$, $m = \lfloor 2|Y| / n^{1/k} \rfloor$,
-    and let $Y_1,\ldots,Y_m$ be as in Lemma~\ref{lemma:reduce}.
-    Player $i$ sets $Z = x_i$, and finds the index $\ell \in \set{1,\ldots,m}$
-    such that $Y_j \cap Z = \emptyset$ (the existence of this index is guaranteed by Lemma~\ref{lemma:reduce}).
-    Player $i$ sends index $\ell$ to the coordinator, who forwards it to the other players.
+  \item The participants use the protocol from lemma 2.1 in order to discover $Y \subseteq A_{i-1}^{(j)} \setminus X_i $ where $ |Y| > \frac{n^{1/k}}{2}$ 
   \item All participants set:
     \begin{itemize}
-      \item $U \leftarrow U \setminus Z_{\ell}$,
+      \item $U \leftarrow U \setminus Y$,
       \item $n \leftarrow |U|$,
-      \item $x_i \leftarrow x_i \cap Y$,
+      \item $x_i \leftarrow x_i \cap U$,
       \item $\mu \leftarrow \mu | \Pi$
     \end{itemize}
 \end{enumerate}
