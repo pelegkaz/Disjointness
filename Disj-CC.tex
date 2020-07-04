@@ -5,6 +5,7 @@
 \usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{mathtools}
 \usepackage{bbm}
 \usepackage{times}
 \usepackage{paralist}
@@ -90,12 +91,13 @@ Let us describe a point of view for the set distjoiness problem: we are going to
 \subsection{Revealing Zeros} 
 Let us first examine a protocol which helps a single player to reveal many zeros using small communication in a specific scenario. Later on we describe how this scenario is created.
 \begin{lemma}
-    For a settings where there is a set $A \subseteq [N] $, $k$ players (which know $A$) and player $i$ holds a set $A_i$. Define $n = |A|$. If $|A_i| \leq \frac{|A|}{n^{1/k}}, A_i \subseteq A$. There is a deterministic protocol that reveals a set $B \subseteq A \setminus A_i$ and $|B| = \frac{n^{1/k}}{2}$ and costs $klog(n)$ bits of communication (using the coordinator settings). 
+    For a settings where there is a set $A \subseteq [N] $, $k$ players (which know $A$) and player $i$ holds a set $A_i$. There are public numbers $m, n$ and $m \leq |A| \leq n$. If $|A_i| \leq \frac{|A|}{m}, A_i \subseteq A$. There is a deterministic protocol that reveals a set $B \subseteq A \setminus A_i$ and $|B| \geq \frac{m}{2}$ and costs $klog(n)$ bits of communication (using the coordinator settings). 
 \end{lemma}
 \begin{proof}
-    Let us divide $A$ to groups sized $\frac{n^{1/k}}{2}$: $B_1, B_2, ...$. This is a division that every player knows since they all have $A, k$. Pay attention that there are more than $|A_i|$ groups since since $|A_i|(\frac{n^{1/k}}{2}) < |A_i|(n^{1/k}) \leq |A|$. Due to the pigeonhole principle, there is a group $B_j$ which is disjoint to $A_i$. \newline
+    Let us divide $A$ to groups sized $\frac{m}{2}$ where the last group may be sized up to $m -1$: $B_1, B_2, ...$. This is a division that every player knows even before communicating since they all have $A, k$. \newline
+    Pay attention that there are more than $|A_i|$ groups since $  |A_i|(\frac{m}{2}) < |A_i|(m) \leq |A|$. Due to the pigeonhole principle, there is a group $B_j$ which is disjoint to $A_i$. \newline
     Since the division is public, player $i$ simply sends $j$ to the other players. Every player understands $B_j$ and know that $A_i \cap B_j = \emptyset$. 
-    The only communication used is $j \in [|A_i|] \subseteq [n]$, therefore $klog(n)$. 
+    The only communication used is $j \in [|A_i|]$, therefore $klog(n)$. 
 \end{proof}
 \section{Sequential Point Of View}
 In order to find a player with some zeros, we are going to think about set disjointness a little differently. 
@@ -168,8 +170,7 @@ We say that player $i$ is \emph{critical} in $U_r$ if $i$ satisfies the conditio
 Note that a player does not know whether it is critical or not, as this depends 
 on the other players' inputs;
 but each player can compute the \emph{probability} that it is critical, given its input.
-For a player $i$,
-let
+For a player $i$ with input $x_i$, define
 \begin{equation*}
   \gamma_i \coloneq \Pr_{(\rv{X}_1,\ldots,\rv{X}_k) \sim \mu}\left[ \text{ $i$ is critical} \land \bigcap_i \rv{X}_i = \emptyset \given \rv{X}_i = x_i \right].
 \end{equation*}
@@ -214,10 +215,10 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
       |A_{i-1}^{(j)} \cap X_i| \leq \frac{|A_{i-1}^{(j)}|}{n^{1/k}}.
     \end{equation*}
     It sends the index $j$ to the coordinator, who forwards it to the other players.
-  \item The participants use the protocol from lemma 2.1 in order to discover $Y \subseteq A_{i-1}^{(j)} \setminus X_i $ where $ |Y| > \frac{n^{1/k}}{2}$ 
+  \item The participants use the protocol from lemma 2.1 in order to discover $B \subseteq A_{i-1}^{(j)} \setminus X_i $ where $ |B| > \frac{n^{1/k}}{2}$ 
   \item All participants set:
     \begin{itemize}
-      \item $U \leftarrow U \setminus Y$,
+      \item $U \leftarrow U \setminus B$,
       \item $n \leftarrow |U|$,
       \item $x_i \leftarrow x_i \cap U$,
       \item $\mu \leftarrow \mu | \Pi$
@@ -271,7 +272,8 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
 Our protocol is using random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-1/k})$ bits of communication between the players.
 \subsection{Analysis}
 \paragraph{Error Analysis}
-Let us denote $\Pi$ - the transcript except for the last round.
+Let us denote $\Pi$ - the transcript except for the last round. \newline
+The only stage where the protocol may error is (3) where no player is significant and the protocol "guesses" the result is "not disjoint". \newline
 $\mu(\text{i signficant} \land \gamma_i < \frac{\epsilon}{k}|\Pi) = \underset{x_i \sim \mu|\Pi}{\mathop{\mathbb{E}}}[\mu(\text{i signficant} \land \gamma_i < \frac{\epsilon}{k} | x_i, \Pi)] =$
 $\underset{x_i \sim \mu|\Pi}{\mathop{\mathbb{E}}}[\mu(\text{i signficant} | x_i, \Pi) \mathbbm{1}_{\gamma_i < \frac{\epsilon}{k}}]
 \leq \frac{\epsilon}{k}$
