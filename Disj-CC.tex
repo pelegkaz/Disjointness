@@ -119,8 +119,8 @@ in other words, $x_i$ eliminates a significant fraction of elements from conside
   with
   \begin{enumerate}
     \item 
-      $|A_{i}| / {|A_{i-1}|} < 1 / n^{1/k}$, and,
-    \item $A_i \neq \emptyset$.
+      $|A_{i}| / {|A_{i-1}|} < 1 / n^{1/k}$
+    \item $|A_{i-1}| \geq n^{1-\frac{i-1}{k}}$
   \end{enumerate}
   \label{lemma:narrow}
 \end{lemma}
@@ -149,16 +149,16 @@ in other words, $x_i$ eliminates a significant fraction of elements from conside
   \end{equation*}
   Then we get that
   \begin{align*}
-    \frac{|A_{j^\star} \cap U_r|}{|A_0 \cap U_r|} = 
-    \frac{|A_{j^\star} \cap U_r|}{|A_{j^\star-1} \cap U_r|} \cdot \frac{|A_{j^\star-1} \cap U_r|}{|A_{j^\star-2} \cap U_r|} \cdot \ldots \cdot \frac{|A_1 \cap U_r|}{|A_0 \cap U_r|}
+    \frac{|A_{j^\star - 1} \cap U_r|}{|A_0 \cap U_r|} = 
+    \frac{|A_{j^\star - 1} \cap U_r|}{|A_{j^\star-2} \cap U_r|} \cdot \frac{|A_{j^\star-2} \cap U_r|}{|A_{j^\star-3} \cap U_r|} \cdot \ldots \cdot \frac{|A_1 \cap U_r|}{|A_0 \cap U_r|}
     \geq
     \left(  \frac{1}{n_r^{1/k}} \right)^{j^\star}
     =
-    \frac{1}{n_r^{j^\star/k}}.
+    \frac{1}{n_r^{\frac{j^\star - 1}{k}}}.
   \end{align*}
   Since $|A_0 \cap U_r| = n_r$, 
   \begin{align*}
-      |A_{j^\star} \cap U_r| \geq n_r^{1 - j^\star/k} \geq 1
+      |A_{j^\star - 1} \cap U_r| \geq n_r^{1 - \frac{j^\star-1}{k}}
   \end{align*}
     Therefore $A_{j^\star} \cap U_r \neq \emptyset$.
 \end{proof}
