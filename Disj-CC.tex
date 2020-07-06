@@ -132,66 +132,67 @@ in other words, $x_i$ eliminates a significant fraction of elements from conside
 
   Let $j$ be the largest index such that 
   \begin{equation*}
-    A_{j-1} \cap U_r \neq \emptyset.
+    A_{j-1} \cap U \neq \emptyset.
   \end{equation*}
-  There is such a $j$, because $A_0 \cap U_r = U_r \neq \emptyset$.
+  There is such a $j$, because $A_0 \cap U = U \neq \emptyset$.
 
-  We claim that $A_{j} \cap U_r = \emptyset$.
+  We claim that $A_{j} \cap U = \emptyset$.
   If $j \neq k$, then this must be true, because $j$ is the maximal index such that $A_{j-1} \neq \emptyset$;
   and if $j = k$, then $A_j = A_k = \bigcap_i x_i = \emptyset$ by assumption.
   Thus,
   \begin{equation*}
-    \frac{|A_j \cap U_r|}{|A_{j-1} \cap U_r|} = \frac{0}{|A_{j-1} \cap U_r|} = 0 < \frac{1}{n_r^{1/k}}
+    \frac{|A_j \cap U|}{|A_{j-1} \cap U|} = \frac{0}{|A_{j-1} \cap U|} = 0 < \frac{1}{n_r^{1/k}}
   \end{equation*}
   So we know that (1) holds for $j$.
   Let us denote $j^\star$ the minimal index which satisfies (1).
   Because of its minimality, for all $i \in [j^\star-1]$ we have
   \begin{equation*}
-    \frac{|A_i \cap U_r|}{|A_{i-1} \cap U_r|} \geq \frac{1}{n_r^{1/k}}.
+    \frac{|A_i \cap U|}{|A_{i-1} \cap U|} \geq \frac{1}{n_r^{1/k}}.
   \end{equation*}
   Then we get that
   \begin{align*}
-    \frac{|A_{j^\star - 1} \cap U_r|}{|A_0 \cap U_r|} = 
-    \frac{|A_{j^\star - 1} \cap U_r|}{|A_{j^\star-2} \cap U_r|} \cdot \frac{|A_{j^\star-2} \cap U_r|}{|A_{j^\star-3} \cap U_r|} \cdot \ldots \cdot \frac{|A_1 \cap U_r|}{|A_0 \cap U_r|}
+    \frac{|A_{j^\star - 1} \cap U|}{|A_0 \cap U|} = 
+    \frac{|A_{j^\star - 1} \cap U|}{|A_{j^\star-2} \cap U|} \cdot \frac{|A_{j^\star-2} \cap U|}{|A_{j^\star-3} \cap U|} \cdot \ldots \cdot \frac{|A_1 \cap U|}{|A_0 \cap U|}
     \geq
     \left(  \frac{1}{n_r^{1f/k}} \right)^{j^\star}
     =
     \frac{1}{n_r^{\frac{j^\star - 1}{k}}}.
   \end{align*}
-  Since $|A_0 \cap U_r| = n_r$, 
+  Since $|A_0 \cap U| = n_r$, 
   \begin{align*}
-      |A_{j^\star - 1} \cap U_r| \geq n_r^{1 - \frac{j^\star-1}{k}}
+      |A_{j^\star - 1} \cap U| \geq n_r^{1 - \frac{j^\star-1}{k}}
   \end{align*}
-    Therefore $A_{j^\star} \cap U_r \neq \emptyset$.
+    Therefore $A_{j^\star} \cap U \neq \emptyset$.
 \end{proof}
 
-We say that player $i$ is \emph{critical} in $U_r$ if $i$ satisfies the conditions of the lemma.
+For given inputs $x_1, x_2, ... x_n$, we say that player $i$ is \emph{critical} in $U$ if $i$ satisfies the conditions of the lemma. \newline
+We can now denote $DISJ_i(U) = DISJ \cap \{\text{i is critical in U}\}$ and also $\forall_{U \subseteq [N]} DISJ = \bigcup_i DISJ_i(U)$
 \paragraph{Significant Players}
 Note that a player does not know whether it is critical or not, as this depends 
 on the other players' inputs;
 but each player can compute the \emph{probability} that it is critical, given its input.
-For a player $i$ with input $x_i$, define
+For a player $i$ with input $x_i$, universe $U$ define
 \begin{equation*}
-  \gamma_i \coloneq \Pr_{(\rv{X}_1,\ldots,\rv{X}_k) \sim \mu}\left[ \text{ $i$ is critical} \land \bigcap_i \rv{X}_i = \emptyset \given \rv{X}_i = x_i \right].
+  \gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[ DISJ_i (U) \given \rv{X}_i = x_i \right].
 \end{equation*}
-We say that player $i$ is \emph{significant} if $\gamma_i \geq \eps / k$.
+We say that player $i$ is \emph{significant} if $\gamma_i \geq \eps / kN^{1-\frac{1}{k}}$.
 
 
-\section{$O(kn^{1-1/k})$-Bit Protocol}
+\section{$O(kN^{1-\frac{1}{k}})$-Bit Protocol}
 \subsection{Notations}
 \Rnote{Not touching this for now}
 We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
 
 \subsection{Overview of the Protocol}
-Throughout the protocol, we maintain a \emph{universe}, $U \subseteq [n]$,
+Throughout the protocol, we maintain a \emph{universe}, $U \subseteq [N]$,
 with the property that $\bigcap_i x_i \subseteq U$.
-We initially have $U = [n]$.
+We initially have $U = [N]$.
 The protocol operates in \emph{iterations}, where each iteration has two possible outcomes:
 \begin{enumerate}[I.]
   \item We eliminate at least a $1/\Theta(|U|^{1/k})$-fraction of elements from $U$, or
   \item We halt and guess that $\bigcap_i x_i \neq \emptyset$. This guess is correct with high probability over the inputs.
 \end{enumerate}
-After at most $n^{1 - 1/k}$ iterations, if we have not yet halted,
+After at most $N^{1 - 1/k}$ iterations, if we have not yet halted,
 then $U = \emptyset$, and at this point we announce that $\bigcap_i x_i = \emptyset$.
 
 \subsection{Reducing the Universe Size}
@@ -200,12 +201,12 @@ without communicating a lot.
 
 \subsection{The Protocol}
 For a given product distribution $\mu : \left(\set{0,1}^N\right)^k \rightarrow [0,1]$, we describe a protocol that errs with probability $\epsilon$.
-Our protocol uses public randomness and has $\tilde{O}(kN^{1-1/k})$ bits of expected communication.
+Our protocol uses public randomness and has $\tilde{O}(kN^{1-\frac{1}{k}})$ bits of expected communication.
 
 Initially, $U = \set{1,\ldots,N}$, and $n = N$.
 \begin{enumerate}[(1)]
   \item Termination Condition: If $|U| \leq N^{1 - 1/k}$, each player $i$ sends $x_i$ to the coordinator, who computes and outputs the answer. 
-  \item Otherwise, the coordinator asks each player $i$ whether $i$ is significant (i.e., whether $\gamma_i \geq \eps / k$).
+  \item Otherwise, the coordinator asks each player $i$ whether $i$ is significant (i.e., whether $\gamma_i(x_i, U) \geq \eps / kN^{1-\frac{1}{k}}$).
   \item If no player is significant, the coordinator outputs ``not disjoint''. Otherwise, let $i$ be the
     first significant player. The coordinator informs every player that player $i$ has been selected.
   \item The coordinator and the players use the public randomness to sample \TODO{how many needed?}
@@ -221,7 +222,7 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
       \item $U \leftarrow U \setminus B$,
       \item $n \leftarrow |U|$,
       \item $x_i \leftarrow x_i \cap U$,
-      \item $\mu \leftarrow \mu | \Pi$
+      \item $\mu \leftarrow \mu $ (isn't updated)
     \end{itemize}
 \end{enumerate}
 
@@ -256,10 +257,10 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
 %Observe that $Z^{r}_l \subseteq \overline{X_i}$,
 %so the elements of $Z^{r}_l$ can now be removed from the universe:
 %\begin{equation*}
-  %U_r \leftarrow U_{r-1} \setminus (Z^{r}_l).
+  %U \leftarrow U_{r-1} \setminus (Z^{r}_l).
 %\end{equation*}
 
-%If $n_r \leq n^{1-1/k}$, every player sends his input to the coordinator which calculate the disjointness and sends the output to every player.
+%If $n_r \leq n^{1-\frac{1}{k}}$, every player sends his input to the coordinator which calculate the disjointness and sends the output to every player.
 
 %\paragraph{Clarifications}
 %We strongly use the fact that this is a product distribution where everyone can sample the inputs and parse them and the critical player's input doesn't affect the distribution. \newline
@@ -269,22 +270,50 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
 
 
 \subsection{Properties of Our Protocol}
-Our protocol is using random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-1/k})$ bits of communication between the players.
+Our protocol is using random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-\frac{1}{k}})$ bits of communication between the players.
 \subsection{Analysis}
 \paragraph{Error Analysis}
-Let us denote $\Pi$ - the transcript except for the last round. \newline
-The only stage where the protocol may error is (3) where no player is significant and the protocol "guesses" the result is "not disjoint". \newline
-$\mu(\text{i signficant} \land \gamma_i < \frac{\epsilon}{k}|\Pi) = \underset{x_i \sim \mu|\Pi}{\mathop{\mathbb{E}}}[\mu(\text{i signficant} \land \gamma_i < \frac{\epsilon}{k} | x_i, \Pi)] =$
-$\underset{x_i \sim \mu|\Pi}{\mathop{\mathbb{E}}}[\mu(\text{i signficant} | x_i, \Pi) \mathbbm{1}_{\gamma_i < \frac{\epsilon}{k}}]
-\leq \frac{\epsilon}{k}$
-We claim that $\mu(Err | \Pi) \leq \epsilon$. \newline
-$\mu(Err | \Pi) = \mu(DISJ \land \bigcap \{ \gamma_i < \epsilon / k\} | \Pi) \overset{(1)}{\leq} \sum\limits_{i=1}^k \mu(\text{i signficant} \land \bigcap \{ \gamma_i < \epsilon / k\} | \Pi) \leq \epsilon $\newline
+Let us analyze the error for a specific round. The overall error will be the sum of these errors. \newline
+For a specific round $r$ (with a universe $U_r$), we error only if we guessed not disjointness incorrectly. For this to happen, the input should be disjoint and any player isn't significant in $U_r$. (Although this is not enough since the protocol may stop before round r) \newline
 
-We only error when we stopped because the protocol guessed the output, i.e no player was significant and actually the players' inputs are disjoint. The other ending of the protocol is when everyone sends their inputs to the coordinator which calculates the exact output and there is no possible error. \newline
+$\mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
 
-$ \mu[Err] \overset{(2)}{\leq} \underset{\Pi}{\mathop{\mathbb{E}}} [\mu[Er | \Pi] ] \leq \epsilon $ \newline
-(1) - $  \text{DISJ} = \bigcup_{i=1}^{k}\{\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} \} $ (using lemma 3.1) \newline
-(2) - Law of total expectation
+As proved in lemma 3.1 $DISJ = \bigcup_j DISJ_j(U_r)$ \newline
+
+$ \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \Sigma_j \mu(DISJ_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
+
+Now just relaxing the event:\newline
+$ \Sigma_j \mu(DISJ_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \Sigma_j \mu(DISJ_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
+
+Let us handle a specific element in this sum. We can take the Expectation over $X_j$ \newline
+
+$\mu(DISJ_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(DISJ_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)]$ \newline
+
+This make $\gamma_j$ a constant. \newline
+
+$\underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(DISJ_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)] = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(DISJ_j(U_r) | X_j = x_j) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}]$ \newline
+
+Recall the definition $\gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[ DISJ_i (U) \given \rv{X}_i = x_i \right]$ \newline
+
+$\underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(DISJ_j(U_r) | X_j = x_j) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}]$ \newline
+
+Now we got an expectation over a r.v with a domain $[0, 1]$ multiplied by the indicator of the event it is in $[0, \frac{\epsilon}{kN^{1-\frac{1}{k}}}]$. \newline
+
+$\underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}$ \newline
+
+Summing over all critical players: \newline
+$\Sigma_j \mu(DISJ_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq k\frac{\epsilon}{kN^{1-\frac{1}{k}}} = \frac{\epsilon}{N^{1-\frac{1}{k}}}$
+\newline
+
+To conclude the error in a specific round:
+$\mu(\text{Err in round r}) \leq \frac{\epsilon}{N^{1-\frac{1}{k}}}$.\newline
+
+Now we are ready to sum the overall error:
+
+$\mu(Err) = \Sigma_{r} \mu(\text{Err in round r}) \leq #{\text{number of rounds}} \frac{\epsilon}{N^{1-\frac{1}{k}}}$. \newline
+In our protocol there are $O(N^{1-\frac{1}{k}})$ so
+$\mu(Err) \in O(\epsilon)$
+
 \paragraph{Communication Analysis}
 We analyze round by round. \newline
 For a single round which isn't the last one: firstly we pay at most $k$ bits in order to find a significant player. After that the coordinator sends his identity to the others: $k\log(k)$ bits. Then the protocol sends $j$ and $l$ to all of the players. $l$ is at most $log(n_{r-1})$. Let us analyze how big is $j$. \newline
@@ -292,7 +321,7 @@ This is a random variable which has a geometric distribution. \newline
 $ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} | X_i = x_i]} \leq \frac{k}{\epsilon}$ \newline
 By Jensen's inequality, $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$.  \newline
 So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n) \in O(k(\log(n) + \log(\frac{1}{\epsilon}))$ and we eliminated $(n_r^{\frac{1}{k}}/2)$ zeros. \newline
-As can be seen in the appendix - there are $O(n^{1-1/k})$ rounds.
+As can be seen in the appendix - there are $O(n^{1-\frac{1}{k}})$ rounds.
 For the last round we pay at most $kn^{1-\frac{1}{k}} \log(n)$. \newline
 So the total communication cost is  $O(kn^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(n)))$.
 \section{k-n relation analysis}
@@ -304,7 +333,7 @@ For this case $k$ is pretty small. meaning $kn^{1/k} \approx n^{1/k}$. So we are
 \end{equation*}
 so
 \begin{equation*}
-    n^{1-1/k} > n/2
+    n^{1-\frac{1}{k}} > n/2
 \end{equation*}
 Moreover, in this scenario:
 \begin{equation*}
@@ -554,7 +583,7 @@ Let's pay attention for some simple properties. First of all $\forall_i |X_i| = 
     For $k \geq 2$ and every $n$: $n^{1 - \frac{1}{k}} - (n-\frac{n^{1/k}}{2})^{1-\frac{1}{k}} \geq 0.25$
 \end{claim}
 \begin{proof}
-    Let us define a function $f(x) = x^{1-1/k}$. We want to analyze $f(n) - f(n-\frac{n^{1/k}}{2})$. By Lagrange's theorem, there exists a $c \in [0, \frac{n^{1/k}}{2}]$ such that $f(n) - f(n-\frac{n^{1/k}}{2}) = \frac{n^{1/k}}{2} f'(n-c)$. By calculation: $f'(x) = (1-1/k)x^{-1/k}$. Therefore $f(n) -  f(n-n^{1/k}) = \frac{n^{1/k}}{2} (1-1/k) (n-c)^{-1/k} = \frac{(1-1/k)}{2} (\frac{n}{n-c})^{1/k} \geq (1-1/k)/2 \geq 0.25$ for $k \geq 2$ 
+    Let us define a function $f(x) = x^{1-\frac{1}{k}}$. We want to analyze $f(n) - f(n-\frac{n^{1/k}}{2})$. By Lagrange's theorem, there exists a $c \in [0, \frac{n^{1/k}}{2}]$ such that $f(n) - f(n-\frac{n^{1/k}}{2}) = \frac{n^{1/k}}{2} f'(n-c)$. By calculation: $f'(x) = (1-\frac{1}{k})x^{-1/k}$. Therefore $f(n) -  f(n-n^{1/k}) = \frac{n^{1/k}}{2} (1-\frac{1}{k}) (n-c)^{-1/k} = \frac{(1-\frac{1}{k})}{2} (\frac{n}{n-c})^{1/k} \geq (1-\frac{1}{k})/2 \geq 0.25$ for $k \geq 2$ 
 \end{proof}
 \begin{claim}
     Let us define the function $f(n)$ - rounds for the protocol starting with $n$ bits with $k$ players. As described in the protocol we know the equation 
