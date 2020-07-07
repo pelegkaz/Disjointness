@@ -170,7 +170,6 @@ in other words, $x_i$ eliminates a significant fraction of elements from conside
   \begin{align*}
       |A_{j^\star - 1}(U)| \geq n^{1 - \frac{j^\star-1}{k}}
   \end{align*}
-    Therefore $A_{j^\star}(U) \neq \emptyset$.
 \end{proof}
 
 For given inputs $x_1, x_2, ... x_n$, we say that player $i$ is \emph{critical} in $U$ if $i$ satisfies the conditions of the lemma. \newline
@@ -210,11 +209,8 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
   \item If no player is significant, the coordinator outputs ``not disjoint''. Otherwise, let $i$ be the
     first significant player. The coordinator informs every player that player $i$ has been selected.
   \item The coordinator and the players use the public randomness to sample \TODO{how many needed?}
-    sets $A_{i-1}^{(1)},\ldots$ from the distribution of $\rv{A}_{i-1} \cap U$.
-  \item Player $i$ finds the index $j$ of the first set $A_{i-1}^{(j)}$ such that
-    \begin{equation*}
-      |A_{i-1}^{(j)} \cap X_i| \leq \frac{|A_{i-1}^{(j)}|}{n^{1/k}}.
-    \end{equation*}
+    sets $A_{i-1}^{(1)},\ldots$ from the distribution of $\rv{A}_{i-1}(U)$.
+  \item Player $i$ finds the index $j$ of the first set $A_{i-1}^{(j)}(U)$ such that player $i$ is critical.
     It sends the index $j$ to the coordinator, who forwards it to the other players.
   \item The participants use the protocol from lemma 2.1 in order to discover $B \subseteq A_{i-1}^{(j)} \setminus X_i $ where $ |B| > \frac{n^{1/k}}{2}$ 
   \item All participants set:
@@ -315,20 +311,39 @@ $\mu(Err) \in O(\epsilon)$
 \paragraph{Communication Analysis}
 Let us first analyze the expected communication for a single round: \newline
 
-Every player sends a bit whether he is significant or not - $k$ bits.\newline
+1. Every player sends a bit whether he is significant or not - $k$ bits.\newline
 
-The coordinator informs everyone who is the chosen significant - $klogk$ bits. \newline
+2. The coordinator informs everyone who is the chosen significant - $klogk$ bits. \newline
 
-The index $j$ of $A_{i-1}^{(j)}$ is sent. \newline
+3. The index $j$ of $A_{i-1}^{(j)}$ is sent. \newline
 This is a random variable which has a geometric distribution since $A_{i-1}^{(j)}$ are independent. \newline
-$\Pr[|A_{i-1}^{(j)} \cap X_i| \leq \frac{|A_{i-1}^{(j)}|}{n^{1/k}} | X_i = x_i] \leq \Pr[DISJ_i(U) $
 
-$ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} | X_i = x_i]} \leq \frac{k}{\epsilon}$ \newline
-By Jensen's inequality, $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$.  \newline
-So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n) \in O(k(\log(n) + \log(\frac{1}{\epsilon}))$ and we eliminated $(n_r^{\frac{1}{k}}/2)$ zeros. \newline
-As can be seen in the appendix - there are $O(n^{1-\frac{1}{k}})$ rounds.
-For the last round we pay at most $kn^{1-\frac{1}{k}} \log(n)$. \newline
-So the total communication cost is  $O(kn^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(n)))$.
+Recall that $j$ is chosen where $i$ is critical in $U$. \newline
+Therefore we are looking for the following probability:
+$\Pr[\text{i is critical in U}| X_i = x_i]$ \newline
+
+Since $DISJ_i(U) = DISJ \cap \{\text{i is critical in U}\}$ (by definition), $\{\text{i is critical in U}\} \subseteq DISJ_i$ which leads to \newline
+$\Pr[\text{i is critical in U}| X_i = x_i] \geq \Pr[DISJ_i(U) | X_i = x_i]$ \newline
+
+By definition of $\gamma_i(x_i, U)$: \newline
+$\Pr[\text{i is critical in U}| X_i = x_i] \geq \Pr[DISJ_i(U) | X_i = x_i] = \gamma_i(x_i, U) $\newline
+
+Since i is significant: \newline
+$\gamma_i(x_i, U) \geq \frac{\epsilon}{N^{1-\frac{1}{k}}}$ \newline
+
+To conclude: $\Pr[\text{i is critical in U}| X_i = x_i] \geq \frac{\epsilon}{N^{1-\frac{1}{k}}}$. \newline
+
+Now we can calculate easily the size of j: \newline
+$ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{i is critical in U}| X_i = x_i]} \leq \frac{1}{\gamma_i(x_i, U)} \leq \frac{kN^{1-\frac{1}{k}}}{\epsilon}$ \newline
+By Jensen's inequality, $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{kN^{1-\frac{1}{k}}}{\epsilon}) \leq \log(N) + \log(k) + \log(\frac{1}{\epsilon})$.  \newline
+
+4. The player uses lemma 2.1 - $k\log(N)$ bits.
+
+So in total the cost of the round is $k + k\log(k) + k(\log(N) + \log(k) + \log(\frac{1}{\epsilon})) + k\log(N) \in O(k(\log(N) + \log(\frac{1}{\epsilon}))$.
+
+As can be seen in the appendix - there are $O(N^{1-\frac{1}{k}})$ rounds (since in every round we eliminate $n^{\frac{1}{k}}/2$). \newline
+For the round where we terminate, we pay at most $kN^{1-\frac{1}{k}} \log(N)$. \newline
+So the total communication cost is  $O(kN^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(N)))$.
 \section{k-n relation analysis}
 \paragraph{$k < \log(n)$:}
 For this case $k$ is pretty small. meaning $kn^{1/k} \approx n^{1/k}$. So we are pretty tight (our lower bound is almost like our upper one).
