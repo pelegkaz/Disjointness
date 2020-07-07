@@ -24,7 +24,7 @@
 
 \title{Multiparty Disjointness on Product Distributions}
 \author{Peleg Kazaz}
-\date{August 2019}
+\date{June 2020}
 
 
 %General math style
@@ -86,6 +86,9 @@ The world of communication complexity discusses the settings in which there are 
 In this world, one of the most important problems (sometimes called "mother of problems") is the Set Disjointness problem. In this problem, every node gets a n-bit array and they are asked whether there is an index $i$ where the $i$'th bit is turned on in all of their inputs. \newline
 There are many different settings in which this protocol can be made. The communication between players can be broadcast (shared blackboard model) or unicast (the coordinator). Moreover, the protocol may use randomness or not. The inputs of the players may be drawn using a distribution and in this case we can ask what is the expected error over this distribution (instead of worst case for each input). \newline
 In this paper, we are going to discuss the case in which the inputs are drawn from a product distribution. In this case the inputs are independent and we are asked to design a protocol which doesn't error typically. 
+\subsection{Notations}
+\Rnote{Not touching this for now}
+We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
 \section{Holding The Universe}
 Let us describe a point of view for the set distjoiness problem: we are going to hold a universe $U \subseteq [n]$. The universe is the set of indexes we do care about them e.g the indexes where there might be a intersection over the inputs (maintaining $\bigcap_i x_i \subseteq U$). Set Distjointness problem asks whether $\bigcap_i x_i = \emptyset$ but knowing $\bigcap_i x_i \subseteq U$, says we can easily consider only the question whether $(\bigcap_i x_i) \cap U = \emptyset$. The protocol is going to act in rounds where in each round it \emph{reveals indexes} which don't hold an intersection and get rid of them (thus reducing the universe's size). Such indexes are the indexes which some player has 0 on them. Therefore the protocol is going to focus about revealing zeros in the players' input efficiently. \newline
 \subsection{Revealing Zeros} 
@@ -94,22 +97,27 @@ Let us first examine a protocol which helps a single player to reveal many zeros
     For a settings where there is a set $A \subseteq [N] $, $k$ players (which know $A$) and player $i$ holds a set $A_i$. There are public numbers $m, n$ and $m \leq |A| \leq n$. If $|A_i| \leq \frac{|A|}{m}, A_i \subseteq A$. There is a deterministic protocol that reveals a set $B \subseteq A \setminus A_i$ and $|B| \geq \frac{m}{2}$ and costs $klog(n)$ bits of communication (using the coordinator settings). 
 \end{lemma}
 \begin{proof}
-    Let us divide $A$ to groups sized $\frac{m}{2}$ where the last group may be sized up to $m -1$: $B_1, B_2, ...$. This is a division that every player knows even before communicating since they all have $A, k$. \newline
+    Let us divide $A$ to groups sized $\frac{m}{2}$ where the last group may be sized up to $m -1$: $B_1, B_2, ...$. This is a division that every player knows even before communicating since they all have $A, m$. \newline
     Pay attention that there are more than $|A_i|$ groups since $  |A_i|(\frac{m}{2}) < |A_i|(m) \leq |A|$. Due to the pigeonhole principle, there is a group $B_j$ which is disjoint to $A_i$. \newline
     Since the division is public, player $i$ simply sends $j$ to the other players. Every player understands $B_j$ and know that $A_i \cap B_j = \emptyset$. 
-    The only communication used is $j \in [|A_i|]$, therefore $klog(n)$. 
+    The only communication used is $j \in [\frac{|A|}{m/2}]$, therefore $klog(n)$. 
 \end{proof}
 \section{Sequential Point Of View}
 In order to find a player with some zeros, we are going to think about set disjointness a little differently. 
 We are going to consider a sequential point of view. Let us imagine a process in which we start with the set of all points ([n]). We consider the inputs of the players one after another and intersect their inputs with the result. After intersecting with the last player's set, we end up with the intersection of all sets. Therefore our question is whether this set is empty or not. Moreover, if the last set is empty, one of the players must have subtracted a large amount of elements in this process. Finding this player helps us in order to reveal large amount of zeros in this player's input.
 
-Define sets $[n] = A_0 \supseteq A_1 \supseteq \ldots \supseteq A_k$, as follows:
+Define sets $[N] = A_0 \supseteq A_1 \supseteq \ldots \supseteq A_k$, as follows:
 for each $i = 1,\ldots,k$,
 \begin{equation*}
   A_i \coloneq \cap_{j = 1}^i x_j,
 \end{equation*}
 so that for each $i \in [k]$ we have $A_i = A_{i-1} \cap x_i$.
-Our goal in the $\prob{Disj}$ problem is to determine whether or not $A_k = \emptyset$.
+Our goal in the $\prob{Disj}$ problem is to determine whether or not $A_k = \emptyset$. \newline
+
+We can do the same thing in a specific universe $U$.
+\begin{equation*}
+  A_i(U) \coloneq \cap_{j = 1}^i x_j \cap U
+\end{equation*}
 
 \paragraph{Critical players.}
 We claim that if $\bigcap_i x_i = \emptyset$, then there is at least one player $i$ such that $A_i$ is significantly smaller than $A_{i - 1}$;
@@ -121,8 +129,8 @@ in other words, $x_i$ eliminates a significant fraction of elements from conside
   with
   \begin{enumerate}
     \item 
-      $|A_{i}| / {|A_{i-1}|} < 1 / n^{1/k}$
-    \item $|A_{i-1}| \geq n^{1-\frac{i-1}{k}}$
+      $|A_{i}(U)| / {|A_{i-1}(U)|} < 1 / n^{1/k}$
+    \item $|A_{i-1}(U)| \geq n^{1-\frac{i-1}{k}}$
   \end{enumerate}
   \label{lemma:narrow}
 \end{lemma}
@@ -130,39 +138,39 @@ in other words, $x_i$ eliminates a significant fraction of elements from conside
   We first prove that there is an index $j$ which satisfies the first property, and then we show
   that the minimal such $j$ also has the second property.
 
-  Let $j$ be the largest index such that 
+  Let $j$ be the maximal index such that 
   \begin{equation*}
-    A_{j-1} \cap U \neq \emptyset.
+    A_{j-1}(U) \neq \emptyset.
   \end{equation*}
-  There is such a $j$, because $A_0 \cap U = U \neq \emptyset$.
+  There is such a $j$, because $A_0(U) = U \neq \emptyset$.
 
-  We claim that $A_{j} \cap U = \emptyset$.
-  If $j \neq k$, then this must be true, because $j$ is the maximal index such that $A_{j-1} \neq \emptyset$;
-  and if $j = k$, then $A_j = A_k = \bigcap_i x_i = \emptyset$ by assumption.
+  We claim that $A_{j}(U) = \emptyset$.
+  If $j \neq k$, then this must be true, because $j$ is the maximal index such that $A_{j-1}(U) \neq \emptyset$;
+  and if $j = k$, then $A_j(U) = A_k(U) = U \bigcap_i x_i = \emptyset$ by assumption.
   Thus,
   \begin{equation*}
-    \frac{|A_j \cap U|}{|A_{j-1} \cap U|} = \frac{0}{|A_{j-1} \cap U|} = 0 < \frac{1}{n_r^{1/k}}
+    \frac{|A_j(U)|}{|A_{j-1}(U)|} = \frac{0}{|A_{j-1}(U)|} = 0 < \frac{1}{n^{1/k}}
   \end{equation*}
   So we know that (1) holds for $j$.
   Let us denote $j^\star$ the minimal index which satisfies (1).
   Because of its minimality, for all $i \in [j^\star-1]$ we have
   \begin{equation*}
-    \frac{|A_i \cap U|}{|A_{i-1} \cap U|} \geq \frac{1}{n_r^{1/k}}.
+    \frac{|A_i(U)|}{|A_{i-1}(U)|} \geq \frac{1}{n^{1/k}}.
   \end{equation*}
   Then we get that
   \begin{align*}
-    \frac{|A_{j^\star - 1} \cap U|}{|A_0 \cap U|} = 
-    \frac{|A_{j^\star - 1} \cap U|}{|A_{j^\star-2} \cap U|} \cdot \frac{|A_{j^\star-2} \cap U|}{|A_{j^\star-3} \cap U|} \cdot \ldots \cdot \frac{|A_1 \cap U|}{|A_0 \cap U|}
+    \frac{|A_{j^\star - 1}(U)|}{|A_0(U)|} = 
+    \frac{|A_{j^\star - 1}(U)|}{|A_{j^\star-2}(U)|} \cdot \frac{|A_{j^\star-2}(U)|}{|A_{j^\star-3}(U)|} \cdot \ldots \cdot \frac{|A_1(U)|}{|A_0(U)|}
     \geq
-    \left(  \frac{1}{n_r^{1f/k}} \right)^{j^\star}
+    \left(  \frac{1}{n^{1/k}} \right)^{j^\star - 1}
     =
-    \frac{1}{n_r^{\frac{j^\star - 1}{k}}}.
+    \frac{1}{n^{\frac{j^\star - 1}{k}}}.
   \end{align*}
-  Since $|A_0 \cap U| = n_r$, 
+  Since $|A_0(U)| = n$, 
   \begin{align*}
-      |A_{j^\star - 1} \cap U| \geq n_r^{1 - \frac{j^\star-1}{k}}
+      |A_{j^\star - 1}(U)| \geq n^{1 - \frac{j^\star-1}{k}}
   \end{align*}
-    Therefore $A_{j^\star} \cap U \neq \emptyset$.
+    Therefore $A_{j^\star}(U) \neq \emptyset$.
 \end{proof}
 
 For given inputs $x_1, x_2, ... x_n$, we say that player $i$ is \emph{critical} in $U$ if $i$ satisfies the conditions of the lemma. \newline
@@ -175,13 +183,9 @@ For a player $i$ with input $x_i$, universe $U$ define
 \begin{equation*}
   \gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[ DISJ_i (U) \given \rv{X}_i = x_i \right].
 \end{equation*}
-We say that player $i$ is \emph{significant} if $\gamma_i \geq \eps / kN^{1-\frac{1}{k}}$.
-
+We say that player $i$ is \emph{significant} if $\gamma_i \geq \eps / kN^{1-\frac{1}{k}}$. \newline
 
 \section{$O(kN^{1-\frac{1}{k}})$-Bit Protocol}
-\subsection{Notations}
-\Rnote{Not touching this for now}
-We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
 
 \subsection{Overview of the Protocol}
 Throughout the protocol, we maintain a \emph{universe}, $U \subseteq [N]$,
@@ -192,12 +196,8 @@ The protocol operates in \emph{iterations}, where each iteration has two possibl
   \item We eliminate at least a $1/\Theta(|U|^{1/k})$-fraction of elements from $U$, or
   \item We halt and guess that $\bigcap_i x_i \neq \emptyset$. This guess is correct with high probability over the inputs.
 \end{enumerate}
-After at most $N^{1 - 1/k}$ iterations, if we have not yet halted,
-then $U = \emptyset$, and at this point we announce that $\bigcap_i x_i = \emptyset$.
-
-\subsection{Reducing the Universe Size}
-To reduce the size of the universe, we look for a player whose input rules out many elements from being in the intersection,
-without communicating a lot.
+After at most $O(N^{1 - 1/k})$ iterations, if we have not yet halted,
+then $|U| < c$ for some constant. At this point every player just sends his input to the coordinator which computes the disjointness.
 
 \subsection{The Protocol}
 For a given product distribution $\mu : \left(\set{0,1}^N\right)^k \rightarrow [0,1]$, we describe a protocol that errs with probability $\epsilon$.
@@ -206,11 +206,11 @@ Our protocol uses public randomness and has $\tilde{O}(kN^{1-\frac{1}{k}})$ bits
 Initially, $U = \set{1,\ldots,N}$, and $n = N$.
 \begin{enumerate}[(1)]
   \item Termination Condition: If $|U| \leq N^{1 - 1/k}$, each player $i$ sends $x_i$ to the coordinator, who computes and outputs the answer. 
-  \item Otherwise, the coordinator asks each player $i$ whether $i$ is significant (i.e., whether $\gamma_i(x_i, U) \geq \eps / kN^{1-\frac{1}{k}}$).
+  \item Otherwise, the coordinator asks each player $i$ whether $i$ is significant in $U$ (i.e., whether $\gamma_i(x_i, U) \geq \eps / kN^{1-\frac{1}{k}}$).
   \item If no player is significant, the coordinator outputs ``not disjoint''. Otherwise, let $i$ be the
     first significant player. The coordinator informs every player that player $i$ has been selected.
   \item The coordinator and the players use the public randomness to sample \TODO{how many needed?}
-    sets $A_{i-1}^{(1)},\ldots$ from the distribution of $\rv{A}_{i-1}$.
+    sets $A_{i-1}^{(1)},\ldots$ from the distribution of $\rv{A}_{i-1} \cap U$.
   \item Player $i$ finds the index $j$ of the first set $A_{i-1}^{(j)}$ such that
     \begin{equation*}
       |A_{i-1}^{(j)} \cap X_i| \leq \frac{|A_{i-1}^{(j)}|}{n^{1/k}}.
@@ -237,8 +237,6 @@ Initially, $U = \set{1,\ldots,N}$, and $n = N$.
   %}
   %\caption{How to write algorithms}
 %\end{algorithm}
-
-
 
 %In each iteration $r$, the coordinator asks each of the $k$ players whether or not they are significant.
 %If no player is significant, the coordinator halts and outputs ``not disjoint''.
@@ -310,14 +308,21 @@ $\mu(\text{Err in round r}) \leq \frac{\epsilon}{N^{1-\frac{1}{k}}}$.\newline
 
 Now we are ready to sum the overall error:
 
-$\mu(Err) = \Sigma_{r} \mu(\text{Err in round r}) \leq #{\text{number of rounds}} \frac{\epsilon}{N^{1-\frac{1}{k}}}$. \newline
+$\mu(Err) = \Sigma_{r} \mu(\text{Err in round r}) \leq \#\{\text{number of rounds}\} \frac{\epsilon}{N^{1-\frac{1}{k}}}$. \newline
 In our protocol there are $O(N^{1-\frac{1}{k}})$ so
 $\mu(Err) \in O(\epsilon)$
 
 \paragraph{Communication Analysis}
-We analyze round by round. \newline
-For a single round which isn't the last one: firstly we pay at most $k$ bits in order to find a significant player. After that the coordinator sends his identity to the others: $k\log(k)$ bits. Then the protocol sends $j$ and $l$ to all of the players. $l$ is at most $log(n_{r-1})$. Let us analyze how big is $j$. \newline
-This is a random variable which has a geometric distribution. \newline
+Let us first analyze the expected communication for a single round: \newline
+
+Every player sends a bit whether he is significant or not - $k$ bits.\newline
+
+The coordinator informs everyone who is the chosen significant - $klogk$ bits. \newline
+
+The index $j$ of $A_{i-1}^{(j)}$ is sent. \newline
+This is a random variable which has a geometric distribution since $A_{i-1}^{(j)}$ are independent. \newline
+$\Pr[|A_{i-1}^{(j)} \cap X_i| \leq \frac{|A_{i-1}^{(j)}|}{n^{1/k}} | X_i = x_i] \leq \Pr[DISJ_i(U) $
+
 $ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{$i$ is critical in $U_{r-1}$} \land \text{DISJ} | X_i = x_i]} \leq \frac{k}{\epsilon}$ \newline
 By Jensen's inequality, $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{k}{\epsilon}) = \log(k) + \log(\frac{1}{\epsilon})$.  \newline
 So in total the cost of the round is $k + k\log(k) + k(\log(k) + \log(\frac{1}{\epsilon})) + k\log(n) \in O(k(\log(n) + \log(\frac{1}{\epsilon}))$ and we eliminated $(n_r^{\frac{1}{k}}/2)$ zeros. \newline
