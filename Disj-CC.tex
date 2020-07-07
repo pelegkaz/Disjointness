@@ -346,7 +346,7 @@ For the round where we terminate, we pay at most $kN^{1-\frac{1}{k}} \log(N)$. \
 So the total communication cost is  $O(kN^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(N)))$.
 \section{k-n relation analysis}
 \paragraph{$k < \log(n)$:}
-For this case $k$ is pretty small. meaning $kn^{1/k} \approx n^{1/k}$. So we are pretty tight (our lower bound is almost like our upper one).
+For this case $k$ is pretty small. meaning $kn^{1-1/k}\log(n) \approx n^{1-1/k}$. 
 \paragraph{$k = \alpha\log(n)$:}
 \begin{equation*}
     n^{1/k} = n^{\frac{1}{\alpha\log(n)}} = 2^{\frac{\log(n)}{\alpha\log(n)}} = 2^{1/\alpha}
@@ -365,7 +365,7 @@ Moreover, in this scenario:
 \begin{equation*}
     h(\rv{X}) = cnk
 \end{equation*}
-So our lower bound may also be fine.
+So the entropy for our distribution is indeed $\Theta(nk)$.
 \paragraph{$k \in \omega(\log(n))$:}
 This is an interesting case. Most of the elements in our input should be 1. 
 Let us denote:
