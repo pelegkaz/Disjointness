@@ -89,19 +89,65 @@ In this paper, we are going to discuss the case in which the inputs are drawn fr
 \subsection{Notations}
 \Rnote{Not touching this for now}
 We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
-\section{Holding The Universe}
-Let us describe a point of view for the set distjoiness problem: we are going to hold a universe $U \subseteq [n]$. The universe is the set of indexes we do care about them e.g the indexes where there might be a intersection over the inputs (maintaining $\bigcap_i x_i \subseteq U$). Set Distjointness problem asks whether $\bigcap_i x_i = \emptyset$ but knowing $\bigcap_i x_i \subseteq U$, says we can easily consider only the question whether $(\bigcap_i x_i) \cap U = \emptyset$. The protocol is going to act in rounds where in each round it \emph{reveals indexes} which don't hold an intersection and get rid of them (thus reducing the universe's size). Such indexes are the indexes which some player has 0 on them. Therefore the protocol is going to focus about revealing zeros in the players' input efficiently. \newline
-\subsection{Revealing Zeros} 
-Let us first examine a protocol which helps a single player to reveal many zeros using small communication in a specific scenario. Later on we describe how this scenario is created.
+
 \begin{lemma}
-    For a settings where there is a set $A \subseteq [N] $, $k$ players (which know $A$) and player $i$ holds a set $A_i$. There are public numbers $m, n$ and $m \leq |A| \leq n$. If $|A_i| \leq \frac{|A|}{m}, A_i \subseteq A$. There is a deterministic protocol that reveals a set $B \subseteq A \setminus A_i$ and $|B| \geq \frac{m}{2}$ and costs $klog(n)$ bits of communication (using the coordinator settings). 
+	Suppose we have a set $A \subseteq [N]$ which is known to all players, and a set $A_i \subseteq A$ that is known to some player $i \in [k]$.
+	Let $m, n \in \nat$ be such that $m \leq |A| \leq n$, and assume further that $|A_i| \leq |A|/m$.
+	Then there is a deterministic protocol where only player $i$ speaks,
+	that allows all players to learn a set $B \subseteq A \setminus A_i$
+	of size $|B| \geq m/2$,
+	using $\log n$ bits of communication.
+	\label{lemma:reveal_zeroes}
 \end{lemma}
 \begin{proof}
-    Let us divide $A$ to groups sized $\frac{m}{2}$ where the last group may be sized up to $m -1$: $B_1, B_2, ...$. This is a division that every player knows even before communicating since they all have $A, m$. \newline
-    Pay attention that there are more than $|A_i|$ groups since $  |A_i|(\frac{m}{2}) < |A_i|(m) \leq |A|$. Due to the pigeonhole principle, there is a group $B_j$ which is disjoint to $A_i$. \newline
-    Since the division is public, player $i$ simply sends $j$ to the other players. Every player understands $B_j$ and know that $A_i \cap B_j = \emptyset$. 
-    The only communication used is $j \in [\frac{|A|}{m/2}]$, therefore $klog(n)$. 
+	Fix in advance a partition of $A$ into sets $B_1,\ldots,B_{\ell}$,
+	where $|B_j| = m/2$ for each $j = 1,\ldots,\ell-1$,
+	and the last set has size $m/2 \leq B_{\ell} \leq m - 1$.
+	Note that we have $\ell > |A_i|$:
+	each $B_j$ comprises $m/2$ elements,
+	\begin{equation*}
+		\ell \geq \frac{|A|}{m/2} > \frac{|A|}{m} \geq |A_i|.
+	\end{equation*}
+	Therefore, there exists $j \in [\ell]$ such that $B_j \cap A_i = \emptyset$:
+	in order for $A_i$ to intersect all $\ell$ sets $B_1,\ldots,B_{\ell}$,
+	we would need to have $|A_i| \geq \ell$.
+
+	The protocol is therefore to have player $i$ send the index $j \in [\ell]$ of a set $B_j$
+	such that $A_i \cap B_j = \emptyset$.
+	The requirements are satisfied: we have $B_j \subseteq A \setminus A_i$,
+	and $|B_j| \geq m / 2$.
+	Specifying the index $j$ requires $\log \ell \leq \log n$ bits.
+	
 \end{proof}
+
+
+
+\subsection{Overview of the Protocol}
+Throughout the protocol, we maintain a \emph{universe}, $U \subseteq [N]$,
+with the property that $\bigcap_i x_i \subseteq U$.
+Initially, $U = [N]$.
+
+The protocol operates in \emph{iterations}, where each iteration has two possible outcomes:
+\begin{enumerate}[I.]
+  \item We eliminate at least a $1/\Theta(|U|^{1/k})$-fraction of elements from $U$, or
+  \item We halt and output 1. This output is not always correct, but it is correct with high probability over the inputs.
+\end{enumerate}
+After at most $O(N^{1 - 1/k})$ iterations, if we have not yet halted,
+then $|U| < c$ for some constant. At this point each player $i$ announces $x_i \cap U$,
+and then players output 1 iff $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$.
+
+
+\paragraph{Finding a player that can contribute many zeroes.}
+Consider a process where we start with the current universe $U$,
+and gradually intersect it with more and more players' inputs, 
+obtaining a sequence of sets $A_0(U), A_1(U),\ldots,A_k(U) \subseteq U$,
+where $A_i(U) = \bigcap_{j \leq i} x_j$ (and in particular, $A_0(U) = U$).
+If the answer to Disjointness is ``yes'', then $A_k(U) = \bigcap_{i = 1}^k x_i = \emptyset$.
+In this case, since we start from $|U|$ elements ($A_0(U) = U$) and after $k$ steps have no elements remaining ($A_k(U) = \emptyset$),
+there must be some $i \in [k]$ such that $A_i(U)$ is significantly smaller than $A_{i-1}(U)$.
+This means that player $i$ 
+
+
 \section{Sequential Point Of View}
 In order to find a player with some zeros, we are going to think about set disjointness a little differently. 
 We are going to consider a sequential point of view. Let us imagine a process in which we start with the set of all points ([n]). We consider the inputs of the players one after another and intersect their inputs with the result. After intersecting with the last player's set, we end up with the intersection of all sets. Therefore our question is whether this set is empty or not. Moreover, if the last set is empty, one of the players must have subtracted a large amount of elements in this process. Finding this player helps us in order to reveal large amount of zeros in this player's input.
@@ -185,18 +231,6 @@ For a player $i$ with input $x_i$, universe $U$ define
 We say that player $i$ is \emph{significant} if $\gamma_i \geq \eps / kN^{1-\frac{1}{k}}$. \newline
 
 \section{$O(kN^{1-\frac{1}{k}})$-Bit Protocol}
-
-\subsection{Overview of the Protocol}
-Throughout the protocol, we maintain a \emph{universe}, $U \subseteq [N]$,
-with the property that $\bigcap_i x_i \subseteq U$.
-We initially have $U = [N]$.
-The protocol operates in \emph{iterations}, where each iteration has two possible outcomes:
-\begin{enumerate}[I.]
-  \item We eliminate at least a $1/\Theta(|U|^{1/k})$-fraction of elements from $U$, or
-  \item We halt and guess that $\bigcap_i x_i \neq \emptyset$. This guess is correct with high probability over the inputs.
-\end{enumerate}
-After at most $O(N^{1 - 1/k})$ iterations, if we have not yet halted,
-then $|U| < c$ for some constant. At this point every player just sends his input to the coordinator which computes the disjointness.
 
 \subsection{The Protocol}
 For a given product distribution $\mu : \left(\set{0,1}^N\right)^k \rightarrow [0,1]$, we describe a protocol that errs with probability $\epsilon$.
