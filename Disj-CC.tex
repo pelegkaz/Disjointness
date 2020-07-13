@@ -130,113 +130,122 @@ Initially, $U = [N]$.
 The protocol operates in \emph{iterations}, where each iteration has two possible outcomes:
 \begin{enumerate}[I.]
   \item We eliminate at least a $1/\Theta(|U|^{1/k})$-fraction of elements from $U$, or
-  \item We halt and output 1. This output is not always correct, but it is correct with high probability over the inputs.
+  \item We halt and output 0. This output is not always correct, but it is correct with high probability over the inputs.
 \end{enumerate}
 After at most $O(N^{1 - 1/k})$ iterations, if we have not yet halted,
-then $|U| < c$ for some constant. At this point each player $i$ announces $x_i \cap U$,
+then $|U| < c$ for some constant \TODO{update condition}. At this point each player $i$ announces $x_i \cap U$,
 and then players output 1 iff $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$.
 
 
-\paragraph{Finding a player that can contribute many zeroes.}
+\paragraph{Finding a player that can reduce the universe size.}
 Consider a process where we start with the current universe $U$,
 and gradually intersect it with more and more players' inputs, 
 obtaining a sequence of sets $A_0(U), A_1(U),\ldots,A_k(U) \subseteq U$,
 where $A_i(U) = \bigcap_{j \leq i} x_j$ (and in particular, $A_0(U) = U$).
-If the answer to Disjointness is ``yes'', then $A_k(U) = \bigcap_{i = 1}^k x_i = \emptyset$.
-In this case, since we start from $|U|$ elements ($A_0(U) = U$) and after $k$ steps have no elements remaining ($A_k(U) = \emptyset$),
-there must be some $i \in [k]$ such that $A_i(U)$ is significantly smaller than $A_{i-1}(U)$.
-This means that player $i$ 
+We omit the universe $U$ from our notation when it is clear from the context.
 
+Since $\bigcap_{i = 1}^k x_i \subseteq A_k \subseteq \ldots \subseteq A_0$,
+any element that is missing from some $A_i$ is definitely not in the intersection.
+Our goal is to try to find two consecutive sets $A_i, A_{i+1}$ such that $A_{i+1}$ is \emph{significantly smaller} than $A_i$,
+and then use this fact to eliminate many elements from consideration, reducing the universe size.
 
-\section{Sequential Point Of View}
-In order to find a player with some zeros, we are going to think about set disjointness a little differently. 
-We are going to consider a sequential point of view. Let us imagine a process in which we start with the set of all points ([n]). We consider the inputs of the players one after another and intersect their inputs with the result. After intersecting with the last player's set, we end up with the intersection of all sets. Therefore our question is whether this set is empty or not. Moreover, if the last set is empty, one of the players must have subtracted a large amount of elements in this process. Finding this player helps us in order to reveal large amount of zeros in this player's input.
+\begin{definition}
+	With respect to a universe $U \subseteq [N]$ of size $n = |U| > 0$ and inputs $x_1,\ldots,x_k \subseteq [N]$,
+	we say that an index $i \in [k]$ is \emph{good} if
+	\begin{enumerate}
+		\item $|A_i(U)| / |A_{i-1}(U)| < 1/n^{1/k}$, and
+		\item $|A_{i-1}(U)| \geq n^{1-(i-1)/k}$.
+	\end{enumerate}
+	\label{def:good}
+\end{definition}
 
-Define sets $[N] = A_0 \supseteq A_1 \supseteq \ldots \supseteq A_k$, as follows:
-for each $i = 1,\ldots,k$,
-\begin{equation*}
-  A_i \coloneq \cap_{j = 1}^i x_j,
-\end{equation*}
-so that for each $i \in [k]$ we have $A_i = A_{i-1} \cap x_i$.
-Our goal in the $\prob{Disj}$ problem is to determine whether or not $A_k = \emptyset$. \newline
-
-We can do the same thing in a specific universe $U$.
-\begin{equation*}
-  A_i(U) \coloneq \cap_{j = 1}^i x_j \cap U
-\end{equation*}
-
-\paragraph{Critical players.}
-We claim that if $\bigcap_i x_i = \emptyset$, then there is at least one player $i$ such that $A_i$ is significantly smaller than $A_{i - 1}$;
-in other words, $x_i$ eliminates a significant fraction of elements from consideration.
 \begin{lemma}
-    Let there be a universe $U \subseteq [N]$ ($U \neq \emptyset$). Denote $n = |U|$. \newline
-  If $\bigcap_i x_i = \emptyset$,
-  then there is some player $i \in [k]$
-  with
-  \begin{enumerate}
-    \item 
-      $|A_{i}(U)| / {|A_{i-1}(U)|} < 1 / n^{1/k}$
-    \item $|A_{i-1}(U)| \geq n^{1-\frac{i-1}{k}}$
-  \end{enumerate}
+	Fix a universe $U \subseteq [N]$ of size $|U| = n > 0$ and inputs $x_1,\ldots,x_k \subseteq [N]$,
+	and suppose that $\bigcap_{i = 1}^k x_i \cap U = \emptyset$.
+	Then there is some good index $i \in [k]$.
   \label{lemma:narrow}
 \end{lemma}
 \begin{proof}
-  We first prove that there is an index $j$ which satisfies the first property, and then we show
-  that the minimal such $j$ also has the second property.
+	We first prove that there is an index $j \in [k]$ that satisfies the first property in Def.~\ref{def:good}, and then we show
+  that the minimal such index $j$ also has the second property.
 
-  Let $j$ be the maximal index such that 
+  Let $j \in [k]$ be the maximal index such that 
   \begin{equation*}
-    A_{j-1}(U) \neq \emptyset.
+    A_{j-1} \neq \emptyset.
   \end{equation*}
-  There is such a $j$, because $A_0(U) = U \neq \emptyset$.
+  There is such a $j$, because $A_0 = U \neq \emptyset$.
 
-  We claim that $A_{j}(U) = \emptyset$.
-  If $j \neq k$, then this must be true, because $j$ is the maximal index such that $A_{j-1}(U) \neq \emptyset$;
-  and if $j = k$, then $A_j(U) = A_k(U) = U \bigcap_i x_i = \emptyset$ by assumption.
+  Observe that $A_{j} = \emptyset$:
+  if $j < k$ then this is immediate (otherwise $j$ would not be maximal),
+  and
+  if $j = k$, then $A_j = A_k = U \cap \bigcap_{i=1}^k x_i = \emptyset$ by assumption.
   Thus,
   \begin{equation*}
-    \frac{|A_j(U)|}{|A_{j-1}(U)|} = \frac{0}{|A_{j-1}(U)|} = 0 < \frac{1}{n^{1/k}}
+	  \frac{|A_j|}{|A_{j-1}|} = \frac{0}{|A_{j-1}|} = 0 < \frac{1}{n^{1/k}},
   \end{equation*}
-  So we know that (1) holds for $j$.
-  Let us denote $j^\star$ the minimal index which satisfies (1).
-  Because of its minimality, for all $i \in [j^\star-1]$ we have
+  so we know that (1) holds for $j$.
+
+
+  Let $j^{\ast}$ denote the minimal index in $[k]$ that satisfies (1).
+  Because of its minimality, for all $i \in [j^\ast-1]$ we have
   \begin{equation*}
-    \frac{|A_i(U)|}{|A_{i-1}(U)|} \geq \frac{1}{n^{1/k}}.
+    \frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{1/k}}.
   \end{equation*}
-  Then we get that
+  Therefore,
   \begin{align*}
-    \frac{|A_{j^\star - 1}(U)|}{|A_0(U)|} = 
-    \frac{|A_{j^\star - 1}(U)|}{|A_{j^\star-2}(U)|} \cdot \frac{|A_{j^\star-2}(U)|}{|A_{j^\star-3}(U)|} \cdot \ldots \cdot \frac{|A_1(U)|}{|A_0(U)|}
+    \frac{|A_{j^\ast - 1}|}{|A_0|} = 
+    \frac{|A_{j^\ast - 1}|}{|A_{j^\ast-2}|} \cdot \frac{|A_{j^\ast-2}|}{|A_{j^\ast-3}|} \cdot \ldots \cdot \frac{|A_1|}{|A_0|}
     \geq
-    \left(  \frac{1}{n^{1/k}} \right)^{j^\star - 1}
+    \left(  \frac{1}{n^{1/k}} \right)^{j^\ast - 1}
     =
-    \frac{1}{n^{\frac{j^\star - 1}{k}}}.
+    \frac{1}{n^{\frac{j^\ast - 1}{k}}}.
   \end{align*}
-  Since $|A_0(U)| = n$, 
+  Since $|A_0| = n$, 
   \begin{align*}
-      |A_{j^\star - 1}(U)| \geq n^{1 - \frac{j^\star-1}{k}}
+	  |A_{j^\ast - 1}| \geq n^{1 - \frac{j^\ast-1}{k}}.
   \end{align*}
 \end{proof}
 
-For given inputs $x_1, x_2, ... x_n$, we say that player $i$ is \emph{critical} in $U$ if $i$ satisfies the conditions of the lemma. \newline
-We can now denote $DISJ_i(U) = DISJ \cap \{\text{i is critical in U}\}$ and also $\forall_{U \subseteq [N]} DISJ = \bigcup_i DISJ_i(U)$
-\paragraph{Significant Players}
-Note that a player does not know whether it is critical or not, as this depends 
-on the other players' inputs;
-but each player can compute the \emph{probability} that it is critical, given its input.
-For a player $i$ with input $x_i$, universe $U$ define
-\begin{equation*}
-  \gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[ DISJ_i (U) \given \rv{X}_i = x_i \right].
-\end{equation*}
-We say that player $i$ is \emph{significant} if $\gamma_i \geq \eps / kN^{1-\frac{1}{k}}$. \newline
+Let $D_i(U)$ be an indicator for the event that $\bigcap_{i = 1}^k x_i = \emptyset$ and in addition $i$ is a good index
+with respect to the universe $U$.
+The lemma implies that for any $U \subseteq [n]$ and inputs $x_1,\ldots,x_n$ such that $\bigcap_{i = 1}^k x_i \subseteq U$,
+we have
+$\bigcap_{i = 1}^k x_i = \emptyset$
+iff $\bigvee_{i = 1}^k D_i(U) = 1$.
+As usual, we omit the universe $U$ from our notation where possible.
 
-\section{$O(kN^{1-\frac{1}{k}})$-Bit Protocol}
+\paragraph{Significant players.}
+A player $i \in [k]$ does not know whether or not $i$ is good,
+as this depends on the inputs of the other players.
+However, player $i$ can compute the \emph{probability} that the conditions hold:
+define
+\begin{equation*}
+	\gamma_i = \gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[ D_i(U) \given \rv{X}_i = x_i \right].
+\end{equation*}
+We say that player $i$ is \emph{significant} if $\gamma_i \geq \eps / (kN^{1-1/k})$.
 
 \subsection{The Protocol}
+
 For a given product distribution $\mu : \left(\set{0,1}^N\right)^k \rightarrow [0,1]$, we describe a protocol that errs with probability $\epsilon$.
 Our protocol uses public randomness and has $\tilde{O}(kN^{1-\frac{1}{k}})$ bits of expected communication.
 
-Initially, $U = \set{1,\ldots,N}$, and $n = N$.
+Initially, $U = [N]$, and $n = |U| = N$.
+The protocol proceeds in iterations, where in each iteration, we either halt and output 0,
+or we reduce the size of the universe by a $1/N^{1/k}$-fraction.
+Eventually, when $|U| \leq N^{1-1/k}$, each player $i$ announces $x_i \cap U$.
+We then halt and output 1 if $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$, or 0 otherwise.
+
+Each iteration proceeds as follows:
+\begin{enumerate}[(1)]
+	\item We go through the players, and each player announces whether or not it is significant, by writing a single bit on the board.
+	\item If no player is significant, we halt and output 0.
+	\item Otherwise, let $i \in [k]$ be the index of the first significant player. Using public randomness,
+		we sample $\ell = $ \TODO{how many} sets $A_{i-1}^{(1)},\ldots,$\TODO{how many}
+		from the distribution of $\rv{A}_{i-1}(U)$ \TODO{conditioned on anything?}.
+	\item Player $i$ announces the index $j$ of the first set $A_{i-1}^{(j)}$ such that 
+
+\end{enumerate}<++>
+
 \begin{enumerate}[(1)]
   \item Termination Condition: If $|U| \leq N^{1 - 1/k}$, each player $i$ sends $x_i$ to the coordinator, who computes and outputs the answer. 
   \item Otherwise, the coordinator asks each player $i$ whether $i$ is significant in $U$ (i.e., whether $\gamma_i(x_i, U) \geq \eps / kN^{1-\frac{1}{k}}$).
