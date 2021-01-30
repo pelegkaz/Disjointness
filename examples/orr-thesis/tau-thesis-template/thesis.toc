@@ -1,0 +1,35 @@
+\contentsline {chapter}{\numberline {1}Simultaneous Multi-Party Communication Complexity}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Introduction}{1}{section.1.1}
+\contentsline {subsection}{\numberline {1.1.1}Related Work}{2}{subsection.1.1.1}
+\contentsline {section}{\numberline {1.2}Preliminaries}{3}{section.1.2}
+\contentsline {paragraph}{Notation.}{3}{section.1.2}
+\contentsline {paragraph}{Simultaneous protocols.}{3}{section.1.2}
+\contentsline {paragraph}{Communication complexity.}{3}{section.1.2}
+\contentsline {paragraph}{Individual communication complexity of a player.}{4}{section.1.2}
+\contentsline {paragraph}{Maximal message complexity of a protocol.}{4}{theorem.1}
+\contentsline {paragraph}{Problem statements.}{4}{theorem.1}
+\contentsline {section}{\numberline {1.3}Lower Bound}{5}{section.1.3}
+\contentsline {section}{\numberline {1.4}Tight Upper bound for $\ensuremath {\text {\textsc {AllEq}}} $}{8}{section.1.4}
+\contentsline {paragraph}{Error-correcting codes.}{8}{theorem.10}
+\contentsline {paragraph}{Partitioning into blocks.}{9}{theorem.12}
+\contentsline {paragraph}{Comparing blocks.}{10}{theorem.13}
+\contentsline {paragraph}{Analysis of the error probability.}{10}{remark.1}
+\contentsline {section}{\numberline {1.5}On $\ensuremath {\text {\textsc {ExistsEq}}}$}{11}{section.1.5}
+\contentsline {section}{\numberline {1.6}Conclusion}{13}{section.1.6}
+\contentsline {chapter}{\numberline {2}Sinkless Orientation}{15}{chapter.2}
+\contentsline {section}{\numberline {2.1}Preliminaries}{15}{section.2.1}
+\contentsline {paragraph}{The Distributed LOCAL Setting}{15}{section.2.1}
+\contentsline {paragraph}{Notations}{16}{section.2.1}
+\contentsline {section}{\numberline {2.2}Sinkless Orientation}{16}{section.2.2}
+\contentsline {section}{\numberline {2.3}An $O(\qopname \relax o{log}{n})$ Deterministic Algorithm Problem in the LOCAL model}{17}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Problem Definition}{17}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}Algorithm Description}{17}{subsection.2.3.2}
+\contentsline {section}{\numberline {2.4}Randomized Sinkless algorithm using Algorithmic local Lemma}{18}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Distributed Algorithms for the Lovasz Local Lemma }{18}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2.4.2}$O(\qopname \relax o{log}{n})$ Algorithm on d-regular graphs with $d > 3$}{19}{subsection.2.4.2}
+\contentsline {subsection}{\numberline {2.4.3}$O(\qopname \relax o{log}{n})$ Algorithm on 3-regular graphs}{20}{subsection.2.4.3}
+\contentsline {subsubsection}{Reduction for 3-edge-colored graph}{20}{figure.caption.3}
+\contentsline {subsubsection}{Algorithm for general 3-regular graphs}{21}{theorem.32}
+\contentsline {subsection}{\numberline {2.4.4}Conclusion}{23}{subsection.2.4.4}
+\contentsline {section}{\numberline {2.5}An $O(\qopname \relax o{log}{n})$ Deterministic Algorithm For Sinkless Orientation in the CONGEST model}{23}{section.2.5}
+\contentsline {chapter}{Bibliography}{26}{theorem.43}

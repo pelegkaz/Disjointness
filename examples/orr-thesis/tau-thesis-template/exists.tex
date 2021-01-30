@@ -1,0 +1,86 @@
+\section{On $\ExistsEQ$}
+\label{sec:exists}
+
+The upper bound of Section~\ref{sec:upper} reduces the $\AllEQ$ problem to a collection of 2-player $\EQ$ problems,
+which can then be solved efficiently using known protocols (e.g., from~\cite{BK97}).
+This works because asking whether \emph{all} inputs are equal, and finding any pair of inputs that are not equal is sufficient to conclude that the answer is ``no''. What is the situation for the $\ExistsEQ$ problem, where we ask whether there \emph{exists} a pair of inputs that are equal?
+Intuitively the approach above should not help, and indeed, the complexity of $\ExistsEQ$ is higher:
+
+\begin{theorem}
+	If $k \leq 2^{n-1}$, then $\Rsim_\epsilon(\ExistsEQ_{k,n}) = \Omega(k\sqrt{n})$ for any constant $\epsilon < 1/2$.
+	\label{thm:ExistsEQ}
+\end{theorem}
+\begin{proof}
+	We show that each player $i$ must send $\Omega(\sqrt{n})$ bits in the worst case,
+	and the bound then follows by Observation~\ref{obs:sum}. The proof is by reduction from 2-player $\EQ_{n-1}$ (we assume that $n \geq 2$).
+
+	Let $\Pi$ be a private-coin simultaneous protocol for $\ExistsEQ_{k,n}$ with error $\epsilon < 1/2$.
+	Consider player 1 (the proof for the other players is similar).
+	Assign to each player $i \in \set{3,\ldots,k}$ a unique label $b_i \in \set{0,1}^{n-1}$ (this is possible because $k \leq 2^{n-1}$.
+
+	We construct a 2-player simultaneous protocol $\Pi'$ for $\EQ_{n-1}$ with error $\epsilon < 1/2$ as follows:
+	on inputs $(x,y) \in \set{0,1}^{n-1}$,
+	Alice plays the role of player 1 in $\Pi$, feeding it the input $1x$ (that is, the $n$-bit vector obtained by prepending '1' to $x$);
+	Bob plays the role of player 2 with input $1y$;
+	and the referee in $\Pi'$ plays the role of all the other players and the referee in $\Pi$,
+	feeding each player $i$ the input $0 b_i$, where $b_i$ is the unique label assigned to player $i$.
+
+	After receiving messages from Alice and Bob, and sampling the messages players $3,\ldots,k$
+	would send in $\Pi$ when given the inputs described above,
+	the referee computes the output of $\Pi$ and that is also the output of $\Pi'$.
+
+	Because we prefixed the true inputs $x,y$ with 1, and players $3,\ldots,k$
+	received inputs beginning with 0, we have $\ExistsEQ(1x, 1y, 0b_3,\ldots, 0b_k) = \EQ(x,y)$.
+	Therefore $\Pi'$ succeeds whenever $\Pi$ does, and in particular it has error at most $\epsilon$.
+	By the lower bound of~\cite{BK97}, then, player 1 must send $\Omega(\sqrt{n})$ bits in the worst case.
+\end{proof}
+We note that if $k \geq 2^n$ then $\ExistsEQ$ is trivial, as there must always exist two players with the same input.
+(The depencence of $k$ on $n$ in Theorem~\ref{thm:ExistsEQ} can be improved to $k \leq (1-o(1))\cdot2^n$ by assigning inputs to player $3,\ldots,k$ more cleverly.)
+
+The lower bound above is tight up to $O(\log k)$, and indeed we can state something more general:
+for any 2-player
+function $f : \mathcal{X} \times \mathcal{Y} \rightarrow \set{0,1}$,
+let $\exists_k f$ be the $k$-player function that outputs 1 on input $(x_1,\ldots,x_k)$ iff for some $i,j \in [k]$ we have $f(x_i,x_j) = 1$.
+
+\begin{lemma}
+	For any 2-player function $f$ and $k \geq 2$ we have $\Rsim_{k^2 \epsilon} (\exists_k f) = O(k \cdot \Rsim_\epsilon(f))$.
+	\label{lemma:exists}
+\end{lemma}
+\begin{proof}
+	Let $\Pi = (\Pi_A, \Pi_B, O)$ be a 2-player private-coin simultaneous protocol for $f$ with communication complexity $\Rsim_\epsilon(f)$.
+
+	We construct a protocol $\Pi'$ for $\exists_k f$ as follows:
+	on input $(x_1,\ldots,x_k)$, each player $i$ samples 
+	two messages, $M_A^i \sim \Pi_A(x_i)$ and $M_B^i \sim \Pi_B(x_i)$,
+	and sends them to the referee. The referee
+	samples outputs $Z_{i,j} \sim O( M_A^i, M_B^j )$ for each $(i,j) \in [k]^2$ ($i\neq j$)
+	and
+	outputs ``1'' iff for some pair $Z_{i,j} = 1$.
+
+	If $\exists_k f(x_1,\ldots,x_k) = 1$, then there exist $i,j$ such that $f(x_i, x_j) = 1$, and for this pair of players
+	we have
+		$\Pr\left[ Z_{i,j} = 0 \right] \leq \epsilon$.
+	Therefore the referee outputs ``1'' except with probability $\epsilon$.
+
+	On the other hand, if $\exists_k f(x_1,\ldots,x_k) = 0$,
+	then for every pair $i,j$ of players we have $f(x_i, x_j) = 0$,
+	so
+		$\Pr\left[ Z_{i,j} = 1 \right] \leq \epsilon$.
+		By union bound, in this case the probability that the referee outputs ``1'' is bounded by ${k \choose 2} \epsilon < k^2 \epsilon$.
+\end{proof}
+
+
+To handle the increased error of the protocol for $\exists_k f$, we can use a protocol for $f$ that has error $O(1/k^2)$;
+this is achieved by taking a constant-error protocol for $f$, executing it $O(\log k)$ independent times, and taking the majority output~\cite{KN96}.
+We obtain the following:
+
+\begin{theorem}
+	For any 2-player function $f$, $k \geq 2$, and constant $\epsilon < 1/2$
+	we have $\Rsim_{\epsilon} (\exists_k f) = O(k \log k \cdot \Rsim_\epsilon(f))$.
+	\label{thm:exists}
+\end{theorem}
+\begin{corollary}
+	For $\ExistsEQ$ we have
+	$\Rsim_{\epsilon}(\ExistsEQ) = O( k \log k \sqrt{n})$,
+	matching our lower bound up to a logarithmic factor.
+\end{corollary}

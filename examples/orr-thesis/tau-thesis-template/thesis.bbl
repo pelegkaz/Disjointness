@@ -1,0 +1,151 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{BMN{\etalchar{+}}11}
+
+\bibitem[AGM12]{AGM12}
+Kook~Jin Ahn, Sudipto Guha, and Andrew McGregor.
+\newblock Graph sketches: Sparsification, spanners, and subgraphs.
+\newblock In {\em Proceedings of the 31st Symposium on Principles of Database
+  Systems}, PODS '12, pages 5--14, 2012.
+
+\bibitem[Amb96]{Amb96}
+A.~Ambainis.
+\newblock Communication complexity in a 3-computer model.
+\newblock {\em Algorithmica}, 16(3):298--301, 1996.
+
+\bibitem[BFH{\etalchar{+}}16]{BFHKLRSU16}
+Sebastian Brandt, Orr Fischer, Juho Hirvonen, Barbara Keller, Tuomo
+  Lempi{\"{a}}inen, Joel Rybicki, Jukka Suomela, and Jara Uitto.
+\newblock A lower bound for the distributed lov{\'{a}}sz local lemma.
+\newblock In {\em Proceedings of the 48th Annual {ACM} {SIGACT} Symposium on
+  Theory of Computing, {STOC} 2016, Cambridge, MA, USA, June 18-21, 2016},
+  pages 479--488, 2016.
+
+\bibitem[BGKL04]{BGKL04}
+L\'{a}szl\'{o} Babai, Anna G\'{a}l, Peter~G. Kimmel, and Satyanarayana~V.
+  Lokam.
+\newblock Communication complexity of simultaneous messages.
+\newblock {\em SIAM J. Comput.}, 33(1):137--166, 2004.
+
+\bibitem[BK97]{BK97}
+L.~Babai and P.~G. Kimmel.
+\newblock Randomized simultaneous messages: Solution of a problem of yao in
+  communication complexity.
+\newblock In {\em Proceedings of the 12th Annual IEEE Conference on
+  Computational Complexity}, CCC '97, pages 239--. IEEE Computer Society, 1997.
+
+\bibitem[BMN{\etalchar{+}}11]{BMNRST14}
+Florent Becker, Mart{\'{\i}}n Matamala, Nicolas Nisse, Ivan Rapaport, Karol
+  Suchan, and Ioan Todinca.
+\newblock Adding a referee to an interconnection network: What can(not) be
+  computed in one round.
+\newblock In {\em 25th {IEEE} International Symposium on Parallel and
+  Distributed Processing, {IPDPS} 2011}, pages 508--514, 2011.
+
+\bibitem[BMRT14]{BPRT14}
+Florent Becker, Pedro Montealegre, Ivan Rapaport, and Ioan Todinca.
+\newblock {\em Structural Information and Communication Complexity: 21st
+  International Colloquium, SIROCCO 2014, Takayama, Japan, July 23-25, 2014.
+  Proceedings}, chapter The Simultaneous Number-in-Hand Communication Model for
+  Networks: Private Coins, Public Coins and Determinism, pages 83--95.
+\newblock 2014.
+
+\bibitem[BW]{BW96}
+J.~Bourgain and A.~Wigderson.
+\newblock Personal communication (see ~\cite{BK97}).
+
+\bibitem[CFL83]{CFL83}
+Ashok~K. Chandra, Merrick~L. Furst, and Richard~J. Lipton.
+\newblock Multi-party protocols.
+\newblock In {\em Proceedings of the Fifteenth Annual ACM Symposium on Theory
+  of Computing}, STOC '83, pages 94--99, 1983.
+
+\bibitem[CKP16]{CKP16}
+Yi{-}Jun Chang, Tsvi Kopelowitz, and Seth Pettie.
+\newblock An exponential separation between randomized and deterministic
+  complexity in the {LOCAL} model.
+\newblock In {\em {IEEE} 57th Annual Symposium on Foundations of Computer
+  Science, {FOCS} 2016, 9-11 October 2016, Hyatt Regency, New Brunswick, New
+  Jersey, {USA}}, pages 615--624, 2016.
+
+\bibitem[CPS14]{KMPHH14}
+Kai-Min Chung, Seth Pettie, and Hsin-Hao Su.
+\newblock Distributed algorithms for the lovasz local lemma and graph coloring.
+\newblock In {\em PODC Proceedings of the 2014 ACM symposium on Principles of
+  distributed computing}, pages 134--143, 2014.
+
+\bibitem[CRR14]{CRR14}
+Arkadev Chattopadhyay, Jaikumar Radhakrishnan, and Atri Rudra.
+\newblock Topology matters in communication.
+\newblock In {\em 55th {IEEE} Annual Symposium on Foundations of Computer
+  Science, {FOCS} 2014, Philadelphia, PA, USA, October 18-21, 2014}, pages
+  631--640, 2014.
+
+\bibitem[CSWY01]{CSWY01}
+A.~Chakrabarti, Yaoyun Shi, A.~Wirth, and A.~Yao.
+\newblock Informational complexity and the direct sum problem for simultaneous
+  message complexity.
+\newblock In {\em Proceedings of the Fourty-Second Annual Symposium on
+  Foundations of Computer Science}, FOCS '01, pages 270--278, 2001.
+
+\bibitem[GS17]{GS2017}
+Mohsen Ghaffari and Hsin{-}Hao Su.
+\newblock Distributed degree splitting, edge coloring, and orientations.
+\newblock SODA 2017, 2017.
+
+\bibitem[JK09]{JK09}
+Rahul Jain and Hartmut Klauck.
+\newblock New results in the simultaneous message passing model via information
+  theoretic techniques.
+\newblock In {\em Proceedings of the Twenty-Fourth Annual IEEE Conference on
+  Computational Complexity, 2009}, CCC '09, pages 369 -- 378, 2009.
+
+\bibitem[KN97]{KN96}
+Eyal Kushilevitz and Noam Nisan.
+\newblock {\em Communication Complexity}.
+\newblock Cambridge University Press, 1997.
+
+\bibitem[KNR95]{KNR95}
+Ilan Kremer, Noam Nisan, and Dana Ron.
+\newblock On randomized one-round communication complexity.
+\newblock In {\em Proceedings of the Twenty-seventh Annual ACM Symposium on
+  Theory of Computing}, STOC '95, pages 596--605, 1995.
+
+\bibitem[McG]{OpenProblem65}
+Andrew McGregor.
+\newblock Open problem 65.
+\newblock List of Open Problems in Sublinear Algorithms.
+\newblock \url{http://sublinear.info/index.php?title=Open_Problems:65}.
+
+\bibitem[MS81]{MWS81}
+F.J. MacWilliams and N.J.A. Sloane.
+\newblock {\em The Theory of Error Correcting Codes}.
+\newblock North-Halland, 1981.
+
+\bibitem[MT10]{MoserT10}
+Robin~A. Moser and G{\'{a}}bor Tardos.
+\newblock A constructive proof of the general lov{\'{a}}sz local lemma.
+\newblock {\em J. {ACM}}, 57(2):11:1--11:15, 2010.
+
+\bibitem[NS96]{NS96}
+Ilan Newman and Mario Szegedy.
+\newblock Public vs. private coin flips in one round communication games
+  (extended abstract).
+\newblock In {\em Proceedings of the Twenty-eighth Annual ACM Symposium on
+  Theory of Computing}, STOC '96, pages 561--570, 1996.
+
+\bibitem[WW15]{WW15}
+Omri Weinstein and David~P. Woodruff.
+\newblock {\em Automata, Languages, and Programming: 42nd International
+  Colloquium, ICALP 2015, Kyoto, Japan, July 6-10, 2015, Proceedings, Part I},
+  chapter The Simultaneous Communication of Disjointness with Applications to
+  Data Streams, pages 1082--1093.
+\newblock 2015.
+
+\bibitem[Yao79]{Yao79}
+Andrew Chi-Chih Yao.
+\newblock Some complexity questions related to distributive
+  computing(preliminary report).
+\newblock In {\em Proceedings of the Eleventh Annual ACM Symposium on Theory of
+  Computing}, STOC '79, pages 209--213, 1979.
+
+\end{thebibliography}

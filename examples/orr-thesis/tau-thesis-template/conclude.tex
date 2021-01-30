@@ -1,0 +1,17 @@
+\section{Conclusion}
+In this work we extended the classical results of Babai and Kimmel~\cite{BK97} to the multi-player setting,
+and gave a tight bound for the gap between private-coin and deterministic communication complexity
+in the simultaneous setting.
+We showed that contrary to our initial expectations, the gap does not grow larger with the number of players,
+and indeed the per-player gap can shrink as the number of players grows.
+We also addressed a class of functions defined by taking a two-party function and asking whether there are two players
+whose inputs cause it to output 1.
+
+Our work leaves open the interesting question of simultaneous lower bounds for the model considered in~\cite{AGM12,BMNRST14,BPRT14},
+where each player represents a node in a graph and is given the edges adjacent to that node.
+Our techniques do not apply to this scenario because of the sharing of edges between players.
+Indeed, the connectivity problem for this model (see~\cite{OpenProblem65}) cannot be addressed by reductions from two-player communication complexity,
+because it is easy for two players: 
+we can simply have Alice and Bob compute spanning forests for their part of the input and send them to each other,
+at a total cost of $O(n \log n)$.
+Thus, further multi-party techniques need to be developed to address the hardness of connectivity.

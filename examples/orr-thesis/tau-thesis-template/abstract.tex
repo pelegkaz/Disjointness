@@ -1,0 +1,11 @@
+\begin{abstract}	
+Communication complexity plays a powerful role in proving lower bounds in distributed computing, and is one of primary tools to study the protocols with limited bandwidth (CONGEST model). a common technique is to reduces problems to the well-developed theory of $2$-player communication complexity, but some of these reductions sometime fall short of capturing an $n$-player problem.Therefore a natural avenue of study is multi-party communication complexity. In this work we study multi party communication complexity, in hope to improve our understanding of these types of problems. In particular, we studied simultaneous multi-party communication complexity. 
+
+For two player simultaneous complexity, it is known that giving the players a public (shared) random string is much more useful than private randomness: public-coin protocols can be unboundedly better than deterministic protocols, while private-coin protocols can only give a quadratic improvement on deterministic protocols.
+
+We extend the two-player gap to multiple players, and show that the private-coin communication complexity of a $k$-player function $f$ with deterministic cost $D(f)$, has communication cost $\Omega(\sqrt{D(f)})$ for any $k \geq 2$. Perhaps surprisingly, this bound is tight: although one might expect the gap between private-coin and deterministic protocols to grow with the number of players, we show that the All-Equality function, where each player receives $n$ bits of input and the players must determine if their inputs are all the same, can be solved by a private-coin protocol with $\tilde{O}(\sqrt{nk}+k)$ bits. Since All-Equality has deterministic complexity $\Theta(nk)$, this shows that sometimes the gap scales only as the square root of the number of players, and consequently the number of bits
+each player needs to send actually decreases as the number of players increases.
+
+In Distributed, I include my part in a joint work on the Sinkless Orientation problem in the LOCAL model, a work which obtained new bounds on the Distributed Lovasz Local Lemma, as well as some additional work done in turning the LOCAL algorithm to the CONGEST model.
+
+\end{abstract}

@@ -1,0 +1,164 @@
+	
+	
+	\section{Tight Upper bound for $\AllEQ$}
+	\label{sec:upper}
+	In this section, we show that the lower bound proven in section \ref{sec:lower} is tight for $\AllEQ_{k,n}$. This is done by showing a protocol with maximal message of size $O(\sqrt{\frac{n}{k}}+\log{(\min(n,k))})$ bits per player, and $O(\sqrt{nk}+k\log{(\min(n,k))})$ bits of communication overall. 
+	
+	\begin{theorem}
+		\label{upperBoundMain}
+		There exists a private-coin one sided error randomized simultaneous protocol for $\AllEQ_{k,n}$ with maximal message of size $O(\sqrt{\frac{n}{k}}+\log{(\min(n,k))}) = O(\sqrt{\frac{D^\infty(\AllEQ_{k,n})}{k}} + \log{(\min(n,k))})$ bits per player.
+	\end{theorem}	
+	\begin{corollary}
+		There exists a private-coin one sided error randomized simultaneous protocol for $\AllEQ_{n,k}$ of cost  $O(\sqrt{nk}+k\log{(\min(n,k))})= O(\sqrt{D(\AllEQ_{k,n})} + k\log{(\min(n,k))})$.
+	\end{corollary}
+
+	We note that the \emph{deterministic} communication complexity of $\AllEQ_{n,k}$ is $\Theta(nk)$, and hence also $D^\infty(\AllEQ_{k,n})=\Theta(n)$. This follows immediately from Observation~\ref{obs:det}.
+	
+	Our randomized private-coin protocol is as follows.
+	\paragraph{Error-correcting codes.}
+		In the first step of the protocol, each player encodes its input using a predetermined error correcting code, and uses the encoded string as the new input.
+		We review the definition of an error correcting code. In the definition below, $n$ and $k$ are the standard notation for error correcting codes, which we keep for the sake of consistency with the literature in coding; they are unrelated to the parameters $n,k$ of the communication complexity problem and will be used in this context in the following definition only.
+		
+				\begin{definition}[\cite{MWS81}]
+					$M \subseteq \{0,1\}^n$ is called an \emph{$[n,k,d]$-code} if it contains $2^k$ elements (that is, $|M| = 2^k$) and $d_H(x,y) \geq d$ for every two distinct $x,y$, where $d_H$ is the Hamming distance.
+					For a $[n,k,d]$ code, let $\delta=\frac{d}{n}$ denote the \emph{relative distance} of the code.
+				\end{definition}
+				An $[n,k,d]$-code maps each of $2^k$ inputs to a code word of $n$ bits,
+				such that any two distinct inputs map to code words that have large relative distance.
+				We use a simple error-correcging code (see~\cite{MWS81}), which was also used in ~\cite{Amb96}:
+				\begin{lemma}[\cite{MWS81}, Theorem 17.30\footnote{The theorem in~\cite{MWS81} gives a general construction for any distance up to $1/2$; here we use distance $1/6$.}]
+					\label{Acode}
+					For each $m \geq 1$ there is a $[3m,m,\frac{m}{2}]$-code.
+				\end{lemma}
+				The relative distance of the code in lemma \ref{Acode} is $\delta = \frac{(1/2)m}{3m} = \frac{1}{6}$.
+
+				When the players use the code from Lemma~\ref{Acode} to encode their inputs, each player's
+				input grows by a constant factor (3), while the relative Hamming distance of any two differing inputs becomes
+				at least $\delta$.
+				Let $N = 3n$ denote the length of the encoded inputs,
+				and let $\bar{x}_i$ denote the encoding of player $i$'s input $x_i$.
+		
+				\paragraph{Partitioning into blocks.}
+				After computing the encoding of their inputs, 
+				each player splits its encoded input into blocks of $L = \lceil\frac{N}{k}\rceil$ bits each,
+				except possibly the last block, which may be shorter. For simplicity we assume here that all blocks have the same length, that is, $L$ divides $n$.
+				Let $b = N/L$ be the resulting number of blocks; we note that $b \leq \min(3n,k)$.
+				Let $B_i(\ell) \in \set{0,1}^L$ denote the $\ell$-th block of player $i$.
+		
+				Because any two differing inputs have encodings that are far in Hamming distance,
+				we can show that two players with different inputs will also disagree on many \emph{blocks}:
+		\begin{lemma}
+			\label{PlayersFarApart}
+			For any two players $i,j$ such that $x_i \neq x_j$,
+			we have
+			$\left|\set{\ell \in [b] \st B_i(\ell) \neq B_j(\ell) } \right| \geq \delta b$.
+		\end{lemma}
+		\begin{proof}
+			Assume for the sake of contradiction that $|\{\ell \in [b]|B_i(\ell) \neq B_j(\ell)\}| < \delta b$.
+
+			Let $\Delta = \set{ s \in [N]  \st \bar{x}_i(s) \neq \bar{x}_j(s) }$
+			be the set of coordinates on which players $i,j$ disagree.
+			By the properties of the error correcting code, $|\Delta| \geq \delta N$.
+
+
+			Now partition $\Delta$ into disjoint sets $\Delta_1,\ldots,\Delta_b$,
+			where each $\Delta_\ell$ contains the locations inside block $\ell$ on which the encoded inputs disagree.
+			Each $\Delta_\ell$ contains between $0$ and $N/b$ coordinates, as the size of each block is $L=N/b$.
+			By our assumption, there are fewer than $\delta b$ blocks that contain any differences,
+			so the number of non-empty sets $\Delta_\ell$ is smaller than $\delta b$.
+			It follows that 
+			$|\Delta| < \delta b \cdot (N/b) = \delta N$, which contradicts
+			the relative distance of the code.
+			%Denote $\Delta = \{i|\bar{x}_p(i) \neq \bar{x}_{p'}(i)\}$ The indexes of $p$ and $p'$ in which they differ in the encoded input, and let $m_i = \Delta \cap B_p(i)$. Clearly $\forall_i|m_i| \leq \frac{n}{b}$. By assumption there are less than $\delta b$ $m_i$'s that are not empty, thus $\sum_{i=0}^{b-1} |m_i| < \delta n$, but all the sets of $m_i$ are disjoint , so  $ \sum_{i=0}^{b-1} |m_i| = |\Delta| \geq \delta n$. Therefore $\delta n > \delta n$, Contradiction.       
+		\end{proof}
+	
+		\paragraph{Comparing blocks.}
+		Our goal now is to try to find two players that disagree on some block.
+		We know that if there are two players with different inputs, then they will disagree on many different blocks,
+		so choosing a random block will expose the difference with good probability.
+		In order to compare the blocks, we use an optimal 2-player private-coin simultaneous protocol for $\EQ$:
+	\begin{theorem}[\cite{BK97} Theorem 1.5]
+		There exists a private-coin one-sided error simultaneous protocol for the two player function $EQ_m$ of cost $\Theta(\sqrt{m})$.
+		If the inputs are equal, the protocol always outputs ``Equal''. If the inputs are not equal, then the protocol outputs ``Equal''
+		with probability $< 1/3$.
+	\end{theorem}
+	\begin{remark}
+		We refer here to the symmetric variant of the equality protocol in Remark 3.3 of~\cite{BK97}, in which both Alice and Bob use the same algorithm to compute their outputs.
+	\end{remark}
+
+	We proceed as follows.
+	Each player $i$ chooses a block $\ell \in [b]$ at random. The player applies Alice's algorithm from \cite{BK97}'s 2-player equality protocol on the chosen block $B_i(\ell)$, and sends the output to the referee, along with the index $\ell$ of the block. In this process each player sends $O(\sqrt{\frac{n}{k}}+\log{(\min(n,k))})$ bits, because the length of a block is $L = O(n/k)$, and $b \leq \min(3n,k)$.
+	
+	The referee receives the player's outputs $o_1,...,o_k$, and for each pair that chose the same block index, it simulates \cite{BK97}'s 2-player equality referee. If for all such pairs the output is $1$ then the referee also outputs $1$, otherwise it outputs $0$.
+	Let us denote by $Ref(o_1,\ldots,o_k)$ the referee's output function.
+
+	\paragraph{Analysis of the error probability.}
+	Note that if all inputs are equal, then our protocol always outputs 1: the $\EQ_L$ protocol from~\cite{BK97} has one-sided error,
+	so in this case it will output 1
+	for any pair of blocks compared.
+	On the other hand, if there exist two different inputs, we will only detect this if
+	\begin{inparaenum}[(a)]
+	\item the two corresponding players choose a block on which their encoded inputs differ, and
+	\item the $\EQ_L$ protocol from~\cite{BK97} succeeds and outputs $0$.
+	\end{inparaenum}
+	We show that this does happen with good probability:
+	
+	\begin{lemma}
+		\label{sideErrorLemma}
+		If $\AllEQ(x_1,...,x_k)=0$, then the protocol outputs $0$ with probability at least $\frac{2}{3}\delta (1-e^{-\frac{1}{2}})$.
+	\end{lemma}	
+	\begin{proof}
+	Since there are at least two distinct input strings, there exists an input string received by at most half the players.
+	Let $i$ be a player with such a string, and let $j'_1,...,j'_{\frac{k}{2}}$ be $\frac{k}{2}$ players that disagree with player $i$'s input.
+
+	Let $A_t$ be the event that player $j'_t$ chose the same block index as player $i$.
+	Then
+	\begin{align*}
+		\Pr\left[ Ref(o_1,...,o_k) = 0 \right]
+		\geq 
+		\Pr \left[ Ref(o_1,...,o_k) = 0 \medspace \Big| \medspace \bigcup_{t=1}^{k/2} A_t \right]
+		\cdot \Pr\left[ \bigcup_{t=1}^{k/2} A_t\right].
+	\end{align*}
+	We bound each of these two factors individually.
+	
+	Since all $A_t$'s are independent, and for a fixed $t$ we have $Pr[A_t] = \frac{1}{b}$ then
+	\begin{flalign*}
+		\Pr\left[ \bigcup_{t=1}^{k/2} A_t \right]
+		= 1- \left(1-\frac{1}{b}\right)^{k/2}
+		\geq 1- \left(1-\frac{1}{k}\right)^{k/2}
+		\geq 1- \left(e^{-1/k}\right)^{k/2}
+		= 1-e^{-1/2}.
+	\end{flalign*}
+
+	Next, let us condition on the fact that some specific $A_r$ occurred.
+	Given that at least one of the $A_t$'s occurred, let $A_r$ be such an event,
+	that is, player $r$ chose the same block as player $i$.
+
+	Clearly, conditioning on $A_r$ does not change the probability of each block being selected, because
+	the blocks are chosen uniformly and independently:
+	that is, for each $i,r \in [k]$ and $\ell \in [b]$,
+	\begin{equation*}
+		\Pr\left[ \text{player $i$ chose block $\ell$} \given A_r \right] = \frac{1}{b}.
+	\end{equation*}
+
+	%\begin{equation*}
+	%\forall_{i,l} Pr(\text{player $p$ chose block $i$}|A_l) = \frac{1}{b}
+	%\end{equation*}
+	 %since both players chose their block uniformly at random.
+	 Therefore, by Lemma~\ref{PlayersFarApart},
+	 given the event $A_r$, players $i$ and $r$ disagree on the block they sent with probability at least $(\delta b) / b = \delta$.
+	 Whenever $i$ and $r$ send a block they disagree on,
+	 the protocol from~\cite{BK97} outputs $0$ with probability $2/3$.
+	 So overall,
+	\begin{flalign*}
+		\Pr \left[ Ref(o_1,...,o_k) = 0 \medspace \Big| \medspace \bigcup_{t=1}^{\frac{k}{2}} A_t \right] \geq \frac{2}{3} \delta.
+	\end{flalign*}
+	Combining the two yields
+	$
+	Pr[Ref(o_1,...,o_k) = 0] \geq \frac{2}{3}\delta (1-e^{-\frac{1}{2}}).
+	$
+	\end{proof}
+	\begin{proof}[Proof of Theorem \ref{upperBoundMain}]
+		By lemma \ref{sideErrorLemma}, if $\AllEQ(x_1,...,x_k)=0$ the algorithm errs with constant probability. If $\AllEQ(x_1,...,x_k)=1$ then since $\forall_{i,p,p'} B_p(i) = B_p'(i)$, and the fact that \cite{BK97}'s protocol is a one-sided error protocol, the global protocol will always output $1$, which is the correct value. Since this is a one-sided error protocol with constant error probability, this protocol can be amplified by repeating the protocol in parallel a constant number of times, so that the error probability becomes an arbitrarily small constant, and the communication is only increased by a constant factor.
+	\end{proof}
+

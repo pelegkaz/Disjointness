@@ -1,0 +1,21 @@
+\BOOKMARK [0][-]{chapter.1}{Simultaneous Multi-Party Communication Complexity}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Introduction}{chapter.1}% 2
+\BOOKMARK [2][-]{subsection.1.1.1}{Related Work}{section.1.1}% 3
+\BOOKMARK [1][-]{section.1.2}{Preliminaries}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.3}{Lower Bound}{chapter.1}% 5
+\BOOKMARK [1][-]{section.1.4}{Tight Upper bound for AllEq }{chapter.1}% 6
+\BOOKMARK [1][-]{section.1.5}{On ExistsEq}{chapter.1}% 7
+\BOOKMARK [1][-]{section.1.6}{Conclusion}{chapter.1}% 8
+\BOOKMARK [0][-]{chapter.2}{Sinkless Orientation}{}% 9
+\BOOKMARK [1][-]{section.2.1}{Preliminaries}{chapter.2}% 10
+\BOOKMARK [1][-]{section.2.2}{Sinkless Orientation}{chapter.2}% 11
+\BOOKMARK [1][-]{section.2.3}{An O\(logn\) Deterministic Algorithm Problem in the LOCAL model}{chapter.2}% 12
+\BOOKMARK [2][-]{subsection.2.3.1}{Problem Definition}{section.2.3}% 13
+\BOOKMARK [2][-]{subsection.2.3.2}{Algorithm Description}{section.2.3}% 14
+\BOOKMARK [1][-]{section.2.4}{Randomized Sinkless algorithm using Algorithmic local Lemma}{chapter.2}% 15
+\BOOKMARK [2][-]{subsection.2.4.1}{Distributed Algorithms for the Lovasz Local Lemma }{section.2.4}% 16
+\BOOKMARK [2][-]{subsection.2.4.2}{O\(logn\) Algorithm on d-regular graphs with d > 3}{section.2.4}% 17
+\BOOKMARK [2][-]{subsection.2.4.3}{O\(logn\) Algorithm on 3-regular graphs}{section.2.4}% 18
+\BOOKMARK [2][-]{subsection.2.4.4}{Conclusion}{section.2.4}% 19
+\BOOKMARK [1][-]{section.2.5}{An O\(logn\) Deterministic Algorithm For Sinkless Orientation in the CONGEST model}{chapter.2}% 20
+\BOOKMARK [0][-]{theorem.43}{Bibliography}{}% 21

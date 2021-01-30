@@ -1,0 +1,66 @@
+\section{Preliminaries}
+\label{sec:prelim}
+
+\paragraph{Notation.}
+For a vector $x$ of length $n$, we let $x_{-i}$ denote the vector of length $n-1$ obtained by dropping the $i$-th coordinate of $x$ (where $i \in [n]$).
+
+\paragraph{Simultaneous protocols.}
+
+Fix input domains $\mathcal{X}_1,\ldots,\mathcal{X}_k$ of sizes $m_1,\ldots,m_k$ (respectively).
+A \emph{private-coin $k$-player simultaneous communication protocol} $\Pi$ on $\mathcal{X}_1 \times \ldots \times \mathcal{X}_k$
+is a tuple of functions $(\pi_1,\ldots,\pi_k, O)$,
+where each $\pi_i$ maps the inputs $\mathcal{X}_i$ of player $i$ to a distribution on a finite set of messages $\mathcal{M}_i \subseteq \set{0,1}^*$,
+and $O$ is the referee's output function, mapping each tuple of messages in $\mathcal{M}_1 \times \ldots \times \mathcal{M}_k$ to a distribution on outputs $\set{0,1}$.
+
+We say that $\Pi$ \emph{computes a function $f: \mathcal{X}_1 \times \ldots \times \mathcal{X}_k \rightarrow \set{0,1}$ with error $\eps$}
+if for each $(x_1,\ldots,x_k) \in \mathcal{X}_1 \times \ldots \times \mathcal{X}_k$ we have:
+\begin{equation*}
+	\Pr_{ \set{m_i \sim \pi_i(x_i)}_{i \in [k]}}\left[ O(m_1,\ldots,m_k) \neq f(x_1,\ldots,x_k) \right] \leq \eps.
+\end{equation*}
+
+A \emph{deterministic} protocol is defined as above, except that instead of distributions on messages, the protocol maps each player's input to a deterministic message, and the referee's output is also a deterministic function of the messages it receives from the players.
+
+\paragraph{Communication complexity.}
+The \emph{communication complexity} of a protocol $\Pi$ (randomized or deterministic), denoted by $\CC(\Pi)$, is defined as the maximum total number of bits
+sent by the players to the referee in any execution of the protocol on any input.%
+\footnote{Another reasonable definition for randomized protocols is to take the maximum over all inputs of the \emph{expected} total number of bits sent. For two players this is asymptotically equivalent to the definition above~\cite{KN96}. For $k > 2$ players, the expectation may be smaller than the maximum by a factor of $\log(k)$.}
+
+For a function $f$, the \emph{deterministic communication complexity of $f$} is defined as
+\begin{equation*}
+	\Dsim(f) = \min_{\Pi} \CC(\Pi),
+\end{equation*}
+where the minimum is taken over all deterministic protocols that compute $f$ with no errors. The \emph{private-coin $\eps$-error communication complexity of $f$} is defined as
+\begin{equation*}
+	\Rsim_\eps(f) = \min_{\Pi : \text{$\Pi$ computes $f$ with error $\eps$}} \CC(\Pi).
+\end{equation*}
+
+\paragraph{Individual communication complexity of a player.}
+We let $\CC_i(\Pi)$ denote the maximum number of bits sent by player $i$ to the referee in any execution.
+For general communication protocols, it could be that the players never simultaneously reach their worst-case message sizes --- that is,
+we could have $\CC(\Pi) < \sum_{i=1}^k \CC_i(\Pi)$.
+However, with \emph{simultaneous} protocols this cannot happen:
+\begin{observation}
+	For any private-coin (or deterministic) simultaneous protocol $\Pi$ we have $\CC(\Pi) = \sum_{i=1}^k \CC_i(\Pi)$.
+	\label{obs:sum}
+\end{observation}
+\begin{proof}
+	For each $i \in [k]$, let $x_i$ be some input on which player $i$ sends $\CC_i(\Pi)$ bits with non-zero probability.
+	Then on joint input $(x_1,\ldots,x_k)$, there is a non-zero probability that
+each player $i$ sends $\CC_i(\Pi)$ bits, for a total of $\sum_{i=1}^k \CC_i(\Pi)$ bits.
+Therefore $\CC(\Pi) \geq \sum_{i=1}^k \CC_i(\Pi)$. The inequality in the other direction is immediate, as there cannot be an execution of the protocol in which more than $\sum_{i=1}^k \CC_i(\Pi)$ bits are sent.
+\end{proof}
+
+In the sequel we assume for simplicity that all players always send the same number of bits, that is, each player has a fixed message size. By the observation above, this does not change the communication complexity.
+
+\paragraph{Maximal message complexity of a protocol.}
+The \emph{maximal message complexity} of a protocol $\Pi$ is the maximum individual communication complexity over all players. The deterministic maximum message complexity is $D^{\infty} = \min\limits_{\Pi} \max_i\CC_i(\Pi)$, and the \emph{private-coin $\eps$-error maximal message complexity of $f$} is defined as $R^{\infty}_\eps = \min\limits_{\text{$\Pi$ computes $f$ with error $\eps$}} \max_i\CC_i(\Pi)$
+
+\paragraph{Problem statements.}
+The two main problems we consider in this work are:
+\begin{itemize}
+	\item $\AllEQ_{k,n}(x_1,\ldots,x_k) = 1$ iff $x_1 = \ldots = x_k$, where $x_1,\ldots,x_k \in \set{0,1}^n$;
+	\item $\ExistsEQ_{k,n}(x_1,\ldots,x_k) = 1$ iff for some $i \neq j$ we have $x_i = x_j$, where $x_1,\ldots,x_k \in \set{0,1}^n$.
+\end{itemize}
+
+We often omit the subscript when the number of players and the input size are clear from the context.
+

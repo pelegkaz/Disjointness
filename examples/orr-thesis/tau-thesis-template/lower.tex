@@ -1,0 +1,186 @@
+\section{Lower Bound}
+\label{sec:lower}
+
+In this section we extend the lower bound from~\cite{BK97} to multiple players, and show that for any $k$-player function $f$ and constant error probability $\eps \in (0,1/2)$ we have $\Rsim_\eps(f) = \Omega(\sqrt{\Dsim(f)})$.
+
+When proving two-party communication complexity lower bounds, it is helpful to view the function being computed as a matrix, where the rows are indexed by Alice's input, the columns are indexed by Bob's input, and each cell contains the value of the function on the corresponding pair of inputs. The natural extension to $k$ players is a ``$k$-dimensional matrix'' (or tensor) where the $i$-th dimension is indexed by the inputs to the $i$-th player, and the cells again contain the values of the function on that input combination. For conciseness we refer to this representation as a ``matrix'' even for $k > 2$ players.
+
+In~\cite{BK97} it is observed that the deterministic simultaneous communication complexity of a function is exactly the sum of the logarithms of the number of unique rows and the number of unique columns in the matrix (rounded up to an integer). We generalize the notion of ``rows and columns'' to multiple players as follows.
+
+\begin{definition}[Slice]
+	Fix a $k$-dimensional matrix $M \in \set{0,1}^{m_1 \times \ldots \times m_k}$.
+	For a player $i$ and an input (i.e., index) $x_i \in [m_i]$,
+	we define
+	\emph{the $(i,x_i)$-th slice} of $M$ to be the projection of $M$ onto a $(k-1)$-dimensional matrix $M|_{(i,x_i)} \in \set{0,1}^{m_1 \times \ldots \times m_{i-1} \times m_{i+1} \times \ldots \times m_k}$ obtained by fixing player $i$'s input to $x_i$.
+	That is, for each
+	$x \in \mathcal{X}_1 \times \ldots \times \mathcal{X}_k$
+	we have
+	%$x_1,\ldots,x_{i-1},x_{i+1},\ldots,x_k \in \mathcal{X}_1 \times \ldots \times \mathcal{X}_{i-1} \times \mathcal{X}_{i+1} \times \ldots \times \mathcal{X}_k$ we have
+	%$M|_{(i,x_i)}(x_1,\ldots,x_{i-1}, x_{i+1}, \ldots, x_k) = M(x_1,\ldots,x_k)$.
+	$M|_{(i,x_i)}(x_{-i}) = M(x)$.
+\end{definition}
+
+Note that for $k = 2$ and a 2-dimensional matrix $M$, the $(1,x)$-th slice of $M$ is simply the row indexed by $x$, and the $(2,y)$-th slice
+is the column indexed by $y$.
+
+We assume that the matrices we deal with have \emph{no redundant slices}: there does not exist a pair $(i,x_i), (i,x_i')$ (where $x_i \neq x_i'$) such that
+$M|_{(i,x_i)} = M|_{(i,x_i')}$. If there are redundant slices, we simply remove them; they correspond to inputs to player $i$ on which
+the function value is the same, for any combination of inputs to the other players. Such inputs are ``different in name only'' and we can eliminate the redundancy without changing the communication complexity of the function being computed.
+
+
+Let $\dim_i(M)$ denote the length of $M$ in the $i$-th direction: this is the number of possible inputs to player $i$, after redundant slices are removed (i.e., the number of unique slices for player $i$ in $M$).
+We rely upon the following observation, which generalizes the corresponding observation for two players from~\cite{BK97}:
+
+\begin{observation}
+	Let $f : \mathcal{X}_1 \times \ldots \times \mathcal{X}_k \rightarrow \set{0,1}$ be a $k$-player function,
+	and let $M_f$ be the matrix representing $f$.
+Then
+in any deterministic protocol for $f$, each player $i$ sends at least $\log \dim_i(M_f)$ bits in the worst case,
+and
+$\Dsim(f) = \sum_{i=1}^k \lceil \log \dim_i(M_f)\rceil$.
+\label{obs:det}
+\end{observation}
+
+\begin{proof}
+	Suppose for the sake of contradiction that there is a deterministic protocol $\Pi$ for $f$
+where some player $i$ that always sends fewer than $\lceil \log \dim_i(M_f)\rceil$ bits in $\Pi$.
+For this player there exist two slices (i.e., inputs to player $i$)
+	$M|_{(i,x_i)}$ and $M|_{(i,x_i')}$, with $x_i \neq x_i'$, on which the player sends the same message.
+	Because we assumed that there are no redundant slices, 
+	there exists an input $x_{-i}$ to the other players such that $M|_{(i,x_i)}(x_{-i}) \neq M|_{(i,x_i')}(x_{-i})$.
+	But all players send the same messages to the referee on inputs $(x_i, x_{-i})$ and $(x_i', x_{-i})$,
+	which means that on one of the two inputs the output of the referee is incorrect.
+
+	This shows that each player $i$ must send at least $\lceil \log \dim_i(M_f) \rceil$ bits in the worst-case.
+	This number of bits from each player is also sufficient to compute $f$,
+	as the players can simply send the referee their input (after removing redundant slices,
+	the number of remaining inputs is the number of unique slices).
+	Therefore by Observation~\ref{obs:sum},
+	$\Dsim(f) = \sum_{i=1}^k \lceil \log \dim_i(M_f) \rceil$.
+\end{proof}
+
+
+In~\cite{BK97}, Babai and Kimmel prove the following for two players:
+\begin{lemma}[\cite{BK97}]
+	For any 2-player private-coin protocol $\Pi$ with constant error $\epsilon < 1/2$,
+	\begin{equation*}
+	\CC_1(\Pi) \cdot \CC_2(\Pi) \geq \Omega( \log \dim_1(M_f) + \log \dim_2(M_f) ).
+	\end{equation*}
+	\label{lemma:BK97}
+\end{lemma}
+
+Using this property of 2-player protocols, we can show:
+\begin{lemma}
+	Let $\Pi$ be a $k$-player private-coin protocol for $f : \mathcal{X}_1 \times \ldots \times \mathcal{X}_k \rightarrow \set{0,1}$ with constant error $\eps \in (0,1/2)$.
+	Then for each $i \in [k]$:
+	\begin{equation*}
+		\CC_i(\Pi) \cdot \left(\sum_{j \neq i} \CC_j(\Pi) \right) = \Omega( \log \dim_i(M_f) ).
+	\end{equation*}
+	\label{lemma:player_i_lower}
+\end{lemma}
+\begin{proof}
+	Fix a player $i \in [k]$. The $k$-player protocol $\Pi$ induces a 2-player protocol $\Pi'$, where Alice plays the role of player $i$,
+	and Bob plays the role of all the other players.
+	We have $\CC_1(\Pi') = \CC_i(\Pi)$ and $\CC_2(\Pi') = \sum_{j \neq i} \CC_j(\Pi)$
+	(recall that we assume the message size of each player is fixed).
+
+
+	The 2-player function computed by $\Pi'$ is still $f$, but now we view it as a 2-player function,
+	represented by a 2-dimensional matrix $M_f'$ with rows indexed by $\mathcal{X}_i$ and columns indexed by $\mathcal{X}_1 \times \ldots \times \mathcal{X}_{i-1} \times \mathcal{X}_{i+1} \times \ldots \times \mathcal{X}_k$.
+	Note that $\dim_1(M_f') \geq \dim_i(M_f)$:
+	if $M_f|_{(i,x_i)}$ and $M_f|_{(i,x_i')}$ are slices of $M_f$ that are not equal,
+	then the corresponding rows of $M_f'$, indexed by $x_i$ and $x_i'$, differ as well.
+	Thus, by Lemma~\ref{lemma:BK97},
+	\begin{equation*}
+		\CC_i(\Pi) \cdot \left(\sum_{j\neq i} \CC_j(\Pi) \right) = \CC_1(\Pi') \cdot \CC_2(\Pi') = \Omega(\log \dim_1(M_f')) = \Omega(\log \dim_i(M_f)).
+	\end{equation*}
+\end{proof}
+
+We can now show:
+\begin{theorem}
+	For any $k$-player function $f$ and constant error $\epsilon < 1/2$
+	we have $\Rsim_\eps(f) = \Omega( \sqrt{ \Dsim(f) })$.
+	\label{thm:lower}
+\end{theorem}
+\begin{proof}
+	Let $\Pi$ be an $\eps$-error private-coin simultaneous protocol for $f$.
+	By the lemma, for each $i \in [k]$ we have
+	\begin{equation*}
+		\CC_i(\Pi) \cdot \left(\sum_{j=1}^n \CC_j(\Pi)\right)
+		\geq 
+		\CC_i(\Pi) \cdot \left(\sum_{j \neq i} \CC_j(\Pi)) \right) = \Omega \left( \log \dim_i(M_f) \right).
+	\end{equation*}
+	Summing across all players, we obtain
+	\begin{equation*}
+		\left(\sum_{i=1}^n \CC_i(\Pi)\right) \cdot \left(\sum_{j=1}^n \CC_j(\Pi) \right) = \Omega\left( \sum_{i=1}^n \log \dim_i (M_f) \right),
+	\end{equation*}
+	that is, by Observations~\ref{obs:sum} and~\ref{obs:det},
+	\begin{equation*}
+		\CC(\Pi)^2 = \Omega \left( \Dsim(f) \right).
+	\end{equation*}
+	The theorem follows.
+\end{proof}
+
+From the theorem above we see that the \emph{average} player must send $\Omega(\sqrt{\Dsim(f)/k})$ bits.
+But what is the relationship between the \emph{maximum} number of bits sent by any player in a private-coin
+protocol and a deterministic protocol for $f$? 
+This question is mainly of interest for non-symmetric functions, since for symmetric functions all players must send
+the same number of bits in the worst-case.
+
+\begin{theorem}
+	For any $k$-player function $f$ and constant error $\epsilon$
+	we have $\Rsim_\eps^\infty(f) = \Omega( \sqrt{ \Dsim^\infty(f)/k })$.
+\end{theorem}
+\begin{proof}
+	Recall that by Observation~\ref{obs:det}, $D^\infty(f) = \max_i \log \dim_i(M_f)$.
+	Let $i$ be a player maximizing $\log \dim_i(M_f)$.
+	As we showed in the proof of Theorem~\ref{thm:lower},
+	for this player we have in any private-coin simultaneous protocol $\Pi$:
+	\begin{equation*}
+		\CC_i(\Pi) \cdot \left(\sum_{j=1}^n \CC_j(\Pi)\right)
+		=
+		\Omega \left( \log \dim_i(M_f) \right)
+		=
+		\Omega( D^\infty(f) )
+		.
+	\end{equation*}
+	Now let $\ell$ be the player with the maximum communication complexity in $\Pi$,
+	that is, $\CC_j(\Pi) \leq \CC_\ell(\Pi)$ for each $j \in [k]$. We then have
+	\begin{equation*}
+		\CC_i(\Pi) \cdot \left(\sum_{j=1}^n \CC_j(\Pi)\right)
+		\leq \CC_\ell(\Pi) \cdot (k-1)\CC_\ell(\Pi)
+		< k\CC^2_\ell(\Pi).
+	\end{equation*}
+	Combining the two, we obtain
+		$\CC_\ell(\Pi) = \Omega\left( \sqrt{ D^\infty(f) / k} \right)$,
+	which proves the theorem.
+\end{proof}
+
+\subsection*{Lower Bound of {\boldmath $\Omega(k \log n)$ for $\AllEQ_{k,n}$}}
+We next show that in the specific case of $\AllEQ$, each player needs to send at least $\Omega(\log n)$ bits, yielding a lower bound of $\Omega(k \log n)$.
+This improves on the lower bound of Theorem~\ref{thm:lower} when $k = \Omega(n/\mathrm{polylog}(n))$,
+and will show that the protocol in the next section is optimal.
+\begin{theorem}
+	For any constant $\epsilon < 1/2$ we have $\Rsim_\eps(\AllEQ_{k,n}) = \Omega(k \log n)$.
+\end{theorem}
+\begin{proof}
+	Fix a player $i \in [k]$. To show that player $i$ must send $\Omega(\log n)$ bits,
+	we reduce from $\EQ_n$, but this time our reduction constructs a \emph{one-way protocol},
+	where Alice, taking the role of player $i$, sends a message to Bob, representing all the other players and the referee; and Bob then outputs the answer.
+	It is known that $\EQ_n$ requires $\Omega(\log n)$ bits of communication for private-coind protocols --- this is true
+	even with unrestricted back-and-forth communication between the two players~\cite{KN96}.
+	The lower bound follows.
+
+	Let $\Pi$ be a simultaneous private-coin protocol for $\AllEQ_{k,n}$.
+	We construct a one-way protocol for $\EQ_n$ as follows:
+	on input $(x,y)$, Alice sends Bob the message that player $i$ would send on input $x$ in $\Pi$.
+	Bob computes the messages each player $j \neq i$ would send on input $y$,
+	and then computes the output of the referee; this is the output of the one-way protocol.
+	Clearly, $\AllEQ_{k,n}(x,y,\ldots,y) = \EQ_n(x,y)$, so the one-way protocol succeeds whenever $\Pi$ succeeds.
+
+	\label{thm:lower_k}
+\end{proof}
+
+The lower bounds above use a series of 2-player reductions; they do not seem to exploit the full ``hardness'' of having $k$ players with their own individual private randomness. This makes it more surprising that the lower bounds are tight, as we show in the next section.
+
+

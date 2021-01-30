@@ -1,0 +1,64 @@
+\section{Introduction}
+\label{sec:intro}
+
+In his seminal '79 paper introducing the notion of two-party communication complexity~\cite{Yao79},
+Yao also briefly considered communication between more than two players, and pointed out ``one situation that deserves special attention'': two players receive private inputs, and send randomized messages to a third player, who then produces the output.
+Yao asked what is the communication complexity of the Equality function (called ``the identification function'' in~\cite{Yao79}) in this model:
+in 
+the Equality function $\EQ_n$, the two players receive vectors $\set{0,1}^n$, and the goal is to determine whether $x = y$.
+
+
+Yao showed in~\cite{Yao79} that $\EQ_n$ requires $\Omega(n)$ bits for determistic communication protocols, even if the players can communicate back-and-forth. Using a \emph{shared} random string, the complexity reduces to $O(1)$, and using \emph{private} randomness, but more than a single round, the complexity is $\Theta(\log n)$. In modern nomenclature, the model described above is called \emph{the 2-player simultaneous model}, and the third player (who announces the output) is called the \emph{referee}. Yao's question is then: what is the communication complexity of $\EQ_n$ using private randomness in the simultaneous model of communication complexity?
+
+Some seventeen years later, Yao's question was answered: Newman and Sezegy showed in~\cite{NS96} that $\EQ_n$ requires $\Theta(\sqrt{n})$ bits to compute in the model above, if the players are allowed only private randomness. (Using shared randomness the complexity reduces to $O(1)$, even for simultaneous protocols.) Moreover, Babai and Kimmel showed in~\cite{BK97} that for \emph{any} function $f$, if the deterministic simultaneous complexity of $f$ is $D(f)$, then the private-coin simultaneous communication complexity of $f$ is $\Omega(\sqrt{D(f)})$, so in this sense private randomness is of only limited use for simultaneous protocols.
+
+In this work we study multi-player simultaneous communication complexity%
+\footnote{We consider the \emph{number-in-hand} model, where each player receives a private input, rather than the perhaps
+more familiar \emph{number-on-forehead} model, where each player can see the input of all the other players but not its own.}%
+, and ask: how useful are private random coins for more than two players? Intuitively, one might expect that as the number of players grows, the utility of private randomness should decrease.
+%
+%In particular, several 2-player protocols for $\EQ_n$~\cite{BK97,NS96} achieve communication complexity of $\tilde{O}(\sqrt{n})$ by relying on the \emph{birthday paradox}, which allows the two players to privately each select $\Theta(\sqrt{n})$ random objects from a universe of size $\Theta(n)$ --- and have constant probability that the same object will be selected by both players. For more than two players, we would need $\omega(\sqrt{n})$ random choices from each player --- as the number of players goes to infinity, the number of random choices required to ensure a global intersection approaches the size of the universe. Thus, it might seem that as the number of players goes to infinity, the private-coin simultaneous communication complexity of a function should much closer to its deterministic simultaneous complexity, and perhaps even the two should converge in the limit.
+%
+We first extend the $\Omega(\sqrt{D(f)})$ lower bound of~\cite{BK97} to the multi-player setting, and show that for any $k$-player function $f$,
+the private-coin simultaneous communication complexity of $f$ is $\Omega(\sqrt{D(f)})$.
+We then show, perhaps contrary to expectation, that the extended lower
+bound is still tight in some cases.
+
+To see why this may be surprising, consider the function $\AllEQ_{k,n}$, which generalizes $\EQ_n$ to $k$ players: each player $i$ receives a vector $x_i \in \set{0,1}^n$, and the goal is to determine whether all players received the same input. It is easy to see that the deterministic communication complexity of $\AllEQ_{k,n}$ is $\Omega(nk)$ (not just for simultanoues protocols), and each player must send $n$ bits to the referee in the worst case. From the lower bound above, we obtain a lower bound of $\Omega(\sqrt{nk})$ for the private-coin simultaneous complexity of $\AllEQ_{k,n}$.
+It is easy to see that $\Omega(k)$ is also a lower bound, as each player must send at least one bit, so together we have a lower bound of $\Omega(\sqrt{nk}+k)$.
+If this lower bound is tight, then the average player only needs to send $O(\sqrt{n/k}+1)$ bits to the referee in the worst-case, so in some sense we even \emph{gain} from having more players, and indeed, if $k = \Omega(n)$, then the per-player cost of $\AllEQ_{k,n}$ with private coins is constant, just as it would be with shared coins.
+
+Nevertheless, our lower bound \emph{is} nearly tight, and we are able to give a simultaneous private-coin protocol for $\AllEQ_{k,n}$ where each players sends only $O(\sqrt{n/k} + \log(k))$ bits to the referee,
+for a total of $O(\sqrt{nk}+ k \log \min \set{ k, n})$ bits.
+This matches the lower bound of $\Omega(\sqrt{nk})$ when $k = O(n/\log^2 n)$.
+We also show that $\AllEQ_{k,n}$ requires $\Omega(k \log n)$ bits, so in fact our upper bound for $\AllEQ$ is tight.
+
+We then turn our attention to a harder class of $k$-player problems: those obtained by taking a 2-player function $f$ and asking ``do there exist two players on whose inputs $f$ returns 1?''. An example for this class is the function $\ExistsEQ_{k,n}$, which asks whether there exist two players that received the same input. We show that $\ExistsEQ_{k,n}$ requires $\tilde{\Theta}(k\sqrt{n})$ bits for private-coin simultaneous protocols, and moreover, any function in the class above has private-coin simultaneous complexity $\tilde{O}(k R(f))$, where $R(f)$ is the private-coin simultaneous complexity of $f$ (with constant error).
+
+\subsection{Related Work}
+As we mention above, two-player simultaneous communication complexity was first considered by Yao in~\cite{Yao79},
+and has received considerable attention since.
+The Equality problem was studied in~\cite{BK97,NS96,BW96}, and another optimal simultaneous protocol is given in~\cite{Amb96},
+using error-correcting codes.
+In~\cite{KNR95}, a connection is established between simultaneous and one-round communication complexity and the VC-dimension.
+\cite{CSWY01,JK09} consider the question of simultaneously solving multiple copies of Equality and other functions,
+and in particular, ~\cite{CSWY01} shows that solving $m$ copies of Equality requires $\Omega(m \sqrt{n})$ bits for private-coin simultaneous 2-player protocols.
+
+Multi-player communication complexity has also been extensively studied, but typically in the \emph{number-on-forehead} model, where each player can see the inputs of all the other players but not its own. This model was introduced in~\cite{CFL83}; sufficiently strong lower bounds on protocols in this model, even under restricted (but not simultaneous) communication patterns, would lead to new circuit lower bounds.
+Simultaneous communication complexity for number-on-forehead is considered in ~\cite{BGKL04}.
+
+In contrast, in this work we consider the \emph{number-in-hand} model, where each player knows only its own input.
+This model is related to distributed computing and streaming (see, e.g.,~\cite{WW15}, which gives a lower bound for a promise version of Set Disjointness in our model).
+
+An interesting ``middle case'' between the number-in-hand and number-on-forehead models is considered in~\cite{AGM12,BMNRST14,BPRT14}:
+there the input to the players is an undirected graph, and each player represents a node in the graph and receives the edges
+adjacent to this node as its input.
+This means that each edge is known to \emph{two} players.
+This gives the players surprising power; for example, in~\cite{AGM12} it is shown that graph connectivity can be decided
+in a total of $O(n \log^3 n)$ bits using public randomness. The power of private randomness in this model remains a fascinating open question
+and is part of the motivation for our work.
+
+The functions $\AllEQ$ and $\ExistsEQ$ considered in this work were also studed in, e.g.,~\cite{CRR14}, but not in the context of simultaneous communication; the goal there is to quantify the communication cost of the network topology on communication complexity, in a setting where not all players can talk directly with each other.
+
+
+
