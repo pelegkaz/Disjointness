@@ -82,42 +82,44 @@
 
 
 \section{Introduction}
-The world of communication complexity discusses the settings in which there are many nodes (sometimes called players). Each node has its own input. For a given function, the goal is to design a protocol in which the nodes calculate the function over the whole input (e.g all of the nodes' inputs) together using minimum communication. \newline
-In this world, one of the most important problems (sometimes called "mother of problems") is the Set Disjointness problem. In this problem, every node gets a n-bit array and they are asked whether there is an index $i$ where the $i$'th bit is turned on in all of their inputs. \newline
-There are many different settings in which this protocol can be made. The communication between players can be broadcast (shared blackboard model) or unicast (the coordinator). Moreover, the protocol may use randomness or not. The inputs of the players may be drawn using a distribution and in this case we can ask what is the expected error over this distribution (instead of worst case for each input). \newline
-In this paper, we are going to discuss the case in which the inputs are drawn from a product distribution. In this case the inputs are independent and we are asked to design a protocol which doesn't error typically. 
+Yao's two-party communication complexity is a well-studied model. The most simple settings is the deterministic one. We want to find an algorithm which gets the exact solution for every input. This model has two somewhat similar extensions. The first one is the randomized settings. In this model, every player gets a random string (private or public) and can use it in the protocol. In this model we want the protocol to solve the problem with error up to $\epsilon$ (on the randomized strings). \newline
+Another model is when the inputs themselves are randomized. In this model, we need to design a protocol which solves the problem with error up to $\epsilon$ for every distribution on the inputs. Another interesting problem is to design a protocol which solves the problem for every product distribution (in which the players' inputs are independent. \newline
+One of the most important problems (sometimes called "mother of problems") is the Set Disjointness problem. In this problem, every player gets a n-bit array and they are asked whether there is an index $i$ where the $i$'th bit is turned on in all of their inputs. \newline
+This problem has been studied thoroughly on different models. It has been proved that every randomized protocol must use $\Omega(n)$ in order to achieve constant error bound from $\frac{1}{2}$.  Also it has been proved that the distributional communication complexity of this problem is also $\Omega(n)$ using the corruption methods. Another interesting question is what happens when we limit ourselves to product distribution. In this case a tight bound of $\Theta(\sqrt(n))$ has been proved but only for two players. \newline
+In this paper, we tried to expand this bound for every number of player $k$. We have succeeded to prove the upper bound of $O(kn^{\frac{1}{k}})$. 
+In the two-player protocol, Bob reveals a large amount of his zeros to Alice using the public randomness and the fact that the inputs are drawn from a known product distribution. This method is not easy to generalize since every player may eliminate $\frac{n}{k}$ zeros 
 \subsection{Notations}
 \Rnote{Not touching this for now}
 We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
 
 \begin{lemma}
-	Suppose we have a set $A \subseteq [N]$ which is known to all players, and a set $A_i \subseteq A$ that is known to some player $i \in [k]$.
-	Let $m, n \in \nat$ be such that $m \leq |A| \leq n$, and assume further that $|A_i| \leq |A|/m$.
-	Then there is a deterministic protocol where only player $i$ speaks,
-	that allows all players to learn a set $B \subseteq A \setminus A_i$
-	of size $|B| \geq m/2$,
-	using $\log n$ bits of communication.
-	\label{lemma:reveal_zeroes}
+  Suppose we have a set $A \subseteq [N]$ which is known to all players, and a set $A_i \subseteq A$ that is known to some player $i \in [k]$.
+  Let $m, n \in \nat$ be such that $m \leq |A| \leq n$, and assume further that $|A_i| \leq |A|/m$.
+  Then there is a deterministic protocol where only player $i$ speaks,
+  that allows all players to learn a set $B \subseteq A \setminus A_i$
+  of size $|B| \geq m/2$,
+  using $\log n$ bits of communication.
+  \label{lemma:reveal_zeroes}
 \end{lemma}
 \begin{proof}
-	Fix in advance a partition of $A$ into sets $B_1,\ldots,B_{\ell}$,
-	where $|B_j| = m/2$ for each $j = 1,\ldots,\ell-1$,
-	and the last set has size $m/2 \leq B_{\ell} \leq m - 1$.
-	Note that we have $\ell > |A_i|$:
-	each $B_j$ comprises $m/2$ elements,
-	\begin{equation*}
-		\ell \geq \frac{|A|}{m/2} > \frac{|A|}{m} \geq |A_i|.
-	\end{equation*}
-	Therefore, there exists $j \in [\ell]$ such that $B_j \cap A_i = \emptyset$:
-	in order for $A_i$ to intersect all $\ell$ sets $B_1,\ldots,B_{\ell}$,
-	we would need to have $|A_i| \geq \ell$.
+  Fix in advance a partition of $A$ into sets $B_1,\ldots,B_{\ell}$,
+  where $|B_j| = m/2$ for each $j = 1,\ldots,\ell-1$,
+  and the last set has size $m/2 \leq B_{\ell} \leq m - 1$.
+  Note that we have $\ell > |A_i|$:
+  each $B_j$ comprises $m/2$ elements,
+  \begin{equation*}
+    \ell \geq \frac{|A|}{m/2} - 1 > \frac{|A|}{m} \geq |A_i|.
+  \end{equation*}
+  Therefore, there exists $j \in [\ell]$ such that $B_j \cap A_i = \emptyset$:
+  in order for $A_i$ to intersect all $\ell$ sets $B_1,\ldots,B_{\ell}$,
+  we would need to have $|A_i| \geq \ell$.
 
-	The protocol is therefore to have player $i$ send the index $j \in [\ell]$ of a set $B_j$
-	such that $A_i \cap B_j = \emptyset$.
-	The requirements are satisfied: we have $B_j \subseteq A \setminus A_i$,
-	and $|B_j| \geq m / 2$.
-	Specifying the index $j$ requires $\log \ell \leq \log n$ bits.
-	
+  The protocol is therefore to have player $i$ send the index $j \in [\ell]$ of a set $B_j$
+  such that $A_i \cap B_j = \emptyset$.
+  The requirements are satisfied: we have $B_j \subseteq A \setminus A_i$,
+  and $|B_j| \geq m / 2$.
+  Specifying the index $j$ requires $\log \ell \leq \log n$ bits.
+  
 \end{proof}
 
 
@@ -150,23 +152,23 @@ Our goal is to try to find two consecutive sets $A_i, A_{i+1}$ such that $A_{i+1
 and then use this fact to eliminate many elements from consideration, reducing the universe size.
 
 \begin{definition}
-	With respect to a universe $U \subseteq [N]$ of size $n = |U| > 0$ and inputs $x_1,\ldots,x_k \subseteq [N]$,
-	we say that an index $i \in [k]$ is \emph{good} if
-	\begin{enumerate}
-		\item $|A_i(U)| / |A_{i-1}(U)| < 1/n^{1/k}$, and
-		\item $|A_{i-1}(U)| \geq n^{1-(i-1)/k}$.
-	\end{enumerate}
-	\label{def:good}
+  With respect to a universe $U \subseteq [N]$ of size $n = |U| > 0$ and inputs $x_1,\ldots,x_k \subseteq [N]$,
+  we say that an index $i \in [k]$ is \emph{good} if
+  \begin{enumerate}
+    \item $|A_i(U)| / |A_{i-1}(U)| < 1/n^{1/k}$, and
+    \item $|A_{i-1}(U)| \geq n^{1-(i-1)/k}$.
+  \end{enumerate}
+  \label{def:good}
 \end{definition}
 
 \begin{lemma}
-	Fix a universe $U \subseteq [N]$ of size $|U| = n > 0$ and inputs $x_1,\ldots,x_k \subseteq [N]$,
-	and suppose that $\bigcap_{i = 1}^k x_i \cap U = \emptyset$.
-	Then there is some good index $i \in [k]$.
+  Fix a universe $U \subseteq [N]$ of size $|U| = n > 0$ and inputs $x_1,\ldots,x_k \subseteq [N]$,
+  and suppose that $\bigcap_{i = 1}^k x_i \cap U = \emptyset$.
+  Then there is some good index $i \in [k]$.
   \label{lemma:narrow}
 \end{lemma}
 \begin{proof}
-	We first prove that there is an index $j \in [k]$ that satisfies the first property in Def.~\ref{def:good}, and then we show
+  We first prove that there is an index $j \in [k]$ that satisfies the first property in Def.~\ref{def:good}, and then we show
   that the minimal such index $j$ also has the second property.
 
   Let $j \in [k]$ be the maximal index such that 
@@ -181,7 +183,7 @@ and then use this fact to eliminate many elements from consideration, reducing t
   if $j = k$, then $A_j = A_k = U \cap \bigcap_{i=1}^k x_i = \emptyset$ by assumption.
   Thus,
   \begin{equation*}
-	  \frac{|A_j|}{|A_{j-1}|} = \frac{0}{|A_{j-1}|} = 0 < \frac{1}{n^{1/k}},
+    \frac{|A_j|}{|A_{j-1}|} = \frac{0}{|A_{j-1}|} = 0 < \frac{1}{n^{1/k}},
   \end{equation*}
   so we know that (1) holds for $j$.
 
@@ -202,7 +204,7 @@ and then use this fact to eliminate many elements from consideration, reducing t
   \end{align*}
   Since $|A_0| = n$, 
   \begin{align*}
-	  |A_{j^\ast - 1}| \geq n^{1 - \frac{j^\ast-1}{k}}.
+    |A_{j^\ast - 1}| \geq n^{1 - \frac{j^\ast-1}{k}}.
   \end{align*}
 \end{proof}
 
@@ -220,7 +222,7 @@ as this depends on the inputs of the other players.
 However, player $i$ can compute the \emph{probability} that the conditions hold:
 define
 \begin{equation*}
-	\gamma_i = \gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[ D_i(U) \given \rv{X}_i = x_i \right].
+  \gamma_i = \gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[ D_i(U) \given \rv{X}_i = x_i \right].
 \end{equation*}
 We say that player $i$ is \emph{significant} if $\gamma_i \geq \eps / (kN^{1-1/k})$.
 
@@ -237,12 +239,12 @@ We then halt and output 1 if $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$, or 0 
 
 Each iteration proceeds as follows:
 \begin{enumerate}[(1)]
-	\item We go through the players, and each player announces whether or not it is significant, by writing a single bit on the board.
-	\item If no player is significant, we halt and output 0.
-	\item Otherwise, let $i \in [k]$ be the index of the first significant player. Using public randomness,
-		we sample $\ell = $ \TODO{how many} sets $A_{i-1}^{(1)},\ldots,$\TODO{how many}
-		from the distribution of $\rv{A}_{i-1}(U)$ \TODO{conditioned on anything?}.
-	\item Player $i$ announces the index $j$ of the first set $A_{i-1}^{(j)}$ such that 
+  \item We go through the players, and each player announces whether or not it is significant, by writing a single bit on the board.
+  \item If no player is significant, we halt and output 0.
+  \item Otherwise, let $i \in [k]$ be the index of the first significant player. Using public randomness,
+    we sample $\ell = $ \TODO{how many} sets $A_{i-1}^{(1)},\ldots,$\TODO{how many}
+    from the distribution of $\rv{A}_{i-1}(U)$ \TODO{conditioned on anything?}.
+  \item Player $i$ announces the index $j$ of the first set $A_{i-1}^{(j)}$ such that 
 
 \end{enumerate}<++>
 

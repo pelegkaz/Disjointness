@@ -352,7 +352,7 @@
       \vfill
       \Large
       under the supervision of \\
-      Prof. Rotem Oshman\\
+      Dr. Rotem Oshman\\
 %%%%
 %% Uncomment for a second thesis supervisor:
 %%
