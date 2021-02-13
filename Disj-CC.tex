@@ -312,6 +312,65 @@ Each iteration proceeds as follows:
 \subsection{Properties of Our Protocol}
 Our protocol is using random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-\frac{1}{k}})$ bits of communication between the players.
 \subsection{Analysis}
+\paragraph{Rounds analysis}
+We argue that the protocol may run only $O(n^{1-\frac{1}{k}})$ rounds. As described above, every round where $|U| = n$, we omit $\frac{n^{1-\frac{1}{k}}}{2}$ indexes. Therefore if $f(n)$ is the function of number of rounds when starting with universe sized $n$, we can define it by
+    \begin{equation*}
+        f(n) = \begin{cases}
+               1               & n \leq N^{\frac{1}{k}}\\
+               1 + f(n - \frac{n^{1/k}}{2}) & \text{otherwise}
+           \end{cases}
+    \end{equation*}
+We use two simple technical claims in order to prove that $f(n) \in O(n^{1-\frac{1}{k}})$.
+\begin{claim}
+    For $k \geq 2$ and every $n$: $n^{1 - \frac{1}{k}} - (n-\frac{n^{1/k}}{2})^{1-\frac{1}{k}} \geq 0.25$
+\end{claim}
+\begin{proof}
+    Let us define a function $f(x) = x^{1-\frac{1}{k}}$. We want to analyze $f(n) - f(n-\frac{n^{1/k}}{2})$. By Lagrange's theorem, there exists a $c \in [0, \frac{n^{1/k}}{2}]$ such that $f(n) - f(n-\frac{n^{1/k}}{2}) = \frac{n^{1/k}}{2} f'(n-c)$. By calculation: $f'(x) = (1-\frac{1}{k})x^{-1/k}$. Therefore $f(n) -  f(n-n^{1/k}) = \frac{n^{1/k}}{2} (1-\frac{1}{k}) (n-c)^{-1/k} = \frac{(1-\frac{1}{k})}{2} (\frac{n}{n-c})^{1/k} \geq (1-\frac{1}{k})/2 \geq 0.25$ for $k \geq 2$ 
+\end{proof}
+\begin{claim}
+    For $f(n)$ which is defined by \newline
+    \begin{equation*}
+        f(n) = \begin{cases}
+               1               & n \leq N^{\frac{1}{k}}\\
+               1 + f(n - \frac{n^{1/k}}{2}) & \text{otherwise}
+           \end{cases}
+    \end{equation*}
+    It is true that $f(n) \in O(n^{1-\frac{1}{k}})$.
+\end{claim}
+\begin{proof}
+For the definition of $O$ notation, we need to prove that there exists a constant $D$ for which $\forall_{n, k \in \mathbb{N}} : f(n) \leq Dn^{1-\frac{1}{k}}$. Let us prove it by induction: \newline
+
+a. Induction base: \newline
+
+As always $O$ notation is trivial for the base of the induction as we can choose big enough $D$ such that $f(1) < D$ (for example $D=17f(1)+1337$. \newline
+
+b. the induction step: \newline
+
+By definition we know that \newline
+
+$f(n) = 1 + f(n - \frac{n^{1/k}}{2})$ \newline
+
+In this point we can use the inductive hypothesis \newline
+
+$1 + f(n - \frac{n^{1/k}}{2}) \leq 1 + D(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}}$ \newline
+
+Using the previous claim $(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq n^{1-\frac{1}{k}}-0.25$. \newline
+
+$1 + D(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq 1 + D(n^{1-\frac{1}{k}}-0.25)$ \newline
+
+Now we got exactly what we needed. \newline
+
+$1 + D(n^{1-\frac{1}{k}}-0.25) = 1 - 0.25D + D(n^{1-\frac{1}{k}}) $ \newline
+
+Pay attention that if we choose $D \geq 4$ \newline
+
+$1 - 0.25D + D(n^{1-\frac{1}{k}}) \leq Dn^{1-\frac{1}{k}}$ \newline
+
+To summarize, for $D \geq 4$, we proved that \newline
+
+$f(n) \leq Dn^{1-\frac{1}{k}}$. \newline
+
+\end{proof}
 \paragraph{Error Analysis}
 Let there be a round $r$. In this round, we error only if there was no significant player (in $U_r$) and therefore the coordinator answered "not disjoint" but actually the inputs were disjoint. \newline
 
@@ -654,37 +713,7 @@ and for $i = k$
 where $m_i$ is the $i$'th bit of m in binary representation. ($m_i \mathrel{\mathop:}= ( m \mathop{\&} 2^{i-1} ) \gg i-1 $). \\
 Let's pay attention for some simple properties. First of all $\forall_i |X_i| = \frac{n}{2}$. Moreover, it doesn't matter if we permute the players, for $i < k, |A_i| = 0.5|A_{i-1}|$ and generally for $i < k, |A_i| = 2^{k-1-i}$. $\Pr[DISJ] = 0.5$. The thing is that this distribution has a little entropy ($k$).
 \section{Appendix}
-\paragraph{Rounds analysis for upper bound}
-\begin{claim}
-    For $k \geq 2$ and every $n$: $n^{1 - \frac{1}{k}} - (n-\frac{n^{1/k}}{2})^{1-\frac{1}{k}} \geq 0.25$
-\end{claim}
-\begin{proof}
-    Let us define a function $f(x) = x^{1-\frac{1}{k}}$. We want to analyze $f(n) - f(n-\frac{n^{1/k}}{2})$. By Lagrange's theorem, there exists a $c \in [0, \frac{n^{1/k}}{2}]$ such that $f(n) - f(n-\frac{n^{1/k}}{2}) = \frac{n^{1/k}}{2} f'(n-c)$. By calculation: $f'(x) = (1-\frac{1}{k})x^{-1/k}$. Therefore $f(n) -  f(n-n^{1/k}) = \frac{n^{1/k}}{2} (1-\frac{1}{k}) (n-c)^{-1/k} = \frac{(1-\frac{1}{k})}{2} (\frac{n}{n-c})^{1/k} \geq (1-\frac{1}{k})/2 \geq 0.25$ for $k \geq 2$ 
-\end{proof}
-\begin{claim}
-    Let us define the function $f(n)$ - rounds for the protocol starting with $n$ bits with $k$ players. This function is defined by $f(n) = 1 + f(n - \frac{n^{1/k}}{2})$ \newline
-    $f(i) = 1$ for $i \leq N^{\frac{1}{k}}$ \newline
-    We claim that $f(n) \in O(n^{1-\frac{1}{k}})$
-\end{claim}
-\begin{proof}
-For the definition of $O$ notation, we need to prove that there exists a constant $D$ for which $\forall_{n, k \in \mathbb{N}} : f(n) \leq Dn^{1-\frac{1}{k}}$. \newline
-Let us prove it by induction: \newline
-a. Induction base: \newline
-As always $O$ notation is trivial for the base of the induction as we can choose big enough $D$ such that $f(1) < D$ (for example $D=17f(1)+1337$. \newline
-b. the induction step: \newline
-By definition we know that \newline
-$f(n) = 1 + f(n - \frac{n^{1/k}}{2})$ \newline
-In this point we can use the inductive hypothesis \newline
-$1 + f(n - \frac{n^{1/k}}{2}) \leq 1 + D(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}}$ \newline
-Using the previous claim $(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq n^{1-\frac{1}{k}}-0.25$. \newline
-$1 + D(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq 1 + D(n^{1-\frac{1}{k}}-0.25)$ \newline
-Now we got exactly what we needed. \newline
-$1 + D(n^{1-\frac{1}{k}}-0.25) = 1 - 0.25D + D(n^{1-\frac{1}{k}}) $ \newline
-Pay attention that if we choose $D \geq 4$ \newline
-$1 - 0.25D + D(n^{1-\frac{1}{k}}) \leq Dn^{1-\frac{1}{k}}$ \newline
-To summarize, for $D \geq 4$, we proved that \newline
-$f(n) \leq Dn^{1-\frac{1}{k}}$. \newline
-\end{proof}
+
 
 \subsection{TODO}
 Add an universe set U. and pseudo code. 
