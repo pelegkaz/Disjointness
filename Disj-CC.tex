@@ -28,6 +28,7 @@
 
 
 %General math style
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 \newcommand{\fnstyle}[1]{\mathsf{#1}}
 \newcommand{\set}[1]{\left\{#1\right\}}
 \newcommand{\coloneq}{:=}
@@ -661,16 +662,28 @@ Let's pay attention for some simple properties. First of all $\forall_i |X_i| = 
     Let us define a function $f(x) = x^{1-\frac{1}{k}}$. We want to analyze $f(n) - f(n-\frac{n^{1/k}}{2})$. By Lagrange's theorem, there exists a $c \in [0, \frac{n^{1/k}}{2}]$ such that $f(n) - f(n-\frac{n^{1/k}}{2}) = \frac{n^{1/k}}{2} f'(n-c)$. By calculation: $f'(x) = (1-\frac{1}{k})x^{-1/k}$. Therefore $f(n) -  f(n-n^{1/k}) = \frac{n^{1/k}}{2} (1-\frac{1}{k}) (n-c)^{-1/k} = \frac{(1-\frac{1}{k})}{2} (\frac{n}{n-c})^{1/k} \geq (1-\frac{1}{k})/2 \geq 0.25$ for $k \geq 2$ 
 \end{proof}
 \begin{claim}
-    Let us define the function $f(n)$ - rounds for the protocol starting with $n$ bits with $k$ players. As described in the protocol we know the equation 
-    $f(n) = 1 + f(n - \frac{n^{1/k}}{2})$ \newline
+    Let us define the function $f(n)$ - rounds for the protocol starting with $n$ bits with $k$ players. This function is defined by $f(n) = 1 + f(n - \frac{n^{1/k}}{2})$ \newline
+    $f(i) = 1$ for $i \leq N^{\frac{1}{k}}$ \newline
     We claim that $f(n) \in O(n^{1-\frac{1}{k}})$
 \end{claim}
 \begin{proof}
-We should find that $ \exists_{D\in\mathbb{R}} : \forall_{n, k \in \mathbb{N}} : f(n) \leq Dn^{1-\frac{1}{k}}$. Let us prove by induction. The induction base is trivial (we can choose big enough $D$). The induction step: \newline
-$f(n) = 1 + f(n - \frac{n^{1/k}}{2}) \overset{(1)}{\leq} 1 + D(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \overset{(2)}{\leq} 1 + D(n^{1-\frac{1}{k}}-0.25) \overset{(3)}{\leq} Dn^{1-\frac{1}{k}}$ \newline
-(1) - By induction. \\
-(2) - By previous claim. \\
-(3) - If we choose $4 \leq D$
+For the definition of $O$ notation, we need to prove that there exists a constant $D$ for which $\forall_{n, k \in \mathbb{N}} : f(n) \leq Dn^{1-\frac{1}{k}}$. \newline
+Let us prove it by induction: \newline
+a. Induction base: \newline
+As always $O$ notation is trivial for the base of the induction as we can choose big enough $D$ such that $f(1) < D$ (for example $D=17f(1)+1337$. \newline
+b. the induction step: \newline
+By definition we know that \newline
+$f(n) = 1 + f(n - \frac{n^{1/k}}{2})$ \newline
+In this point we can use the inductive hypothesis \newline
+$1 + f(n - \frac{n^{1/k}}{2}) \leq 1 + D(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}}$ \newline
+Using the previous claim $(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq n^{1-\frac{1}{k}}-0.25$. \newline
+$1 + D(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq 1 + D(n^{1-\frac{1}{k}}-0.25)$ \newline
+Now we got exactly what we needed. \newline
+$1 + D(n^{1-\frac{1}{k}}-0.25) = 1 - 0.25D + D(n^{1-\frac{1}{k}}) $ \newline
+Pay attention that if we choose $D \geq 4$ \newline
+$1 - 0.25D + D(n^{1-\frac{1}{k}}) \leq Dn^{1-\frac{1}{k}}$ \newline
+To summarize, for $D \geq 4$, we proved that \newline
+$f(n) \leq Dn^{1-\frac{1}{k}}$. \newline
 \end{proof}
 
 \subsection{TODO}
