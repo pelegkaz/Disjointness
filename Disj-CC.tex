@@ -239,15 +239,6 @@ Eventually, when $|U| \leq N^{1-1/k}$, each player $i$ announces $x_i \cap U$.
 We then halt and output 1 if $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$, or 0 otherwise.
 
 Each iteration proceeds as follows:
-\begin{enumerate}[(1)]
-  \item We go through the players, and each player announces whether or not it is significant, by writing a single bit on the board.
-  \item If no player is significant, we halt and output 0.
-  \item Otherwise, let $i \in [k]$ be the index of the first significant player. Using public randomness,
-    we sample $\ell = $ \TODO{how many} sets $A_{i-1}^{(1)},\ldots,$\TODO{how many}
-    from the distribution of $\rv{A}_{i-1}(U)$ \TODO{conditioned on anything?}.
-  \item Player $i$ announces the index $j$ of the first set $A_{i-1}^{(j)}$ such that 
-
-\end{enumerate}<++>
 
 \begin{enumerate}[(1)]
   \item Termination Condition: If $|U| \leq N^{1 - 1/k}$, each player $i$ sends $x_i$ to the coordinator, who computes and outputs the answer. 
