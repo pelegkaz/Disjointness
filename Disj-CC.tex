@@ -83,7 +83,7 @@
 
 
 \section{Introduction}
-Yao's two-party communication complexity is a well-studied model. The most simple settings is the deterministic one. We want to find an algorithm which gets the exact solution for every input. This model has two somewhat similar extensions. The first one is the randomized settings. In this model, every player gets a random string (private or public) and can use it in the protocol. In this model we want the protocol to solve the problem with error up to $\epsilon$ (on the randomized strings). \newline
+Yao's two-party communication complexity is a well-studied model. The most simple settings is the deterministic settings. In this settings, we want to find an algorithm which gets the exact solution for every input. This model has two somewhat similar extensions. The first one is the randomized settings. In this model, every player gets a random string (private or public) and can use it in the protocol. In this case, we want the protocol to solve the problem with error up to $\epsilon$ (over the randomized strings). \newline
 Another model is when the inputs themselves are randomized. In this model, we need to design a protocol which solves the problem with error up to $\epsilon$ for every distribution on the inputs. Another interesting problem is to design a protocol which solves the problem for every product distribution (in which the players' inputs are independent. \newline
 One of the most important problems (sometimes called "mother of problems") is the Set Disjointness problem. In this problem, every player gets a n-bit array and they are asked whether there is an index $i$ where the $i$'th bit is turned on in all of their inputs. \newline
 This problem has been studied thoroughly on different models. It has been proved that every randomized protocol must use $\Omega(n)$ in order to achieve constant error bound from $\frac{1}{2}$.  Also it has been proved that the distributional communication complexity of this problem is also $\Omega(n)$ using the corruption methods. Another interesting question is what happens when we limit ourselves to product distribution. In this case a tight bound of $\Theta(\sqrt(n))$ has been proved but only for two players. \newline
@@ -135,19 +135,20 @@ The protocol operates in \emph{iterations}, where each iteration has two possibl
   \item We eliminate at least a $1/\Theta(|U|^{1/k})$-fraction of elements from $U$, or
   \item We halt and output 0. This output is not always correct, but it is correct with high probability over the inputs.
 \end{enumerate}
-After at most $O(N^{1 - 1/k})$ iterations, if we have not yet halted,
-then $|U| < c$ for some constant \TODO{update condition}. At this point each player $i$ announces $x_i \cap U$,
-and then players output 1 iff $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$.
-
+After at most $4N^{1 - 1/k}$ iterations, if we have not yet halted,
+then $|U| < N^{\frac{1}{k}}$ for some constant. At this point each player $i$ announces $x_i \cap U$,
+and then players output 1 iff $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$. \newline
+\newline
+Let's dive in to the method to eliminate high fraction of elements from the universe.
 
 \paragraph{Finding a player that can reduce the universe size.}
-Consider a process where we start with the current universe $U$,
+Consider a process where we start with some universe $U$ (where $\bigcap_{i = 1}^k x_i \subseteq U$),
 and gradually intersect it with more and more players' inputs, 
 obtaining a sequence of sets $A_0(U), A_1(U),\ldots,A_k(U) \subseteq U$,
-where $A_i(U) = \bigcap_{j \leq i} x_j$ (and in particular, $A_0(U) = U$).
+where $A_i(U) = U \cap (\bigcap_{j \leq i} x_j)$ (and in particular, $A_0(U) = U$).
 We omit the universe $U$ from our notation when it is clear from the context.
 
-Since $\bigcap_{i = 1}^k x_i \subseteq A_k \subseteq \ldots \subseteq A_0$,
+Since $\bigcap_{i = 1}^k x_i = A_k \subseteq \ldots \subseteq A_0$,
 any element that is missing from some $A_i$ is definitely not in the intersection.
 Our goal is to try to find two consecutive sets $A_i, A_{i+1}$ such that $A_{i+1}$ is \emph{significantly smaller} than $A_i$,
 and then use this fact to eliminate many elements from consideration, reducing the universe size.
@@ -164,7 +165,7 @@ and then use this fact to eliminate many elements from consideration, reducing t
 
 \begin{lemma}
   Fix a universe $U \subseteq [N]$ of size $|U| = n > 0$ and inputs $x_1,\ldots,x_k \subseteq [N]$,
-  and suppose that $\bigcap_{i = 1}^k x_i \cap U = \emptyset$.
+  and suppose that $\bigcap_{i = 1}^k x_i = \emptyset$.
   Then there is some good index $i \in [k]$.
   \label{lemma:narrow}
 \end{lemma}
@@ -209,7 +210,7 @@ and then use this fact to eliminate many elements from consideration, reducing t
   \end{align*}
 \end{proof}
 
-Let $D_i(U)$ be an indicator for the event that $\bigcap_{i = 1}^k x_i = \emptyset$ and in addition $i$ is a good index
+Let $D_i(U)$ be an indicator for the event that $\bigcap_{j = 1}^k x_j = \emptyset$ and in addition $i$ is a good index
 with respect to the universe $U$.
 The lemma implies that for any $U \subseteq [n]$ and inputs $x_1,\ldots,x_n$ such that $\bigcap_{i = 1}^k x_i \subseteq U$,
 we have
@@ -304,14 +305,14 @@ Each iteration proceeds as follows:
 Our protocol is using random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-\frac{1}{k}})$ bits of communication between the players.
 \subsection{Analysis}
 \paragraph{Rounds analysis}
-We argue that the protocol may run only $O(n^{1-\frac{1}{k}})$ rounds. As described above, every round where $|U| = n$, we omit $\frac{n^{1-\frac{1}{k}}}{2}$ indexes. Therefore if $f(n)$ is the function of number of rounds when starting with universe sized $n$, we can define it by
+We argue that the protocol should run only $4N^{1-\frac{1}{k}}$ rounds. As described above, every round where $|U| = n$, we omit $\frac{n^{1-\frac{1}{k}}}{2}$ indexes. Therefore if $f(n)$ is the function of number of rounds when starting with universe sized $n$, we can define it by
     \begin{equation*}
         f(n) = \begin{cases}
                1               & n \leq N^{\frac{1}{k}}\\
                1 + f(n - \frac{n^{1/k}}{2}) & \text{otherwise}
            \end{cases}
     \end{equation*}
-We use two simple technical claims in order to prove that $f(n) \in O(n^{1-\frac{1}{k}})$.
+We use two simple technical claims in order to prove that $f(n) \leq 4n^{1-\frac{1}{k}}$.
 \begin{claim}
     For $k \geq 2$ and every $n$: $n^{1 - \frac{1}{k}} - (n-\frac{n^{1/k}}{2})^{1-\frac{1}{k}} \geq 0.25$
 \end{claim}
@@ -326,14 +327,14 @@ We use two simple technical claims in order to prove that $f(n) \in O(n^{1-\frac
                1 + f(n - \frac{n^{1/k}}{2}) & \text{otherwise}
            \end{cases}
     \end{equation*}
-    It is true that $f(n) \in O(n^{1-\frac{1}{k}})$.
+    It is true that $f(n) \leq 4n^{1-\frac{1}{k}}$.
 \end{claim}
 \begin{proof}
-For the definition of $O$ notation, we need to prove that there exists a constant $D$ for which $\forall_{n, k \in \mathbb{N}} : f(n) \leq Dn^{1-\frac{1}{k}}$. Let us prove it by induction: \newline
+Let us prove it by induction: \newline
 
 a. Induction base: \newline
 
-As always $O$ notation is trivial for the base of the induction as we can choose big enough $D$ such that $f(1) < D$ (for example $D=17f(1)+1337$. \newline
+$\forall_{n \leq N^{1/k}} f(n) = 1 \leq 4 \leq 4n^{1-\frac{1}{k}}$. \newline
 
 b. the induction step: \newline
 
@@ -343,23 +344,19 @@ $f(n) = 1 + f(n - \frac{n^{1/k}}{2})$ \newline
 
 In this point we can use the inductive hypothesis \newline
 
-$1 + f(n - \frac{n^{1/k}}{2}) \leq 1 + D(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}}$ \newline
+$1 + f(n - \frac{n^{1/k}}{2}) \leq 1 + 4(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}}$ \newline
 
 Using the previous claim $(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq n^{1-\frac{1}{k}}-0.25$. \newline
 
-$1 + D(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq 1 + D(n^{1-\frac{1}{k}}-0.25)$ \newline
+$1 + 4(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq 1 + 4(n^{1-\frac{1}{k}}-0.25)$ \newline
 
 Now we got exactly what we needed. \newline
 
-$1 + D(n^{1-\frac{1}{k}}-0.25) = 1 - 0.25D + D(n^{1-\frac{1}{k}}) $ \newline
+$1 + 4(n^{1-\frac{1}{k}}-0.25) = 4(n^{1-\frac{1}{k}})$ \newline
 
-Pay attention that if we choose $D \geq 4$ \newline
+To summarize, we proved that \newline
 
-$1 - 0.25D + D(n^{1-\frac{1}{k}}) \leq Dn^{1-\frac{1}{k}}$ \newline
-
-To summarize, for $D \geq 4$, we proved that \newline
-
-$f(n) \leq Dn^{1-\frac{1}{k}}$. \newline
+$f(n) \leq 4n^{1-\frac{1}{k}}$. \newline
 
 \end{proof}
 \paragraph{Error Analysis}
