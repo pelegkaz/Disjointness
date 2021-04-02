@@ -374,11 +374,11 @@ $ \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1
 
 Using union bound we may consider the sum of these probabilities. \newline
 
-$ \mu(\bigcup_{j = 1}^k D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \Sigma_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
+$ \mu(\bigcup_{j = 1}^k D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
 
 For every element in the sum, we relax the event the only the specific player is good. \newline
 
-$\Sigma_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \Sigma_j \mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
+$\sum_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
 
 At this point, we stop the calculation and consider a specific element in this sum. Every element is actually the event in which a player is good but not significant or in other words, the player is good but the probability that he is good is small. Using this definition it is pretty clear that the probability of this event is small. \newline
 Let us consider the expectation of this probability over the player's input. \newline
@@ -399,7 +399,7 @@ $\underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\g
 
 At this point, we finished considering the specific element (case in which a player is good but not significant) and we can resume the calculation of the whole error in round $r$.  \newline
 
-$\Sigma_j \mu(DISJ_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \Sigma_j \frac{\epsilon}{kN^{1-\frac{1}{k}}} = k\frac{\epsilon}{kN^{1-\frac{1}{k}}} = \frac{\epsilon}{N^{1-\frac{1}{k}}}$
+$\sum_j \mu(DISJ_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \frac{\epsilon}{kN^{1-\frac{1}{k}}} = k\frac{\epsilon}{kN^{1-\frac{1}{k}}} = \frac{\epsilon}{N^{1-\frac{1}{k}}}$
 \newline
 
 To conclude, we just proved that the error in a specific round $r$:
@@ -407,7 +407,7 @@ $\mu(\text{Err in round r}) \leq \frac{\epsilon}{N^{1-\frac{1}{k}}}$.\newline
 
 Now we are consider the overall error of the protocol (summing over all rounds):
 
-$\mu(Err) = \Sigma_{r} \mu(\text{Err in round r}) \leq \#\{\text{number of rounds}\} \frac{\epsilon}{N^{1-\frac{1}{k}}}$. \newline
+$\mu(Err) = \sum_{r} \mu(\text{Err in round r}) \leq \#\{\text{number of rounds}\} \frac{\epsilon}{N^{1-\frac{1}{k}}}$. \newline
 In our protocol there are $O(N^{1-\frac{1}{k}})$ so
 $\mu(Err) \in O(\epsilon)$
 
@@ -476,13 +476,13 @@ Let us denote:
     p_{ij} = \Pr[i \in X_j]
 \end{equation*}
 \begin{equation*}
-    \Pr[\neg \text{DISJ}] \leq \Sigma_{i=1}^{n}\Pr[i \in \cap_{j=1}^{k}X_j] = \Sigma_{i=1}^{n}\Pi_{j=1}^{k}p_{ij}
+    \Pr[\neg \text{DISJ}] \leq \sum_{i=1}^{n}\Pr[i \in \cap_{j=1}^{k}X_j] = \sum_{i=1}^{n}\Pi_{j=1}^{k}p_{ij}
 \end{equation*}
 Let us look at a specific coordinate $i$. Assume $\Pi_{j=1}^{k}p_{ij} \geq \frac{\epsilon}{n}$.
-By lagrange multipliers we can know that $\Sigma_{j=1}^{k}p_{ij} \geq k(\frac{\epsilon}{n})^{\frac{1}{k}}$.
+By lagrange multipliers we can know that $\sum_{j=1}^{k}p_{ij} \geq k(\frac{\epsilon}{n})^{\frac{1}{k}}$.
 Pay attention that:
 \begin{equation*}
-    \mathop{\mathbb{E}}[\text{Zeros in i}] = k - \Sigma_{j=1}^{k}p_{ij} \leq k \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right)
+    \mathop{\mathbb{E}}[\text{Zeros in i}] = k - \sum_{j=1}^{k}p_{ij} \leq k \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right)
 \end{equation*}
 \begin{equation*}
     \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right) = \left(1 - e^{\frac{\log(\frac{\epsilon}{n})}{k}}\right) = \left(1 - e^{\frac{\log(\epsilon) -\log(n)}{k}}\right)
@@ -523,9 +523,9 @@ So total expected communication complexity for this protocol is
     k + n\log{\frac{n}{\epsilon}}\log n
 \end{equation*}
 \paragraph{Error}
-We error only when declaring disjoitness and there is an intersection in unimportant coordinate.
+We error only when declaring disjointness and there is an intersection in unimportant coordinate.
 \begin{equation*}
-    \Pr[\text{ERROR}] = \Pr[\text{i unimportant} \land i \in \bigcap_j X_j] \leq \Sigma_i \Pr[\text{i unimportant} \land i \in \bigcap
+    \Pr[\text{ERROR}] = \Pr[\text{i unimportant} \land i \in \bigcap_j X_j] \leq \sum_i \Pr[\text{i unimportant} \land i \in \bigcap
     _j X_j] \leq n\frac{\epsilon}{n} = \epsilon
 \end{equation*}
 \begin{claim}
@@ -536,13 +536,13 @@ If
 \end{equation*}
 We can know that
 \begin{equation*}
-    \Sigma_{i=1}^{k}p_i \geq k\left(\frac{\epsilon}{n}\right)^{1/k}
+    \sum_{i=1}^{k}p_i \geq k\left(\frac{\epsilon}{n}\right)^{1/k}
 \end{equation*}
 \end{claim}
 \begin{proof}
 By lagrange multipliers let us denote a target function 
 \begin{equation*}
-    f(x_1, ... , x_k) = \Sigma_{i=1}^{k}x_i
+    f(x_1, ... , x_k) = \sum_{i=1}^{k}x_i
 \end{equation*}
 A constraint function
 \begin{equation*}
@@ -550,7 +550,7 @@ A constraint function
 \end{equation*}
 Lagrange function
 \begin{equation*}
-    \mathcal{L}(x_1, ... , x_k, \lambda) = \Sigma_{i=1}^{k}x_i - \lambda\left(\Pi_{i=1}^{k}x_i - \frac{\epsilon}{n}  \right)
+    \mathcal{L}(x_1, ... , x_k, \lambda) = \sum_{i=1}^{k}x_i - \lambda\left(\Pi_{i=1}^{k}x_i - \frac{\epsilon}{n}  \right)
 \end{equation*}
 \begin{align*}
     \frac{\partial\mathcal{L}}{\partial x_i} = 1 - \lambda\Pi_{j \neq i}x_j  \\
@@ -586,8 +586,8 @@ Here we have a big obstacle since the error is huge (the one coordinate chance t
 
 \paragraph{Information Analysis}
 $X_j - \text{Input for all of the players in coordinate j}$ \newline
-$I(X, \Pi) = \underset{j\in[k]}{\Sigma} I[X_j, \Pi | X_{<j}] \overset{(1)}{\geq } \underset{j\in[k]}{\Sigma} I[X_j, \Pi]$ \newline
-$I(X', \Pi ') = \underset{j \in [k]}{\mathbb{E}}[I(X_j, \Pi] = \frac{1}{n}\underset{j\in[k]}{\Sigma} I[X_j, \Pi] \leq \frac{1}{n}I(X, \Pi)$ \newline
+$I(X, \Pi) = \underset{j\in[k]}{\sum} I[X_j, \Pi | X_{<j}] \overset{(1)}{\geq } \underset{j\in[k]}{\sum} I[X_j, \Pi]$ \newline
+$I(X', \Pi ') = \underset{j \in [k]}{\mathbb{E}}[I(X_j, \Pi] = \frac{1}{n}\underset{j\in[k]}{\sum} I[X_j, \Pi] \leq \frac{1}{n}I(X, \Pi)$ \newline
 (1) - Since the coordinates are independent
 
 \subsection{$AND_k$ Information Cost}
@@ -598,7 +598,7 @@ We are going to bound the information cost for a protocol that solves $AND_k$. O
 3 - Concluding this for the general information cost of the protocol \newline
 \paragraph{Definitions}
 \begin{definition}
-$D(a || b) = \underset{x}{\Sigma}a(x)\log(\frac{a(x)}{b(x)})$
+$D(a || b) = \underset{x}{\sum}a(x)\log(\frac{a(x)}{b(x)})$
 \end{definition}
 \paragraph{Protocol properties}
 For a transcript $\pi$ and player $i$ there is a function $q_i(\pi, x_i) \in [0,1]$ where \newline
@@ -669,7 +669,7 @@ If $\lambda_i(\pi) \geq \pi$, for big enough $n$:
 $D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \geq \frac{\mu(1)}{4} $
 \paragraph{Part 3 - Information Summary}
 \begin{equation*}
-    I(X;\Pi) = \overset{k+i}{\underset{j=i+1}{\Sigma } } I[X_{j \% k}, \Pi | X_{<(j \% k)}] \geq I(X_i;\Pi | X_{-i}) = \mathbb{E}_{x, \pi \sim \mu} \left( D\left(\frac{X_i | \pi, X_{-i}}{X_i | X_{-i}} \right) \right) \geq
+    I(X;\Pi) = \overset{k+i}{\underset{j=i+1}{\sum } } I[X_{j \% k}, \Pi | X_{<(j \% k)}] \geq I(X_i;\Pi | X_{-i}) = \mathbb{E}_{x, \pi \sim \mu} \left( D\left(\frac{X_i | \pi, X_{-i}}{X_i | X_{-i}} \right) \right) \geq
 \end{equation*}
 \begin{equation*}
     \geq \mu(0^k) \mathbb{E}_{\pi \sim x = 0^k} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq 
