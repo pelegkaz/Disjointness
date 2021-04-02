@@ -139,7 +139,7 @@ After at most $4N^{1 - 1/k}$ iterations, if we have not yet halted,
 then $|U| < N^{\frac{1}{k}}$ for some constant. At this point each player $i$ announces $x_i \cap U$,
 and then players output 1 iff $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$. \newline
 \newline
-Let's dive in to the method to eliminate high fraction of elements from the universe.
+Let us dive in to the method to eliminate high fraction of elements from the universe.
 
 \paragraph{Finding a player that can reduce the universe size.}
 Consider a process where we start with some universe $U$ (where $\bigcap_{i = 1}^k x_i \subseteq U$),
@@ -362,7 +362,7 @@ $f(n) \leq 4n^{1-\frac{1}{k}}$. \newline
 \paragraph{Error Analysis}
 Let there be a round $r$. In this round, we error only if there was no significant player (in $U_r$) and therefore the coordinator answered "not disjoint" but actually the inputs were disjoint. \newline
 
-$\mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \text{ i isn't signficant})$ \newline
+$\mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \text{ i is not signficant})$ \newline
 
 Using the definition of "significant player" we may rewrite it as: \newline
 
@@ -580,7 +580,7 @@ $I(\Pi, X) \geq n I(\Pi ', X')$
 For input $X'_i \in \{0, 1\}$, the players use the public randomness in order to find a random index $j \in [k]$ in which they are gonna insert the original input. For the other indexes, every player uses the private randomness in order to sample the other indexes from $\mu$. Then they just run the protocol $A$ for their inputs. They answer the output of $A$. 
 
 \paragraph{Error Analysis}
-Our protocol errors in one of two cases: The original protocol errors or the inputs that the player sampled has an intersection and the given doesn't. \newline
+Our protocol errors in one of two cases: The original protocol errors or the inputs that the player sampled has an intersection and the given does not. \newline
 $\Pr[Error] \leq \epsilon + \Pr[\underset{j \in [k]}{\bigcap } X^j_{-i} \neq \emptyset] = \epsilon + 1 - (1 - \frac{c}{n})^{n-1} \approx \epsilon + 1 - \frac{1}{\sqrt[c]{e}}$ \newline
 Here we have a big obstacle since the error is huge (the one coordinate chance to be disjoint is $\frac{1}{n}$ which alone is problematic since it goes smaller). This hints to us that we can not use a constant $\epsilon$ for $AND_k$ and our distribution.
 
@@ -624,7 +624,7 @@ $\Pr[A \bigcap T_1 | x = 0^k] \leq \Pr[T_1 | x = 0^k] = \Pr[\text{ERROR} | x = 0
 This is since the right answer for $0^k$ is 0 so $T_1$ is error. \newline 
 $\Pr[A \bigcap T_0 | x = 0^k] \leq \alpha ^k \Pr[A \bigcap T_0 | x = 1^k] \leq \alpha ^k \Pr[\text{ERROR} | x = 1^k] \leq \alpha ^k \Pr[T_0| x = 1^k] \leq \alpha ^k \epsilon$ \newline
 $\Pr[A| x = 0^k] \leq \epsilon (1 + \alpha ^k) $ \newline
-The set in which the transcripts don't really prefer 0 over 1 isn't very common under $x = 0^k$. \newline
+The set in which the transcripts do not prefer 0 over 1 is not very common under $x = 0^k$. \newline
 We can also see that $\Pr[A^\complement| x = 0^k] \geq 1 - \epsilon (1 + \alpha ^k) $ \newline
 Pay attention that $A^\complement = \{\pi | \exists_i \lambda_i(\pi) \geq \alpha\}$. \newline
 If we define $A_{i}^\complement = \{\pi | \lambda_i(\pi) \geq \alpha\}$, we can see that $A^\complement = \bigcup_{i} A_{i}^\complement$.
@@ -699,7 +699,7 @@ and for $i = k$
               \right.
   \]
 where $m_i$ is the $i$'th bit of m in binary representation. ($m_i \mathrel{\mathop:}= ( m \mathop{\&} 2^{i-1} ) \gg i-1 $). \\
-Let's pay attention for some simple properties. First of all $\forall_i |X_i| = \frac{n}{2}$. Moreover, it doesn't matter if we permute the players, for $i < k, |A_i| = 0.5|A_{i-1}|$ and generally for $i < k, |A_i| = 2^{k-1-i}$. $\Pr[DISJ] = 0.5$. The thing is that this distribution has a little entropy ($k$).
+Let us pay attention for some simple properties. First of all $\forall_i |X_i| = \frac{n}{2}$. Moreover, it does not matter if we permute the players, for $i < k, |A_i| = 0.5|A_{i-1}|$ and generally for $i < k, |A_i| = 2^{k-1-i}$. $\Pr[DISJ] = 0.5$. The thing is that this distribution has a little entropy ($k$).
 \section{Appendix}
 
 
