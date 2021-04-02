@@ -136,10 +136,10 @@ The protocol operates in \emph{iterations}, where each iteration has two possibl
   \item We halt and output 0. This output is not always correct, but it is correct with high probability over the inputs.
 \end{enumerate}
 After at most $4N^{1 - 1/k}$ iterations, if we have not yet halted,
-then $|U| < N^{\frac{1}{k}}$ for some constant. At this point each player $i$ announces $x_i \cap U$,
-and then players output 1 iff $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$. \newline
+then $|U| < N^{\frac{1}{k}}$. At this point each player $i$ announces $x_i \cap U$,
+and then the players output 1 iff $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$. \newline
 \newline
-Let us dive in to the method to eliminate high fraction of elements from the universe.
+Let us dive in to the method to eliminate a significant fraction of elements from the universe.
 
 \paragraph{Finding a player that can reduce the universe size.}
 Consider a process where we start with some universe $U$ (where $\bigcap_{i = 1}^k x_i \subseteq U$),
@@ -242,7 +242,7 @@ We then halt and output 1 if $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$, or 0 
 Each iteration proceeds as follows:
 
 \begin{enumerate}[(1)]
-  \item Termination Condition: If $|U| \leq N^{1 - 1/k}$, each player $i$ sends $x_i$ to the coordinator, who computes and outputs the answer. 
+  \item Termination condition: if $|U| \leq N^{1 - 1/k}$, each player $i$ sends $x_i$ to the coordinator, who computes and outputs the answer. 
   \item Otherwise, the coordinator asks each player $i$ whether $i$ is significant in $U$ (i.e., whether $\gamma_i(x_i, U) \geq \eps / kN^{1-\frac{1}{k}}$).
   \item If no player is significant, the coordinator outputs ``not disjoint''. Otherwise, let $i$ be the
     first significant player. The coordinator informs every player that player $i$ has been selected.
@@ -302,7 +302,7 @@ Each iteration proceeds as follows:
 
 
 \subsection{Properties of Our Protocol}
-Our protocol is using random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-\frac{1}{k}})$ bits of communication between the players.
+Our protocol uses random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-\frac{1}{k}})$ bits of communication between the players.
 \subsection{Analysis}
 \paragraph{Rounds analysis}
 We argue that the protocol should run only $4N^{1-\frac{1}{k}}$ rounds. As described above, every round where $|U| = n$, we omit $\frac{n^{1-\frac{1}{k}}}{2}$ indexes. Therefore if $f(n)$ is the function of number of rounds when starting with universe sized $n$, we can define it by
