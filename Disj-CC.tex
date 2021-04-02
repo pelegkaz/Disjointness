@@ -83,12 +83,12 @@
 
 
 \section{Introduction}
-Yao's two-party communication complexity is a well-studied model. The most simple settings is the deterministic settings. In this settings, we want to find an algorithm which gets the exact solution for every input. This model has two somewhat similar extensions. The first one is the randomized settings. In this model, every player gets a random string (private or public) and can use it in the protocol. In this case, we want the protocol to solve the problem with error up to $\epsilon$ (over the randomized strings). \newline
-Another model is when the inputs themselves are randomized. In this model, we need to design a protocol which solves the problem with error up to $\epsilon$ for every distribution on the inputs. Another interesting problem is to design a protocol which solves the problem for every product distribution (in which the players' inputs are independent. \newline
-One of the most important problems (sometimes called "mother of problems") is the Set Disjointness problem. In this problem, every player gets a n-bit array and they are asked whether there is an index $i$ where the $i$'th bit is turned on in all of their inputs. \newline
-This problem has been studied thoroughly on different models. It has been proved that every randomized protocol must use $\Omega(n)$ in order to achieve constant error bound from $\frac{1}{2}$.  Also it has been proved that the distributional communication complexity of this problem is also $\Omega(n)$ using the corruption methods. Another interesting question is what happens when we limit ourselves to product distribution. In this case a tight bound of $\Theta(\sqrt(n))$ has been proved but only for two players. \newline
-In this paper, we tried to expand this bound for every number of player $k$. We have succeeded to prove the upper bound of $O(kn^{\frac{1}{k}})$. 
-In the two-player protocol, Bob reveals a large amount of his zeros to Alice using the public randomness and the fact that the inputs are drawn from a known product distribution. This method is not easy to generalize since every player may eliminate $\frac{n}{k}$ zeros 
+Yao's two-party communication complexity is a well-studied model. The most simple settings are the deterministic settings. In these settings, we want to find an algorithm that gets the exact solution for every input. This model has two somewhat similar extensions. The first one is the randomized settings. In this model, every player gets a random string (private or public) and can use it in the protocol. In this case, we want the protocol to solve the problem with an error of up to $\epsilon$ (over the randomized strings). \newline
+Another model is when the inputs themselves are randomized. In this model, we need to design a protocol that solves the problem with an error of up to $\epsilon$ for every distribution on the inputs. Another interesting problem is to design a protocol that solves the problem for every product distribution (in which the players' inputs are independent. \newline
+One of the most important problems (sometimes called the "mother of problems") is the Set Disjointness problem. In this problem, every player gets an n-bit array and they are asked whether there is an index $i$ where the $i$'th bit is turned on in all of their inputs. \newline
+This problem has been studied thoroughly on different models. It has been proved that every randomized protocol must use $\Omega(n)$ in order to achieve constant error bound from $\frac{1}{2}$.  Also, it has been proved that the distributional communication complexity of this problem is also $\Omega(n)$ using the corruption methods. Another interesting question is what happens when we limit ourselves to product distribution. In this case, a tight bound of $\Theta(\sqrt(n))$ has been proved but only for two players. \newline
+In this paper, we tried to expand this bound for every number of players $k$. We have succeeded to prove the upper bound of $O(kn^{\frac{1}{k}})$. 
+In the two-player protocol, Bob reveals a large number of his zeros to Alice using the public randomness and the fact that the inputs are drawn from known product distribution. This method is not easy to generalize since every player may eliminate $\frac{n}{k}$ zeros 
 \subsection{Notations}
 \Rnote{Not touching this for now}
 We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
@@ -234,7 +234,7 @@ For a given product distribution $\mu : \left(\set{0,1}^N\right)^k \rightarrow [
 Our protocol uses public randomness and has $\tilde{O}(kN^{1-\frac{1}{k}})$ bits of expected communication.
 
 Initially, $U = [N]$, and $n = |U| = N$.
-The protocol proceeds in iterations, where in each iteration, we either halt and output 0,
+The protocol proceeds in iterations, and in each iteration, we either halt and output 0,
 or we reduce the size of the universe by a $1/N^{1/k}$-fraction.
 Eventually, when $|U| \leq N^{1-1/k}$, each player $i$ announces $x_i \cap U$.
 We then halt and output 1 if $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$, or 0 otherwise.
@@ -292,11 +292,11 @@ Each iteration proceeds as follows:
   %U \leftarrow U_{r-1} \setminus (Z^{r}_l).
 %\end{equation*}
 
-%If $n_r \leq n^{1-\frac{1}{k}}$, every player sends his input to the coordinator which calculate the disjointness and sends the output to every player.
+%If $n_r \leq n^{1-\frac{1}{k}}$, every player sends his input to the coordinator which calculates the disjointness and sends the output to every player.
 
 %\paragraph{Clarifications}
 %We strongly use the fact that this is a product distribution where everyone can sample the inputs and parse them and the critical player's input doesn't affect the distribution. \newline
-%For specific inputs, one of the player must be critical if there is an intersection (as proved in the lemma) but it is not easy to know which one of them is critical. 
+%For specific inputs, one of the players must be critical if there is an intersection (as proved in the lemma) but it is not easy to know which one of them is critical. 
 %\TODO{up to here}
 
 
@@ -338,11 +338,11 @@ $\forall_{n \leq N^{1/k}} f(n) = 1 \leq 4 \leq 4n^{1-\frac{1}{k}}$. \newline
 
 b. the induction step: \newline
 
-By definition we know that \newline
+By definition, we know that \newline
 
 $f(n) = 1 + f(n - \frac{n^{1/k}}{2})$ \newline
 
-In this point we can use the inductive hypothesis \newline
+In this point, we can use the inductive hypothesis \newline
 
 $1 + f(n - \frac{n^{1/k}}{2}) \leq 1 + 4(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}}$ \newline
 
@@ -364,7 +364,7 @@ Let there be a round $r$. In this round, we error only if there was no significa
 
 $\mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \text{ i isn't signficant})$ \newline
 
-Using the definition of "significant player" we may rewrite as: \newline
+Using the definition of "significant player" we may rewrite it as: \newline
 
 $\mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
 
@@ -380,12 +380,12 @@ For every element in the sum, we relax the event the only the specific player is
 
 $\Sigma_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \Sigma_j \mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
 
-At this point we stop the calculation and consider a specific element in this sum. Every element is actually the event in which a player is good but not significant or in other words the player is good but the probability that he is good is small. Using this definition it is pretty clear that the probability of this event is small. \newline
+At this point, we stop the calculation and consider a specific element in this sum. Every element is actually the event in which a player is good but not significant or in other words, the player is good but the probability that he is good is small. Using this definition it is pretty clear that the probability of this event is small. \newline
 Let us consider the expectation of this probability over the player's input. \newline
 
 $\mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)]$ \newline
 
-Now the player's input is constant and it's significance is also a constant. \newline
+Now the player's input is constant and the event that he is significance is also a constant. \newline
 
 $\underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)] = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) | X_j = x_j) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}]$ \newline
 
@@ -397,7 +397,7 @@ Now we got an expectation over a non-negative r.v ($\gamma_j(x_j, U_r)$) multipl
 
 $\underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] \leq \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\frac{\epsilon}{kN^{1-\frac{1}{k}}} \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}$ \newline
 
-In this point we finished considering the specific element (case in which a player is good but not significant) and we can resume the calculation of the whole error in round $r$.  \newline
+At this point, we finished considering the specific element (case in which a player is good but not significant) and we can resume the calculation of the whole error in round $r$.  \newline
 
 $\Sigma_j \mu(DISJ_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \Sigma_j \frac{\epsilon}{kN^{1-\frac{1}{k}}} = k\frac{\epsilon}{kN^{1-\frac{1}{k}}} = \frac{\epsilon}{N^{1-\frac{1}{k}}}$
 \newline
@@ -580,9 +580,9 @@ $I(\Pi, X) \geq n I(\Pi ', X')$
 For input $X'_i \in \{0, 1\}$, the players use the public randomness in order to find a random index $j \in [k]$ in which they are gonna insert the original input. For the other indexes, every player uses the private randomness in order to sample the other indexes from $\mu$. Then they just run the protocol $A$ for their inputs. They answer the output of $A$. 
 
 \paragraph{Error Analysis}
-Our protocol errors in one of two cases: The original protocol errors, or the inputs that the player sampled has intersection and the given doesn't. \newline
+Our protocol errors in one of two cases: The original protocol errors or the inputs that the player sampled has an intersection and the given doesn't. \newline
 $\Pr[Error] \leq \epsilon + \Pr[\underset{j \in [k]}{\bigcap } X^j_{-i} \neq \emptyset] = \epsilon + 1 - (1 - \frac{c}{n})^{n-1} \approx \epsilon + 1 - \frac{1}{\sqrt[c]{e}}$ \newline
-Here we have a big obstacle since the error is huge (the one coordinate chance to be disjoint is $\frac{1}{n}$ which alone is problematic since it goes smaller). This hints us that we can not use a constant $\epsilon$ for $AND_k$ and our distribution.
+Here we have a big obstacle since the error is huge (the one coordinate chance to be disjoint is $\frac{1}{n}$ which alone is problematic since it goes smaller). This hints to us that we can not use a constant $\epsilon$ for $AND_k$ and our distribution.
 
 \paragraph{Information Analysis}
 $X_j - \text{Input for all of the players in coordinate j}$ \newline
@@ -592,7 +592,7 @@ $I(X', \Pi ') = \underset{j \in [k]}{\mathbb{E}}[I(X_j, \Pi] = \frac{1}{n}\under
 
 \subsection{$AND_k$ Information Cost}
 \paragraph{Introduction}
-We are going to bound the information cost for a protocol which solves $AND_k$. Our analysis is divided into three blocks: \newline
+We are going to bound the information cost for a protocol that solves $AND_k$. Our analysis is divided into three blocks: \newline
 1 - Using the error of the protocol in order to conclude it must know some information about specific player's input. \newline
 2 - Distinguishing this input is leaking some information (specifically KL-Divergence) \newline
 3 - Concluding this for the general information cost of the protocol \newline
@@ -618,7 +618,7 @@ $\frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \frac{\Pi_{i \in [k]} q_i (\pi, x_i
 \end{proof}
 Let there be $\alpha \in \mathbb{R}, \alpha \geq 1$ \newline
 Let us define a set of transcripts $A = \{\pi | \forall_i \lambda_i (\pi) < \alpha \}$. 
-Denote two more sets: $T_1$ - transcripts which are ended with positive answer (there is an intersection). $T_0$ - transcripts which are ended with negative answer (there is no intersection). \newline
+Denote two more sets: $T_1$ - transcripts which are ended with positive answers (there is an intersection). $T_0$ - transcripts which are ended with negative answers (there is no intersection). \newline
 Let us pay attention: \newline
 $\Pr[A \bigcap T_1 | x = 0^k] \leq \Pr[T_1 | x = 0^k] = \Pr[\text{ERROR} | x = 0^k] \leq \epsilon$ \newline
 This is since the right answer for $0^k$ is 0 so $T_1$ is error. \newline 
@@ -632,10 +632,10 @@ Using this fact and union bound, there exists $i$ such that
 \begin{equation*}
     \Pr[A_{i}^\complement| x = 0^k] \geq \frac{1 - \epsilon (1 + \alpha ^k)}{k}
 \end{equation*}
-That is the finish line of this part. We got a set of transcripts which has nice probability under $x = 0^k$ where the transcripts prefer strongly 0 over 1 for some index. We may use this technique in different ways depends on our distribution of inputs. For small $k$ our distribution give high probability for $0^k$ which is pretty convenient. For other distribution we may want to modify this method. \newline
+That is the finish line of this part. We got a set of transcripts that has a nice probability under $x = 0^k$ where the transcripts prefer strongly 0 over 1 for some index. We may use this technique in different ways depends on our distribution of inputs. For small $k$ our distribution gives a high probability for $0^k$ which is pretty convenient. For other distribution, we want to use the other method. \newline
 This is a rough method in order to use the fact that the protocol has to be "biased" in terms of $\lambda_i$ in order to have a low error. \newline
 \paragraph{Part 2 - Divergence}
-In this part, we are going to show that the set we found in the last part is contributing high enough divergence. This will be enough since $x = 0^k$ has high probability under our distribution. \newline
+In this part, we are going to show that the set we found in the last part is contributing large enough divergence. This will be enough since $x = 0^k$ has a high probability under our distribution. \newline
 Let us analyze the connection between $\lambda_i(\pi)$ to its divergence. \newline
 Pay attention to this: \newline
 \begin{equation*}
@@ -704,7 +704,7 @@ Let's pay attention for some simple properties. First of all $\forall_i |X_i| = 
 
 
 \subsection{TODO}
-Add an universe set U. and pseudo code. 
+Add a universe set U. and pseudo code. 
 Tough (est?) distribution\newline
 Make sure to rethink how does this protocol end \newline
 Does it help to permutate the players? \newline
