@@ -470,34 +470,58 @@ Let us first analyze the expected communication for a single round: \newline
 2. The coordinator informs everyone who is the chosen significant - $klogk$ bits. \newline
 
 3. The index $j$ of $A_{i-1}^{(j)}$ is sent. \newline
-This is a random variable which has a geometric distribution since $A_{i-1}^{(j)}$ are independent. \newline
 
-Recall that $j$ is chosen where $i$ is critical in $U$. \newline
+4. The player uses lemma 2.1 - $k\log(N)$ bits. \newline
+
+Let us calculate the 3rd part - $j$. \newline
+This index is a random variable which has a geometric distribution since $A_{i-1}^{(j)}$ are independent. \newline
+
+Recall that $j$ is chosen where $i$ is good in $U$. \newline
 Therefore we are looking for the following probability:
-$\Pr[\text{i is critical in U}| X_i = x_i]$ \newline
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i]
+\end{equation*}
 
-Since $DISJ_i(U) = DISJ \cap \{\text{i is critical in U}\}$ (by definition), $\{\text{i is critical in U}\} \subseteq DISJ_i$ which leads to \newline
-$\Pr[\text{i is critical in U}| X_i = x_i] \geq \Pr[DISJ_i(U) | X_i = x_i]$ \newline
+Since $DISJ_i(U) = DISJ \cap \{\text{i is good in U}\}$ (by definition), $\{\text{i is good in U}\} \subseteq DISJ_i$ which leads to 
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i] \geq \Pr[DISJ_i(U) | X_i = x_i]
+\end{equation*}
 
-By definition of $\gamma_i(x_i, U)$: \newline
-$\Pr[\text{i is critical in U}| X_i = x_i] \geq \Pr[DISJ_i(U) | X_i = x_i] = \gamma_i(x_i, U) $\newline
+By definition of $\gamma_i(x_i, U)$:
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i] \geq \Pr[DISJ_i(U) | X_i = x_i] = \gamma_i(x_i, U)
+\end{equation*}
 
-Since i is significant: \newline
-$\gamma_i(x_i, U) \geq \frac{\epsilon}{N^{1-\frac{1}{k}}}$ \newline
+Since i is significant
+\begin{equation*}
+    \gamma_i(x_i, U) \geq \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
 
-To conclude: $\Pr[\text{i is critical in U}| X_i = x_i] \geq \frac{\epsilon}{N^{1-\frac{1}{k}}}$. \newline
+To conclude
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i] \geq \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
 
-Now we can calculate easily the size of j: \newline
-$ \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{i is critical in U}| X_i = x_i]} \leq \frac{1}{\gamma_i(x_i, U)} \leq \frac{kN^{1-\frac{1}{k}}}{\epsilon}$ \newline
-By Jensen's inequality, $\mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{kN^{1-\frac{1}{k}}}{\epsilon}) \leq \log(N) + \log(k) + \log(\frac{1}{\epsilon})$.  \newline
+Now we can calculate easily the size of j
+\begin{equation*}
+    \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{i is good in U}| X_i = x_i]} \leq \frac{1}{\gamma_i(x_i, U)} \leq \frac{kN^{1-\frac{1}{k}}}{\epsilon}
+\end{equation*}
 
-4. The player uses lemma 2.1 - $k\log(N)$ bits.
+By Jensen's inequality
+\begin{equation*}
+    \mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{kN^{1-\frac{1}{k}}}{\epsilon}) \leq \log(N) + \log(k) + \log(\frac{1}{\epsilon})
+\end{equation*}
 
-So in total the cost of the round is $k + k\log(k) + k(\log(N) + \log(k) + \log(\frac{1}{\epsilon})) + k\log(N) \in O(k(\log(N) + \log(\frac{1}{\epsilon}))$.
-
-As can be seen in the appendix - there are $O(N^{1-\frac{1}{k}})$ rounds (since in every round we eliminate $n^{\frac{1}{k}}/2$). \newline
-For the round where we terminate, we pay at most $kN^{1-\frac{1}{k}} \log(N)$. \newline
-So the total communication cost is  $O(kN^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(N)))$.
+So in total the cost of the round is 
+\begin{equation*}
+    k + k\log(k) + k(\log(N) + \log(k) + \log(\frac{1}{\epsilon})) + k\log(N) \in O(k(\log(N) + \log(\frac{1}{\epsilon}))
+\end{equation*}
+The protocol operates at most $4(N^{1-\frac{1}{k}})$ rounds. \newline
+For the round where we terminate, we pay at most $kN^{\frac{1}{k}} \log(N)$. \newline
+So the total communication cost is  
+\begin{equation*}
+    O(kN^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(N)))
+\end{equation*}
 \section{k-n relation analysis}
 \paragraph{$k < \log(n)$:}
 For this case $k$ is pretty small. meaning $kn^{1-1/k}\log(n) \approx n^{1-1/k}$. 
