@@ -152,12 +152,17 @@ Let us dive in to the method to eliminate a significant fraction of elements fro
 \paragraph{Finding a player that can reduce the universe size.}
 Consider a process where we start with some universe $U$ (where $\bigcap_{i = 1}^k x_i \subseteq U$),
 and gradually intersect it with more and more players' inputs, 
-obtaining a sequence of sets $A_0(U), A_1(U),\ldots,A_k(U) \subseteq U$,
-where $A_i(U) = U \cap (\bigcap_{j \leq i} x_j)$ (and in particular, $A_0(U) = U$).
-We omit the universe $U$ from our notation when it is clear from the context.
+obtaining a sequence of sets
+\begin{equation*}
+    \bigcap_{j = 1}^k x_j = U \cap \bigcap_{j = 1}^k x_j \subseteq  U \cap \bigcap_{j = 1}^{k-1} x_j \subseteq \ldots \subseteq  U \cap x_1 \cap x_2 \subseteq  U \cap x_1 \subseteq U
+\end{equation*}
+Let us denote these sets $A_i(U) = U \cap (\bigcap_{j \leq i} x_j)$ (and in particular, $A_0(U) = U$).
+\begin{equation*}
+    \bigcap_{j = 1}^k x_j = A_k(U) \subseteq A_{k-1}(U) \subseteq \ldots \subseteq A_1(U) \subseteq A_0(U) = U
+\end{equation*}
 
-Since $\bigcap_{i = 1}^k x_i = A_k \subseteq \ldots \subseteq A_0$,
-any element that is missing from some $A_i$ is definitely not in the intersection.
+We omit the universe $U$ from our notation when it is clear from the context. \newline
+Pay attention that any element that is missing from some $A_i$ is definitely not in the intersection.
 Our goal is to try to find two consecutive sets $A_i, A_{i+1}$ such that $A_{i+1}$ is \emph{significantly smaller} than $A_i$,
 and then use this fact to eliminate many elements from consideration, reducing the universe size.
 
