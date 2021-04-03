@@ -396,56 +396,71 @@ To summarize, we proved that \newline
 
 \end{proof}
 \paragraph{Error Analysis}
-Let there be a round $r$. In this round, we error only if there was no significant player (in $U_r$) and therefore the coordinator answered "not disjoint" but actually the inputs were disjoint. \newline
+Let there be a round $r$. In this round, we error only if there was no significant player (in $U_r$) and therefore the coordinator answered "not disjoint" but actually the inputs were disjoint.
+\begin{equation*}
+  \mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \text{ i is not signficant})
+\end{equation*}
 
-$\mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \text{ i is not signficant})$ \newline
+Using the definition of "significant player" we may rewrite it as:
+\begin{equation*}
+  \mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
 
-Using the definition of "significant player" we may rewrite it as: \newline
+As proved in lemma 1.2, if the inputs are disjoint, there is a good player. $DISJ = \bigcup_{j = 1}^k D_j(U_r)$ 
+\begin{equation*}
+  \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) = \mu(\bigcup_{j = 1}^k D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
 
-$\mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
+Using union bound we may consider the sum of these probabilities.
+\begin{equation*}
+  \mu(\bigcup_{j = 1}^k D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
 
-As proved in lemma 1.2, if the inputs are disjoint, there is a good player. $DISJ = \bigcup_{j = 1}^k D_j(U_r)$ \newline
-
-$ \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) = \mu(\bigcup_{j = 1}^k D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
-
-Using union bound we may consider the sum of these probabilities. \newline
-
-$ \mu(\bigcup_{j = 1}^k D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
-
-For every element in the sum, we relax the event the only the specific player is good. \newline
-
-$\sum_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})$ \newline
+For every element in the sum, we relax the event the only the specific player is good.
+\begin{equation*}
+  \sum_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
 
 At this point, we stop the calculation and consider a specific element in this sum. Every element is actually the event in which a player is good but not significant or in other words, the player is good but the probability that he is good is small. Using this definition it is pretty clear that the probability of this event is small. \newline
-Let us consider the expectation of this probability over the player's input. \newline
+Let us consider the expectation of this probability over the player's input.
+\begin{equation*}
+  \mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)]
+\end{equation*}
 
-$\mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)]$ \newline
+Now the player's input is constant and the event that he is significance is also a constant.
+\begin{equation*}
+  \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)] = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) | X_j = x_j) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}]
+\end{equation*}
 
-Now the player's input is constant and the event that he is significance is also a constant. \newline
+Recall the definition of significance player $\gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[D_i (U) \given \rv{X}_i = x_i \right]$.
+\begin{equation*}
+  \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) | X_j = x_j) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}]
+\end{equation*}
 
-$\underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)] = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) | X_j = x_j) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}]$ \newline
-
-Recall the definition of significance player $\gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[D_i (U) \given \rv{X}_i = x_i \right]$ \newline
-
-$\underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) | X_j = x_j) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}]$ \newline
-
-Now we got an expectation over a non-negative r.v ($\gamma_j(x_j, U_r)$) multiplied by the indicator of the event it is in smaller than $\frac{\epsilon}{kN^{1-\frac{1}{k}}}$. We may replace the r.v with $\frac{\epsilon}{kN^{1-\frac{1}{k}}}$. \newline
-
-$\underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] \leq \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\frac{\epsilon}{kN^{1-\frac{1}{k}}} \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}$ \newline
+Now we got an expectation over a non-negative r.v ($\gamma_j(x_j, U_r)$) multiplied by the indicator of the event it is in smaller than $\frac{\epsilon}{kN^{1-\frac{1}{k}}}$. We may replace the r.v with $\frac{\epsilon}{kN^{1-\frac{1}{k}}}$.
+\begin{equation*}
+  \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] \leq \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\frac{\epsilon}{kN^{1-\frac{1}{k}}} \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}
+\end{equation*}
 
 At this point, we finished considering the specific element (case in which a player is good but not significant) and we can resume the calculation of the whole error in round $r$.  \newline
-
-$\sum_j \mu(DISJ_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \frac{\epsilon}{kN^{1-\frac{1}{k}}} = k\frac{\epsilon}{kN^{1-\frac{1}{k}}} = \frac{\epsilon}{N^{1-\frac{1}{k}}}$
-\newline
+\begin{equation*}
+  \sum_j \mu(DISJ_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \frac{\epsilon}{kN^{1-\frac{1}{k}}} = k\frac{\epsilon}{kN^{1-\frac{1}{k}}} = \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
 
 To conclude, we just proved that the error in a specific round $r$:
-$\mu(\text{Err in round r}) \leq \frac{\epsilon}{N^{1-\frac{1}{k}}}$.\newline
+\begin{equation*}
+  \mu(\text{Err in round r}) \leq \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
 
 Now we are consider the overall error of the protocol (summing over all rounds):
+\begin{equation*}
+  \mu(Err) = \sum_{r} \mu(\text{Err in round r}) \leq \#\{\text{number of rounds}\} \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
 
-$\mu(Err) = \sum_{r} \mu(\text{Err in round r}) \leq \#\{\text{number of rounds}\} \frac{\epsilon}{N^{1-\frac{1}{k}}}$. \newline
 In our protocol there are $O(N^{1-\frac{1}{k}})$ so
-$\mu(Err) \in O(\epsilon)$
+\begin{equation*}
+  \mu(Err) \in O(\epsilon)
+\end{equation*}
 
 \paragraph{Communication Analysis}
 Let us first analyze the expected communication for a single round: \newline
