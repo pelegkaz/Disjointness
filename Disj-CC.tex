@@ -141,12 +141,11 @@ Initially, $U = [N]$.
 
 The protocol operates in \emph{iterations}, where each iteration has two possible outcomes:
 \begin{enumerate}[I.]
-  \item We eliminate at least a $1/\Theta(|U|^{1/k})$-fraction of elements from $U$, or
-  \item We halt and output 0. This output is not always correct, but it is correct with high probability over the inputs.
+  \item We eliminate at least a $1/\Theta(|U|^{1/k})$-fraction of elements from $U$
+  \item We halt and guess 0 as the answer. This output is not always correct, but it is correct with high probability over the inputs.
 \end{enumerate}
-After at most $4N^{1 - 1/k}$ iterations, if we have not yet halted,
-then $|U| < N^{\frac{1}{k}}$. At this point each player $i$ announces $x_i \cap U$,
-and then the players output 1 iff $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$. \newline
+The protocol operates in iterations until the universe is small enough ($|U| < N^{\frac{1}{k}}$). This happens after at most $4N^{1 - 1/k}$ iterations. At this point each player $i$ shares his input $x_i \cap U$,
+and the players calculate the exact answer and output it (output 1 iff $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$). \newline
 \newline
 Let us dive in to the method to eliminate a significant fraction of elements from the universe.
 
@@ -323,10 +322,26 @@ We argue that the protocol should run only $4N^{1-\frac{1}{k}}$ rounds. As descr
     \end{equation*}
 We use two simple technical claims in order to prove that $f(n) \leq 4n^{1-\frac{1}{k}}$.
 \begin{claim}
-    For $k \geq 2$ and every $n$: $n^{1 - \frac{1}{k}} - (n-\frac{n^{1/k}}{2})^{1-\frac{1}{k}} \geq 0.25$
+    For $k \geq 2$ and every $n$: $n^{1 - \frac{1}{k}} - \left(n-\frac{n^{1/k}}{2}\right)^{1-\frac{1}{k}} \geq 0.25$
 \end{claim}
 \begin{proof}
-    Let us define a function $f(x) = x^{1-\frac{1}{k}}$. We want to analyze $f(n) - f(n-\frac{n^{1/k}}{2})$. By Lagrange's theorem, there exists a $c \in [0, \frac{n^{1/k}}{2}]$ such that $f(n) - f(n-\frac{n^{1/k}}{2}) = \frac{n^{1/k}}{2} f'(n-c)$. By calculation: $f'(x) = (1-\frac{1}{k})x^{-1/k}$. Therefore $f(n) -  f(n-n^{1/k}) = \frac{n^{1/k}}{2} (1-\frac{1}{k}) (n-c)^{-1/k} = \frac{(1-\frac{1}{k})}{2} (\frac{n}{n-c})^{1/k} \geq (1-\frac{1}{k})/2 \geq 0.25$ for $k \geq 2$ 
+    Let us define a function $g(x) = x^{1-\frac{1}{k}}$. We want to analyze:
+    \begin{equation*}
+        n^{1 - \frac{1}{k}} - \left(n-\frac{n^{1/k}}{2}\right)^{1-\frac{1}{k}} = g(n) - g\left (n-\frac{n^{1/k}}{2}\right)
+    \end{equation*}
+    By Lagrange's theorem, there exists a $c \in [0, \frac{n^{1/k}}{2}]$ such that
+    \begin{equation*}
+        g(n) - g\left( n-\frac{n^{1/k}}{2}\right) = \frac{n^{1/k}}{2} g'(n-c)
+    \end{equation*}
+    By calculation: 
+    \begin{equation*}
+        g'(x) = \left(1-\frac{1}{k}\right)x^{-1/k}
+    \end{equation*}
+    Therefore 
+    \begin{equation*}
+        g(n) - g\left( n-\frac{n^{1/k}}{2}\right) = \frac{n^{1/k}}{2} \left(1-\frac{1}{k}\right) (n-c)^{-1/k} = \frac{(1-\frac{1}{k})}{2} \left(\frac{n}{n-c}\right)^{1/k} \geq \frac{(1-\frac{1}{k})}{2} \geq 0.25
+    \end{equation*}
+    for $k \geq 2$ 
 \end{proof}
 \begin{claim}
     For $f(n)$ which is defined by \newline
