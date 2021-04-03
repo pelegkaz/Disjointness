@@ -356,31 +356,43 @@ We use two simple technical claims in order to prove that $f(n) \leq 4n^{1-\frac
 \begin{proof}
 Let us prove it by induction: \newline
 
-a. Induction base: \newline
+a. Induction base (for $n \leq N^{1/k}$)\newline
+\begin{equation*}
+   f(n) = 1 < 4 \leq 4n^{1-\frac{1}{k}}
+\end{equation*}
 
-$\forall_{n \leq N^{1/k}} f(n) = 1 \leq 4 \leq 4n^{1-\frac{1}{k}}$. \newline
-
-b. the induction step: \newline
+b. The induction step\newline
 
 By definition, we know that \newline
-
-$f(n) = 1 + f(n - \frac{n^{1/k}}{2})$ \newline
+\begin{equation*}
+  f(n) = 1 + f(n - \frac{n^{1/k}}{2})
+\end{equation*}
 
 In this point, we can use the inductive hypothesis \newline
+\begin{equation*}
+  1 + f(n - \frac{n^{1/k}}{2}) \leq 1 + 4(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}}
+\end{equation*}
 
-$1 + f(n - \frac{n^{1/k}}{2}) \leq 1 + 4(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}}$ \newline
+Using the previous claim:
+\begin{equation*}
+   (n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq n^{1-\frac{1}{k}}-0.25
+\end{equation*}
 
-Using the previous claim $(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq n^{1-\frac{1}{k}}-0.25$. \newline
-
-$1 + 4(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq 1 + 4(n^{1-\frac{1}{k}}-0.25)$ \newline
+\begin{equation*}
+  1 + 4(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq 1 + 4(n^{1-\frac{1}{k}}-0.25)
+\end{equation*}
 
 Now we got exactly what we needed. \newline
 
-$1 + 4(n^{1-\frac{1}{k}}-0.25) = 4(n^{1-\frac{1}{k}})$ \newline
+\begin{equation*}
+  1 + 4(n^{1-\frac{1}{k}}-0.25) = 4(n^{1-\frac{1}{k}})
+\end{equation*}
 
 To summarize, we proved that \newline
 
-$f(n) \leq 4n^{1-\frac{1}{k}}$. \newline
+\begin{equation*}
+  f(n) \leq 4n^{1-\frac{1}{k}}
+\end{equation*}
 
 \end{proof}
 \paragraph{Error Analysis}
