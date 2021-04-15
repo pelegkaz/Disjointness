@@ -528,42 +528,21 @@ So the total communication cost is
     O(kN^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(N)))
 \end{equation*}
 \section{k-n relation analysis}
-\paragraph{$k < \log(n)$:}
-For this case $k$ is pretty small. meaning $kn^{1-1/k}\log(n) \approx n^{1-1/k}$. 
-\paragraph{$k = \alpha\log(n)$:}
+Let us pay attention that the mentioned upper bound may be not significant in some cases. Let us pay attention to the case in which $k = \alpha\log(n)$.
 \begin{equation*}
     n^{1/k} = n^{\frac{1}{\alpha\log(n)}} = 2^{\frac{\log(n)}{\alpha\log(n)}} = 2^{1/\alpha}
 \end{equation*}
-so
+In this case
 \begin{equation*}
-    n^{1-\frac{1}{k}} > n/2
+    n^{1-\frac{1}{k}} > n/2 \in \Omega(n)
 \end{equation*}
-Moreover, in this scenario:
-\begin{equation*}
-    p = \frac{1}{n^{1/k}} = \frac{1}{2^{\frac{1}{\alpha}}} 
-\end{equation*}
-\begin{equation*}
-    h(p) = c 
-\end{equation*}
-\begin{equation*}
-    h(\rv{X}) = cnk
-\end{equation*}
-So the entropy for our distribution is indeed $\Theta(nk)$.
-\paragraph{$k \in \omega(\log(n))$:}
-This is an interesting case. Most of the elements in our input should be 1. 
-Let us denote:
-\begin{equation*}
-    p_{ij} = \Pr[i \in X_j]
-\end{equation*}
+It may seems that our protocol is not very helpful in this case. \newline
+Let us consider even bigger number of players: $k \in \omega(\log(n))$. \newline
+Now things act differently - For hard distribution most of the elements in the players' input should be 1. 
 \begin{equation*}
     \Pr[\neg \text{DISJ}] \leq \sum_{i=1}^{n}\Pr[i \in \cap_{j=1}^{k}X_j] = \sum_{i=1}^{n}\Pi_{j=1}^{k}p_{ij}
 \end{equation*}
-Let us look at a specific coordinate $i$. Assume $\Pi_{j=1}^{k}p_{ij} \geq \frac{\epsilon}{n}$.
-By lagrange multipliers we can know that $\sum_{j=1}^{k}p_{ij} \geq k(\frac{\epsilon}{n})^{\frac{1}{k}}$.
-Pay attention that:
-\begin{equation*}
-    \mathop{\mathbb{E}}[\text{Zeros in i}] = k - \sum_{j=1}^{k}p_{ij} \leq k \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right)
-\end{equation*}
+
 \begin{equation*}
     \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right) = \left(1 - e^{\frac{\log(\frac{\epsilon}{n})}{k}}\right) = \left(1 - e^{\frac{\log(\epsilon) -\log(n)}{k}}\right)
 \end{equation*}
@@ -579,36 +558,87 @@ So if our protocol just think about the important indexes (the one which has pro
 \begin{equation*}
     \text{CC} = k + n\log^2(n)
 \end{equation*}
-\section{$O(k + n\log^2(n))$-Protocol}
-Let us pay attention that for big amount of players, the situation is opposite about the distribution of 0-1. If there are a lot of players ($k \in \omega(\log(n))$, most of the bits should be 1's.
-\paragraph{Critical Coordinates}
-Let us denote a coordinate $i$ critical if:
+\section{$O(k + n\log^{2}(n))$-Protocol}
+Let us present a protocol which is useful only where we have many players ($k \in \omega(\log(n))$. In this case, most of the bits in our input should be 1's. For simplicity, let us denote
+\begin{equation*}
+    k = \log(n) \alpha(n)
+\end{equation*}
+\paragraph{Critical Indexes}
+Let us name an index $i$ critical if:
 \begin{equation*}
     \Pr[i \in \bigcap^{k}_{j=1}{X_j}] > \frac{\epsilon}{n}
 \end{equation*}
+This is a global term (not for a specific player).
 \subsection{The Protocol}
-Every one of the players are calculating what are the important coordinates.
-Every player (one by one) sends the indexes of his zeros which are in important coordinates to the coordinator.
-If there is an important coordinate with no zero - the coordinatore declares intersection.
-Otherwise, declare - disjointness.
+\begin{enumerate}[(1)]
+    \item Without any communication, the players calculate what are the critical indexes (using the knowledge about the distribution but not about any current input): $U = \{i | \Pr[i \in \bigcap^{k}_{j=1}{X_j}] > \frac{\epsilon}{n}\}$.
+    \item Every player $j$ sends the indexes of his critical zeros to the coordinator: $Y_j= U \setminus X_j$
+    \item The coordinator declares intersection iff $\bigcup_j Y_j \neq U$.
+\end{enumerate}
 \paragraph{Communication}
-We are going to talk to all of the players $k$.
-Now we should ask about the expected numbers of zeros in the important coordinates. We are going to pay $\log(n)$ for each one of them.
-The expected number of zeros is:
+The only communication done in this protocol is done in stage 2. 
+In this stage, every player sends his critical zeros. 
+We should calculate the expectation for the number of critical zeros for all players and pay $\log(n)$ for each one. \newline
+Let us examine a specific critical index $i$. \newline
+Let us denote:
 \begin{equation*}
-    nk\left(1-\left(\frac{\epsilon}{n}\right)^{1/k}\right) = nk\left(1-e^{\frac{\log{\frac{\epsilon}{n}}}{k}}\right) \sim nk\frac{\log{\frac{n}{\epsilon}}}{k} = n\log{\frac{n}{\epsilon}}
+    p_{ij} = \Pr[i \in X_j]
+\end{equation*}
+By definition of critical index
+\begin{equation*} 
+    \Pr[i \in \bigcap^{k}_{j=1}{X_j}] > \frac{\epsilon}{n}
+\end{equation*}
+Since $\mu$ is a product distribution
+\begin{equation*} 
+    \Pr[i \in \bigcap^{k}_{j=1}{X_j}] = \prod_{j=1}^{k}p_{ij}
+\end{equation*}
+Combining these two equations:
+\begin{equation*} 
+    \prod_{j=1}^{k}p_{ij} > \frac{\epsilon}{n}
+\end{equation*}
+Using Lagrange multipliers:
+\begin{equation*}
+    \sum_{j=1}^{k}p_{ij} \geq k \left(\frac{\epsilon}{n} \right)^{\frac{1}{k}}
+\end{equation*}
+At this point, let us examine the zeros in index i
+\begin{equation*}
+    \mathop{\mathbb{E}}[\text{Zeros in i}] = k - \sum_{j=1}^{k}p_{ij} \leq k \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right)
+\end{equation*}
+The total number of zeros:
+\begin{equation*}
+    \mathop{\mathbb{E}}[\text{Zeros}] = \sum_{i=1}^n\mathop{\mathbb{E}}[\text{Zeros in i}] \leq nk\left(1-\left(\frac{\epsilon}{n}\right)^{1/k}\right)
+\end{equation*}
+Using log definition
+\begin{equation*}
+    nk\left(1-\left(\frac{\epsilon}{n}\right)^{1/k}\right) = nk\left(1-e^{\frac{\log{\frac{\epsilon}{n}}}{k}}\right)
+\end{equation*}
+since $k \in \omega(\log(n))$
+\begin{equation*}
+    \frac{\log{\frac{\epsilon}{n}}}{k} = -\frac{\log{\frac{n}{\epsilon}}}{k} \rightarrow 0^{-}
+\end{equation*}
+Now we can use the limit $x \sim 1-e^x$ for $x \rightarrow 0^{-}$ 
+\begin{equation*}
+      nk\left(1-e^{\frac{\log{\frac{\epsilon}{n}}}{k}}\right) \sim nk\frac{\log{\frac{n}{\epsilon}}}{k} = n\log{\frac{n}{\epsilon}}
 \end{equation*}
 So total expected communication complexity for this protocol is
 \begin{equation*}
     k + n\log{\frac{n}{\epsilon}}\log n
 \end{equation*}
 \paragraph{Error}
-We error only when declaring disjointness and there is an intersection in unimportant coordinate.
+We error only if there is an intersection outiside important indexes (in this case we falsly output disjoint).
 \begin{equation*}
-    \Pr[\text{ERROR}] = \Pr[\text{i unimportant} \land i \in \bigcap_j X_j] \leq \sum_i \Pr[\text{i unimportant} \land i \in \bigcap
-    _j X_j] \leq n\frac{\epsilon}{n} = \epsilon
+    \Pr[\text{ERROR}] = \Pr[\bigcup_{i \notin U} \{i \in \bigcap_j X_j\}]
+\end{equation*}
+Using union bound
+\begin{equation*}
+    \Pr[\bigcup_{i \notin U} \{i \in \bigcap_j X_j\}]\leq \sum_{i \notin U} \Pr[i \in \bigcap_j X_j] 
+\end{equation*}
+Using the definition of uncritical index $\Pr[i \in \bigcap^{k}_{j=1}{X_j}] \leq \frac{\epsilon}{n}$
+\begin{equation*}
+    \sum_{i \notin U} \Pr[i \in \bigcap_j X_j] \leq n\frac{\epsilon}{n} = \epsilon
 \end{equation*}
 \begin{claim}
+TODO-Move to appendix? \newline
 For $p_1, p_2, ... , p_k \in [0,1]$ \newline
 If
 \begin{equation*}
