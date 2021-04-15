@@ -89,9 +89,7 @@ One of the most important problems (sometimes called the "mother of problems") i
 This problem has been studied thoroughly on different models. It has been proved that every randomized protocol must use $\Omega(n)$ in order to achieve constant error bound from $\frac{1}{2}$.  Also, it has been proved that the distributional communication complexity of this problem is also $\Omega(n)$ using the corruption methods. Another interesting question is what happens when we limit ourselves to product distribution. In this case, a tight bound of $\Theta(\sqrt(n))$ has been proved but only for two players. \newline
 In this paper, we tried to expand this bound for every number of players $k$. We have succeeded to prove the upper bound of $O(kn^{\frac{1}{k}})$. 
 In the two-player protocol, Bob reveals a large number of his zeros to Alice using the public randomness and the fact that the inputs are drawn from known product distribution. This method is not easy to generalize since every player may eliminate $\frac{n}{k}$ zeros 
-\subsection{Notations}
-\Rnote{Not touching this for now}
-We use the popular notation: We are going to have $k$ players. For $i \in [k], X_i \in \{0,1\}^{n}$ - the $i$'th player's input. Sometimes we are going to think of $X_i$ as a subset of $[n]$ where $X_i = \{j \in [n] | X_{ij} = 1\}$. In this notation, the distjointness problem is to decide whether $\cap^{k}_{j=1}X_j = \emptyset$. \newline
+\subsection{----}
 
 \begin{lemma}
   Suppose we have a set $A \subseteq [N]$ which is known to all players, and a set $A_i \subseteq A$ that is known to some player $i \in [k]$.
@@ -662,26 +660,6 @@ By (2):
 \section{Lower Bound}
 \paragraph{Introduction}
 Usually in lower bound using information theory techniques, we firstly move to the problem of disjointness where $n=1$ denoted as $\text{AND}_k$ which is the problem where every player has one bit and they need to answer whether they all got 1 or not. After moving to this problem, we calculate how much information is needed in order to solve it.
-\subsection{Direct Sum}
-\begin{theorem}
-Given a protocol $A$ which solves $DISJ^n_k$ with error $\epsilon$ (for every input). There is a protocol $B$ which solves $AND_k$ with error $\epsilon + ??$ such that \newline
-For $X \sim \mu^n, \Pi \sim A(X), X' \sim \mu, \Pi ' \sim B(X') $ \newline
-$I(\Pi, X) \geq n I(\Pi ', X')$
-\end{theorem}
-\paragraph{The Protocol}
-For input $X'_i \in \{0, 1\}$, the players use the public randomness in order to find a random index $j \in [k]$ in which they are gonna insert the original input. For the other indexes, every player uses the private randomness in order to sample the other indexes from $\mu$. Then they just run the protocol $A$ for their inputs. They answer the output of $A$. 
-
-\paragraph{Error Analysis}
-Our protocol errors in one of two cases: The original protocol errors or the inputs that the player sampled has an intersection and the given does not. \newline
-$\Pr[Error] \leq \epsilon + \Pr[\underset{j \in [k]}{\bigcap } X^j_{-i} \neq \emptyset] = \epsilon + 1 - (1 - \frac{c}{n})^{n-1} \approx \epsilon + 1 - \frac{1}{\sqrt[c]{e}}$ \newline
-Here we have a big obstacle since the error is huge (the one coordinate chance to be disjoint is $\frac{1}{n}$ which alone is problematic since it goes smaller). This hints to us that we can not use a constant $\epsilon$ for $AND_k$ and our distribution.
-
-\paragraph{Information Analysis}
-$X_j - \text{Input for all of the players in coordinate j}$ \newline
-$I(X, \Pi) = \underset{j\in[k]}{\sum} I[X_j, \Pi | X_{<j}] \overset{(1)}{\geq } \underset{j\in[k]}{\sum} I[X_j, \Pi]$ \newline
-$I(X', \Pi ') = \underset{j \in [k]}{\mathbb{E}}[I(X_j, \Pi] = \frac{1}{n}\underset{j\in[k]}{\sum} I[X_j, \Pi] \leq \frac{1}{n}I(X, \Pi)$ \newline
-(1) - Since the coordinates are independent
-
 \subsection{$AND_k$ Information Cost}
 \paragraph{Introduction}
 We are going to bound the information cost for a protocol that solves $AND_k$. Our analysis is divided into three blocks: \newline
