@@ -539,25 +539,6 @@ In this case
 It may seems that our protocol is not very helpful in this case. \newline
 Let us consider even bigger number of players: $k \in \omega(\log(n))$. \newline
 Now things act differently - For hard distribution most of the elements in the players' input should be 1. 
-\begin{equation*}
-    \Pr[\neg \text{DISJ}] \leq \sum_{i=1}^{n}\Pr[i \in \cap_{j=1}^{k}X_j] = \sum_{i=1}^{n}\Pi_{j=1}^{k}p_{ij}
-\end{equation*}
-
-\begin{equation*}
-    \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right) = \left(1 - e^{\frac{\log(\frac{\epsilon}{n})}{k}}\right) = \left(1 - e^{\frac{\log(\epsilon) -\log(n)}{k}}\right)
-\end{equation*}
-If $k = \log(n) \alpha(n)$
-\begin{equation*}
-    \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right) \sim \left(1 - e^{\frac{1}{\alpha(n)}}\right) \sim \frac{1}{\alpha(n)}
-\end{equation*}
-We can conclude that
-\begin{equation*}
-    \mathop{\mathbb{E}}[\text{Zeros}] = nk\left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right) \sim \frac{nk}{\alpha(n)} = n\log(n)
-\end{equation*}
-So if our protocol just think about the important indexes (the one which has probability to be in the intersection) and just ask every player to send the indexes of his zeros.
-\begin{equation*}
-    \text{CC} = k + n\log^2(n)
-\end{equation*}
 \section{$O(k + n\log^{2}(n))$-Protocol}
 Let us present a protocol which is useful only where we have many players ($k \in \omega(\log(n))$. In this case, most of the bits in our input should be 1's. For simplicity, let us denote
 \begin{equation*}
