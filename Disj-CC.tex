@@ -551,6 +551,7 @@ Let us name an index $i$ critical if:
 \end{equation*}
 This is a global term (not for a specific player).
 \subsection{The Protocol}
+The protocol is pretty simple and straight-forward using the fact that there is a small number of zeros in the input.
 \begin{enumerate}[(1)]
     \item Without any communication, the players calculate what are the critical indexes (using the knowledge about the distribution but not about any current input): $U = \{i | \Pr[i \in \bigcap^{k}_{j=1}{X_j}] > \frac{\epsilon}{n}\}$.
     \item Every player $j$ sends the indexes of his critical zeros to the coordinator: $Y_j= U \setminus X_j$
