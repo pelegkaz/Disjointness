@@ -668,24 +668,42 @@ We are going to bound the information cost for a protocol that solves $AND_k$. O
 3 - Concluding this for the general information cost of the protocol \newline
 \paragraph{Definitions}
 \begin{definition}
-$D(a || b) = \underset{x}{\sum}a(x)\log(\frac{a(x)}{b(x)})$
+KL-Divergence for $D(a || b)$ is defined by
+\begin{equation*} 
+    D(a || b) = \sum_{x \in \Omega} a(x)\log \left(\frac{a(x)}{b(x)}\right)
+\end{equation*}
 \end{definition}
 \paragraph{Protocol properties}
-For a transcript $\pi$ and player $i$ there is a function $q_i(\pi, x_i) \in [0,1]$ where \newline
-$Pr[\pi | x] = \underset{i}{\Pi}q_i(\pi, x_i )$
+For a transcript $\pi$ and player $i$ there is a function $q_i(\pi, x_i) \in [0,1]$ where
+\begin{equation*}
+    Pr[\pi | x] = \prod_{i=1}^{k}q_i(\pi, x_i )
+\end{equation*}
 \begin{definition}
-$\lambda _i (\pi) = \frac{q_i(\pi, 0)}{q_i(\pi, 1)}$
+\begin{equation*}
+    \lambda _i (\pi) = \frac{q_i(\pi, 0)}{q_i(\pi, 1)}
+\end{equation*}
 \end{definition}
 We should think about this as how much this transcript prefers that $x_i = 0$ over $x_i = 1$.
 \paragraph{Part 1 - Protocol Error Analysis}
 \begin{lemma}
-For any input $x \in \{0,1\}^k$, and any transcript $\pi$. For $Z(x) = {i \in k | x_i = 0}$, it is true that  \newline
+For any input $x \in \{0,1\}^k$, and any transcript $\pi$. For $Z(x) = \{i \in k | x_i = 0\}$, it is true that  \newline
 \begin{equation*}
     \frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \prod_{i \in Z(x)} \lambda_i(\pi)
 \end{equation*}
 \end{lemma}
 \begin{proof}
-$\frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \frac{\prod_{i \in [k]} q_i (\pi, x_i)}{\prod_{i \in [k]} q_i (\pi, 1)} = \prod_{i \in Z(x)} \frac{q_i (\pi, 0)}{q_i (\pi, 1)} = \prod_{i \in Z(x)} \lambda_i (\pi)$
+By definition of $q$ function
+\begin{equation*}
+    \frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \frac{\prod_{i \in [k]} q_i (\pi, x_i)}{\prod_{i \in [k]} q_i (\pi, 1)}
+\end{equation*}
+By definition of $Z(x)$
+\begin{equation*}
+    \frac{\prod_{i \in [k]} q_i (\pi, x_i)}{\prod_{i \in [k]} q_i (\pi, 1)} = \prod_{i \in Z(x)} \frac{q_i (\pi, 0)}{q_i (\pi, 1)}
+\end{equation*}
+By definition of $\lambda_i (\pi)$
+\begin{equation*}
+    \prod_{i \in Z(x)} \frac{q_i (\pi, 0)}{q_i (\pi, 1)} = \prod_{i \in Z(x)} \lambda_i (\pi)
+\end{equation*}
 \end{proof}
 Let there be $\alpha \in \mathbb{R}, \alpha \geq 1$ \newline
 Let us define a set of transcripts $A = \{\pi | \forall_i \lambda_i (\pi) < \alpha \}$. 
