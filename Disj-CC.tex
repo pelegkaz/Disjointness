@@ -622,7 +622,7 @@ TODO-Move to appendix? \newline
 For $p_1, p_2, ... , p_k \in [0,1]$ \newline
 If
 \begin{equation*}
-    \Pi_{i=1}^{k}p_i \geq \frac{\epsilon}{n}
+    \prod_{i=1}^{k}p_i \geq \frac{\epsilon}{n}
 \end{equation*}
 We can know that
 \begin{equation*}
@@ -636,19 +636,19 @@ By lagrange multipliers let us denote a target function
 \end{equation*}
 A constraint function
 \begin{equation*}
-    g(x_1, ... , x_k) = \Pi_{i=1}^{k}x_i - \frac{\epsilon}{n} 
+    g(x_1, ... , x_k) = \prod_{i=1}^{k}x_i - \frac{\epsilon}{n} 
 \end{equation*}
 Lagrange function
 \begin{equation*}
-    \mathcal{L}(x_1, ... , x_k, \lambda) = \sum_{i=1}^{k}x_i - \lambda\left(\Pi_{i=1}^{k}x_i - \frac{\epsilon}{n}  \right)
+    \mathcal{L}(x_1, ... , x_k, \lambda) = \sum_{i=1}^{k}x_i - \lambda\left(\prod_{i=1}^{k}x_i - \frac{\epsilon}{n}  \right)
 \end{equation*}
 \begin{align*}
-    \frac{\partial\mathcal{L}}{\partial x_i} = 1 - \lambda\Pi_{j \neq i}x_j  \\
-    \frac{\partial\mathcal{L}}{\partial \lambda} = \Pi_{i=1}^{k}x_i - \frac{\epsilon}{n}
+    \frac{\partial\mathcal{L}}{\partial x_i} = 1 - \lambda\prod_{j \neq i}x_j  \\
+    \frac{\partial\mathcal{L}}{\partial \lambda} = \prod_{i=1}^{k}x_i - \frac{\epsilon}{n}
 \end{align*}
 By (2):
 \begin{align*}
-    \Pi_{i=1}^{k}x_i = \frac{\epsilon}{n} \\
+    \prod_{i=1}^{k}x_i = \frac{\epsilon}{n} \\
     1 = \frac{\lambda\frac{\epsilon}{n}}{x_i} \\ 
     x_i = \lambda\frac{\epsilon}{n} \\
     \left(\lambda\frac{\epsilon}{n}\right)^k = \frac{\epsilon}{n} \\
@@ -679,12 +679,13 @@ $\lambda _i (\pi) = \frac{q_i(\pi, 0)}{q_i(\pi, 1)}$
 We should think about this as how much this transcript prefers that $x_i = 0$ over $x_i = 1$.
 \paragraph{Part 1 - Protocol Error Analysis}
 \begin{lemma}
-For any $x \in \{0,1\}^k$, any transcript $\pi$ \newline
-Denote $Z(x) = {i \in k | x_i = 0}$ so \newline
-$\frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \Pi_{i \in Z(x)} \lambda_i (\pi)$
+For any input $x \in \{0,1\}^k$, and any transcript $\pi$. For $Z(x) = {i \in k | x_i = 0}$, it is true that  \newline
+\begin{equation*}
+    \frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \prod_{i \in Z(x)} \lambda_i(\pi)
+\end{equation*}
 \end{lemma}
 \begin{proof}
-$\frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \frac{\Pi_{i \in [k]} q_i (\pi, x_i)}{\Pi_{i \in [k]} q_i (\pi, 1)} = \Pi_{i \in Z(x)} \frac{q_i (\pi, 0)}{q_i (\pi, 1)} = \Pi_{i \in Z(x)} \lambda_i (\pi)$
+$\frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \frac{\prod_{i \in [k]} q_i (\pi, x_i)}{\prod_{i \in [k]} q_i (\pi, 1)} = \prod_{i \in Z(x)} \frac{q_i (\pi, 0)}{q_i (\pi, 1)} = \prod_{i \in Z(x)} \lambda_i (\pi)$
 \end{proof}
 Let there be $\alpha \in \mathbb{R}, \alpha \geq 1$ \newline
 Let us define a set of transcripts $A = \{\pi | \forall_i \lambda_i (\pi) < \alpha \}$. 
