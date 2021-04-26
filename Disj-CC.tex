@@ -667,23 +667,41 @@ We are going to bound the information cost for a protocol that solves $AND_k$. O
 2 - Distinguishing this input is leaking some information (specifically KL-Divergence) \newline
 3 - Concluding this for the general information cost of the protocol \newline
 \paragraph{Definitions}
+
 \begin{definition}
 KL-Divergence for $D(a || b)$ is defined by
 \begin{equation*} 
     D(a || b) = \sum_{x \in \Omega} a(x)\log \left(\frac{a(x)}{b(x)}\right)
 \end{equation*}
 \end{definition}
+
+\begin{definition}
+    Denote two sets of transcripts: \newline
+    $T_1$ - transcripts which are ended with positive answers (there is an intersection). \newline
+    $T_0$ - transcripts which are ended with negative answers (there is no intersection).
+\end{definition}
+
 \paragraph{Protocol properties}
 For a transcript $\pi$ and player $i$ there is a function $q_i(\pi, x_i) \in [0,1]$ where
 \begin{equation*}
     Pr[\pi | x] = \prod_{i=1}^{k}q_i(\pi, x_i )
 \end{equation*}
+
 \begin{definition}
 \begin{equation*}
     \lambda _i (\pi) = \frac{q_i(\pi, 0)}{q_i(\pi, 1)}
 \end{equation*}
-\end{definition}
 We should think about this as how much this transcript prefers that $x_i = 0$ over $x_i = 1$.
+\end{definition}
+
+\begin{definition}
+For $\alpha \in \mathbb{R}$ where $\alpha \geq 1$, let us define a set of transcripts 
+\begin{equation*}
+    A = \{\pi | \forall_{i \in [k]} \lambda_i (\pi) < \alpha \}
+\end{equation*}
+\end{definition}
+
+
 \paragraph{Part 1 - Protocol Error Analysis}
 \begin{lemma}
 For any input $x \in \{0,1\}^k$, and any transcript $\pi$. For $Z(x) = \{i \in k | x_i = 0\}$, it is true that  \newline
@@ -705,22 +723,107 @@ By definition of $\lambda_i (\pi)$
     \prod_{i \in Z(x)} \frac{q_i (\pi, 0)}{q_i (\pi, 1)} = \prod_{i \in Z(x)} \lambda_i (\pi)
 \end{equation*}
 \end{proof}
-Let there be $\alpha \in \mathbb{R}, \alpha \geq 1$ \newline
-Let us define a set of transcripts $A = \{\pi | \forall_i \lambda_i (\pi) < \alpha \}$. 
-Denote two more sets: $T_1$ - transcripts which are ended with positive answers (there is an intersection). $T_0$ - transcripts which are ended with negative answers (there is no intersection). \newline
-Let us pay attention: \newline
-$\Pr[A \bigcap T_1 | x = 0^k] \leq \Pr[T_1 | x = 0^k] = \Pr[\text{ERROR} | x = 0^k] \leq \epsilon$ \newline
-This is since the right answer for $0^k$ is 0 so $T_1$ is error. \newline 
-$\Pr[A \bigcap T_0 | x = 0^k] \leq \alpha ^k \Pr[A \bigcap T_0 | x = 1^k] \leq \alpha ^k \Pr[\text{ERROR} | x = 1^k] \leq \alpha ^k \Pr[T_0| x = 1^k] \leq \alpha ^k \epsilon$ \newline
-$\Pr[A| x = 0^k] \leq \epsilon (1 + \alpha ^k) $ \newline
-The set in which the transcripts do not prefer 0 over 1 is not very common under $x = 0^k$. \newline
-We can also see that $\Pr[A^\complement| x = 0^k] \geq 1 - \epsilon (1 + \alpha ^k) $ \newline
-Pay attention that $A^\complement = \{\pi | \exists_i \lambda_i(\pi) \geq \alpha\}$. \newline
-If we define $A_{i}^\complement = \{\pi | \lambda_i(\pi) \geq \alpha\}$, we can see that $A^\complement = \bigcup_{i} A_{i}^\complement$.
-Using this fact and union bound, there exists $i$ such that 
+
+\begin{lemma}
+    \begin{equation*}
+        \Pr[A| x = 0^k] \leq \epsilon (1 + \alpha ^k)
+    \end{equation*}
+    The set in which the transcripts do not prefer 0 over 1 is not very common under $x = 0^k$.
+\end{lemma}
+\begin{proof}
+For $T_0, T_1$ defined as mentioned, let us bound the probability for $A \bigcap T_0$ and $A \bigcap T_1$. \newline
+
+1. For $A \bigcap T_0$: \newline
+Let there be $\pi \in A \bigcap T_0$. \newline
+For this $\pi$, let us use the previous lemma for $x = 0^k$
+\begin{equation*}
+    \frac{Pr[\pi | X = 0^k]}{Pr[\pi | X = 1^k]} = \prod_{i \in Z(0^k)} \lambda_i(\pi)
+\end{equation*}
+Since $Z(0^k) = [k]$
+\begin{equation*}
+    \frac{Pr[\pi | X = 0^k]}{Pr[\pi | X = 1^k]} = \prod_{i \in [k]} \lambda_i(\pi)
+\end{equation*}
+Since $\pi \in A$, we know that $\forall_{i \in [k]}\lambda_i(\pi) < \alpha$
+\begin{equation*}
+    \frac{Pr[\pi | X = 0^k]}{Pr[\pi | X = 1^k]} < \alpha^{k}
+\end{equation*}
+Summing over all $\pi \in A \bigcap T_0 $
+\begin{equation*}
+    \Pr[A \bigcap T_0 | x = 0^k] < \alpha ^k \Pr[A \bigcap T_0 | x = 1^k]
+\end{equation*}
+Since $A \bigcap T_0 \subseteq T_0$
+\begin{equation*}
+    \alpha ^k \Pr[A \bigcap T_0 | x = 1^k] \leq \alpha ^k \Pr[T_0 | x = 1^k]
+\end{equation*}
+Since the answer of disjointness is 1 for the input $x=1^k$, we know that $\{T_0 | x=1^k\} = \{\text{ERROR} | x=1^k\}$ .
+\begin{equation*}
+    \alpha ^k \Pr[T_0 | x = 1^k] = \alpha ^k \Pr[\text{ERROR} | x = 1^k]
+\end{equation*}
+For a protocol which errors $\epsilon$ for any input
+\begin{equation*}
+    \Pr[\text{ERROR} | x = 1^k] \leq \epsilon
+\end{equation*}
+We now have that 
+\begin{equation*}
+    \Pr[A \bigcap T_0 | x = 0^k] \leq \alpha^k \epsilon
+\end{equation*}
+2. For $A \bigcap T_1$: \newline
+Since $A \bigcap T_1 \subseteq T_1$
+\begin{equation*}
+    \Pr[A \bigcap T_1 | x = 0^k] \leq \Pr[T_1 | x = 0^k]
+\end{equation*}
+Since the answer of disjointness is 0 for the input $x=0^k$, we know that $\{T_1 | x=0^k\} = \{\text{ERROR} | x=0^k\}$ .
+\begin{equation*}
+    \Pr[T_1 | x = 0^k] = \Pr[\text{ERROR} | x = 0^k]
+\end{equation*}
+For a protocol which errors $\epsilon$ for any input
+\begin{equation*}
+    \Pr[\text{ERROR} | x = 0^k] \leq \epsilon
+\end{equation*}
+We now have that 
+\begin{equation*}
+    \Pr[A \bigcap T_1 | x = 0^k] \leq \epsilon
+\end{equation*}
+
+3. To conclude: \newline
+\begin{equation*}
+    \Pr[A| x = 0^k] = \leq \Pr[A \bigcap T_0 | x = 0^k] + \Pr[A \bigcap T_1 | x = 0^k] < \epsilon (1 + \alpha ^k)
+\end{equation*}
+\end{proof}
+
+\begin{lemma}
+    For $A_{i}^\complement = \{\pi | \lambda_i(\pi) \geq \alpha\}$, there exists $i$ where
+    \begin{equation*}
+    \Pr[A_{i}^\complement| x = 0^k] \geq \frac{1 - \epsilon (1 + \alpha ^k)}{k}
+    \end{equation*}
+\end{lemma}
+\begin{proof}
+Using the previous lemma,
+\begin{equation*}
+    \Pr[A| x = 0^k] \leq \epsilon (1 + \alpha ^k)
+\end{equation*}
+Using set compliment
+\begin{equation*}
+    \Pr[A^\complement| x = 0^k] \geq 1 - \epsilon (1 + \alpha ^k)
+\end{equation*}
+Since $A^\complement = \{\pi | \exists_i \lambda_i(\pi) \geq \alpha\}$, we know that 
+\begin{equation*}
+    A^\complement = \bigcup_{i} A_{i}^\complement
+\end{equation*}
+Therefore 
+\begin{equation*}
+     \sum_{i=1}^{k} \Pr[A_i^\complement| x = 0^k] \geq \Pr[A^\complement| x = 0^k]
+\end{equation*}
+Combining these facts
+\begin{equation*}
+    \sum_{i=1}^{k} \Pr[A_i^\complement| x = 0^k] \geq 1 - \epsilon (1 + \alpha ^k)
+\end{equation*}
+Therefore there exists $i$ where 
 \begin{equation*}
     \Pr[A_{i}^\complement| x = 0^k] \geq \frac{1 - \epsilon (1 + \alpha ^k)}{k}
-\end{equation*}
+    \end{equation*}
+\end{proof}
+
 That is the finish line of this part. We got a set of transcripts that has a nice probability under $x = 0^k$ where the transcripts prefer strongly 0 over 1 for some index. We may use this technique in different ways depends on our distribution of inputs. For small $k$ our distribution gives a high probability for $0^k$ which is pretty convenient. For other distribution, we want to use the other method. \newline
 This is a rough method in order to use the fact that the protocol has to be "biased" in terms of $\lambda_i$ in order to have a low error. \newline
 \paragraph{Part 2 - Divergence}
