@@ -908,6 +908,40 @@ By definition of KL-Divergence
 \begin{equation*}
     \Pr[X_i = 1 | X_{-i}=0^{k-1}, \pi]\log\left(\frac{\Pr[X_i = 1 | X_{-i}=0^{k-1}, \pi]}{\Pr[X_i = 1 | X_{-i}=0^{k-1}]}\right)
 \end{equation*}
+\paragraph{Part 1 of the divergence:}
+Since the input is drawn using product distribution
+\begin{equation*}
+    \Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi]\log\left(\frac{\Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi]}{\Pr[X_i = 0 | X_{-i}=0^{k-1}]}\right) = \Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi]\log\left(\frac{\Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi]}{\mu(0)}\right) = 
+\end{equation*}
+Using the previous lemma
+\begin{equation*}
+    \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}\log\left(\frac{\frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}}{\mu(0)}\right) = 
+\end{equation*}
+Some algebraic expansion
+\begin{equation*}
+    \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}\log\left(\frac{1}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}\right) \geq
+\end{equation*}
+Using $\lambda_i(\pi) \geq \alpha$
+\begin{equation*}
+    \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\alpha}}\log\left(\frac{1}{\mu(0) + \frac{\mu(1)}{\alpha}}\right) =
+\end{equation*}
+Since $\mu(0) = 1 - \mu(1)$
+\begin{equation*}
+    \frac{\mu(0)}{1 - \mu(1) + \frac{\mu(1)}{\alpha}}\log\left(\frac{1}{1 - \mu(1) + \frac{\mu(1)}{\alpha}}\right) = 
+\end{equation*}
+Some algebraic expansion
+\begin{equation*}
+    \frac{\mu(0)}{1 - \mu(1)(1 -\frac{1}{\alpha})}\log\left(\frac{1}{1 - \mu(1)(1 -\frac{1}{\alpha})}\right) =
+\end{equation*}
+Some more algebraic expansion
+\begin{equation*}
+    \frac{\mu(0)}{1 - \mu(1)(1 -\frac{1}{\alpha})}\log\left(1 + \frac{\mu(1)(1 -\frac{1}{\alpha})}{1 - \mu(1)(1 -\frac{1}{\alpha})}\right) \geq
+\end{equation*}
+Using $\log(1+x) \sim x$ for $x \rightarrow 0$
+\begin{equation*}
+    \frac{\mu(0)(\mu(1)(1 -\frac{1}{\alpha}))}{2\left(1 - \mu(1)(1 -\frac{1}{\alpha})\right)^2} \geq \frac{\mu(1)}{2}
+\end{equation*}
+
 \paragraph{Part 2 of the divergence:}
 Since the input is drawn using product distribution
 \begin{equation*}
@@ -921,23 +955,23 @@ Some algebraic expansion
 \begin{equation*}
     \frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)}\log\left(\frac{1}{\lambda_i(\pi)\mu(0) + \mu(1)}\right) = -\mu(1) \frac{\log(\lambda_i(\pi)\mu(0) + \mu(1))}{\lambda_i(\pi)\mu(0) + \mu(1)}
 \end{equation*}
-Denote $\beta = (\lambda_i(\pi)\mu(0) + \mu(1))$. If $\beta \rightarrow \infty$, $\frac{log(\beta)}{\beta} \rightarrow 0$. 
+Pay attention that since $ \mu(1) \geq 0$, $\mu(0) \geq \frac{1}{2}$ and $\lambda_i(\pi) \geq \alpha$
+\begin{equation*}
+    \lambda_i(\pi)\mu(0) + \mu(1) \geq \lambda_i(\pi)\mu(0) \geq \frac{\lambda_i(\pi)}{2} \geq \frac{\alpha}{2}
+\end{equation*}
+Since $\frac{log(x)}{x} \rightarrow 0$ when $x \rightarrow \infty$, for big enough $\alpha$
+\begin{equation*}
+    -\mu(1) \frac{\log(\lambda_i(\pi)\mu(0) + \mu(1))}{\lambda_i(\pi)\mu(0) + \mu(1)} \geq -\frac{\mu(1)}{4}
+\end{equation*}
+\paragraph{For conclusion}
+If $\lambda_i(\pi) \geq \alpha$, for big enough $n$:
+\begin{equation*}
+     D_{KL}\left(\Dfrac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i} = 0^{k-1}} \right) \geq \frac{\mu(1)}{2} -\frac{\mu(1)}{4} = \frac{\mu(1)}{4}
+\end{equation*}
 \end{proof}
 
-$\frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)} \log\left( \frac{1}{\lambda_i(\pi)\mu(0) + \mu(1)}\right) = -\mu(1) \frac{\log(\lambda_i(\pi)\mu(0) + \mu(1))}{\lambda_i(\pi)\mu(0) + \mu(1)}$ \newline
-It is true that $\frac{logx}{x} \rightarrow 0$ for $x \rightarrow \infty$ \newline
-For small k, $\mu(0) \rightarrow 1$. We can choose big enough $\alpha$ such that for big n, if $\lambda_i(\pi) \geq \alpha$ it is true that: \newline
-$\lambda_i(\pi)\mu(0) + \mu(1) \geq \lambda_i(\pi)\mu(0) \geq \frac{\lambda_i(\pi)}{2} \geq \frac{\alpha}{2}$ \newline
-$ \frac{\log(\lambda_i(\pi)\mu(0) + \mu(1))}{\lambda_i(\pi)\mu(0) + \mu(1)} < \frac{1}{8}$ \newline
-To conclude this part:
-$\frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)} \log\left( \frac{1}{\lambda_i(\pi)\mu(0) + \mu(1)}\right) \geq -\mu(1) \frac{1}{8}$
-\paragraph{Part 1 of the divergence:}
-$\frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}\log\left(\frac{1}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}\right) \geq \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\alpha}}\log\left(\frac{1}{\mu(0) + \frac{\mu(1)}{\alpha}}\right) = \frac{\mu(0)}{1 - \mu(1) + \frac{\mu(1)}{\alpha}}\log\left(\frac{1}{1 - \mu(1) + \frac{\mu(1)}{\alpha}}\right) = \frac{\mu(0)}{1 - \mu(1)(1 -\frac{1}{\alpha})}\log\left(\frac{1}{1 - \mu(1)(1 -\frac{1}{\alpha})}\right) = \frac{\mu(0)}{1 - \mu(1)(1 -\frac{1}{\alpha})}\log\left(1 + \frac{\mu(1)(1 -\frac{1}{\alpha})}{1 - \mu(1)(1 -\frac{1}{\alpha})}\right) \geq \frac{\mu(0)(\mu(1)(1 -\frac{1}{\alpha}))}{2\left(1 - \mu(1)(1 -\frac{1}{\alpha})\right)^2} \geq \frac{\mu(1)}{4}$ \newline
-$\log(1+x) \sim x$ for $x \rightarrow 0$
-\paragraph{Conclude Divergence part}
-If $\lambda_i(\pi) \geq \alpha$, for big enough $n$:
-$D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \geq \frac{\mu(1)}{4} $
-\paragraph{Part 3 - Information Summary} \newline
+\paragraph{Part 3 - Information Summary}
+
 By definition of $X$
 \begin{equation*}
     I(X;\Pi) = I(X_i,X_{-i};\Pi)
