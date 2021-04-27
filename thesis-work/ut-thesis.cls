@@ -337,7 +337,7 @@
    \begin{titlepage}
    \begin{large}
    \begin{center}
-      \includegraphics[scale=0.25]{img/TAU-Logo.jpg}\\
+   	  \includegraphics[scale=0.25]{img/TAU-Logo.jpg}\\
       \large
       Tel Aviv University\\
       Raymond and Beverly Sackler Faculty of Exact Sciences\\
