@@ -971,7 +971,12 @@ If $\lambda_i(\pi) \geq \alpha$, for big enough $n$:
 \end{proof}
 
 \paragraph{Part 3 - Information Summary}
-
+\begin{theorem}
+\begin{equation*}
+    I(X;\Pi) \in \Omega\left(\frac{n^{-\frac{1}{k}}}{k}\right)
+\end{equation*}
+\end{theorem}
+\begin{proof}
 By definition of $X$
 \begin{equation*}
     I(X;\Pi) = I(X_i,X_{-i};\Pi)
@@ -988,15 +993,27 @@ Using the mutual information - kl-divergence relation
 \begin{equation*}
     I(X_i;\Pi|X_{-i}) = \mathbb{E}_{x, \pi \sim \mu} \left( D_{KL}\left(\Dfrac{X_i | \pi, X_{-i}}{X_i | X_{-i}} \right) \right)
 \end{equation*}
+Picking only a specific element ($x=0^k$) in the expectation sum
 \begin{equation*}
-    I(X;\Pi) = \overset{k+i}{\underset{j=i+1}{\sum } } I[X_{j \% k}, \Pi | X_{<(j \% k)}] \geq I(X_i;\Pi | X_{-i}) = \mathbb{E}_{x, \pi \sim \mu} \left( D\left(\frac{X_i | \pi, X_{-i}}{X_i | X_{-i}} \right) \right) \geq
+    \mathbb{E}_{x, \pi \sim \mu} \left( D_{KL}\left(\Dfrac{X_i | \pi, X_{-i}}{X_i | X_{-i}} \right) \right) \geq \mu(0^k) \mathbb{E}_{\pi \sim x = 0^k} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right)
 \end{equation*}
+Looking only at transcripts in $A_{i}^\complement$
 \begin{equation*}
-    \geq \mu(0^k) \mathbb{E}_{\pi \sim x = 0^k} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq 
+    \mu(0^k) \mathbb{E}_{\pi \sim x = 0^k} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq \mu(0^k) \Pr[A_{i}^\complement| x = 0^k] \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right)
 \end{equation*}
+Using Part 1
 \begin{equation*}
-\mu(0^k) \Pr[A_{i}^\complement| x = 0^k] \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq \left (1 - n^{-\frac{1}{k}} \right)^{k} \cdot \frac{1 - \epsilon (1 + \alpha ^k)}{k} \frac{\mu(1)}{4} \in \Omega\left(\frac{n^{-\frac{1}{k}}}{k}\right)
+    \mu(0^k) \Pr[A_{i}^\complement| x = 0^k] \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq \mu(0^k) \frac{1 - \epsilon (1 + \alpha ^k)}{k} \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right)
 \end{equation*}
+Using Part 2
+\begin{equation*}
+    \mu(0^k) \frac{1 - \epsilon (1 + \alpha ^k)}{k} \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq \mu(0^k) \frac{1 - \epsilon (1 + \alpha ^k)}{k} \frac{\mu(1)}{4}
+\end{equation*}
+Since $\mu(1) = n^{-\frac{1}{k}}$ and $\mu(0) = 1 - n^{-\frac{1}{k}}$
+\begin{equation*}
+    \mu(0^k) \frac{1 - \epsilon (1 + \alpha ^k)}{k} \frac{\mu(1)}{4} = \left (1 - n^{-\frac{1}{k}} \right)^{k} \cdot \frac{1 - \epsilon (1 + \alpha ^k)}{k} \cdot \frac{n^{-\frac{1}{k}}}{4} \in \Omega\left(\frac{n^{-\frac{1}{k}}}{k}\right)
+\end{equation*}
+\end{proof}
 \section{Extra}
 \paragraph{Binary Distribution}
 Let us consider a specific interesting distribution for $n = 2^{k-1}$. We think of $X_i \subseteq \{0, 1, ... , n-1\} $ \newline
