@@ -89,12 +89,7 @@
 
 
 \section{Introduction}
-Yao's two-party communication complexity is a well-studied model. The most simple settings are the deterministic settings. In these settings, we want to find an algorithm that gets the exact solution for every input. This model has two somewhat similar extensions. The first one is the randomized settings. In this model, every player gets a random string (private or public) and can use it in the protocol. In this case, we want the protocol to solve the problem with an error of up to $\epsilon$ (over the randomized strings). \newline
-Another model is when the inputs themselves are randomized. In this model, we need to design a protocol that solves the problem with an error of up to $\epsilon$ for every distribution on the inputs. Another interesting problem is to design a protocol that solves the problem for every product distribution (in which the players' inputs are independent. \newline
-One of the most important problems (sometimes called the "mother of problems") is the Set Disjointness problem. In this problem, every player gets an n-bit array and they are asked whether there is an index $i$ where the $i$'th bit is turned on in all of their inputs. \newline
-This problem has been studied thoroughly on different models. It has been proved that every randomized protocol must use $\Omega(n)$ in order to achieve constant error bound from $\frac{1}{2}$.  Also, it has been proved that the distributional communication complexity of this problem is also $\Omega(n)$ using the corruption methods. Another interesting question is what happens when we limit ourselves to product distribution. In this case, a tight bound of $\Theta(\sqrt(n))$ has been proved but only for two players. \newline
-In this paper, we tried to expand this bound for every number of players $k$. We have succeeded to prove the upper bound of $O(kn^{\frac{1}{k}})$. 
-In the two-player protocol, Bob reveals a large number of his zeros to Alice using the public randomness and the fact that the inputs are drawn from known product distribution. This method is not easy to generalize since every player may eliminate $\frac{n}{k}$ zeros 
+
 \subsection{----}
 
 \begin{lemma}
