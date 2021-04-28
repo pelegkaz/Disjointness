@@ -1,0 +1,213 @@
+\section{Properties of Our Protocol}
+Our protocol uses random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-\frac{1}{k}})$ bits of communication between the players.
+\subsection{Analysis}
+\paragraph{Rounds analysis}
+We argue that the protocol should run only $4N^{1-\frac{1}{k}}$ rounds. As described above, every round where $|U| = n$, we omit $\frac{n^{1-\frac{1}{k}}}{2}$ indexes. Therefore if $f(n)$ is the function of number of rounds when starting with universe sized $n$, we can define it by
+    \begin{equation*}
+        f(n) = \begin{cases}
+               1               & n \leq N^{\frac{1}{k}}\\
+               1 + f(n - \frac{n^{1/k}}{2}) & \text{otherwise}
+           \end{cases}
+    \end{equation*}
+We use two simple technical claims in order to prove that $f(n) \leq 4n^{1-\frac{1}{k}}$.
+\begin{claim}
+    For $k \geq 2$ and every $n$: $n^{1 - \frac{1}{k}} - \left(n-\frac{n^{1/k}}{2}\right)^{1-\frac{1}{k}} \geq 0.25$
+\end{claim}
+\begin{proof}
+    Let us define a function $g(x) = x^{1-\frac{1}{k}}$. We want to analyze:
+    \begin{equation*}
+        n^{1 - \frac{1}{k}} - \left(n-\frac{n^{1/k}}{2}\right)^{1-\frac{1}{k}} = g(n) - g\left (n-\frac{n^{1/k}}{2}\right)
+    \end{equation*}
+    By Lagrange's theorem, there exists a $c \in [0, \frac{n^{1/k}}{2}]$ such that
+    \begin{equation*}
+        g(n) - g\left( n-\frac{n^{1/k}}{2}\right) = \frac{n^{1/k}}{2} g'(n-c)
+    \end{equation*}
+    By calculation: 
+    \begin{equation*}
+        g'(x) = \left(1-\frac{1}{k}\right)x^{-1/k}
+    \end{equation*}
+    Therefore 
+    \begin{equation*}
+        g(n) - g\left( n-\frac{n^{1/k}}{2}\right) = \frac{n^{1/k}}{2} \left(1-\frac{1}{k}\right) (n-c)^{-1/k} = \frac{(1-\frac{1}{k})}{2} \left(\frac{n}{n-c}\right)^{1/k} \geq \frac{(1-\frac{1}{k})}{2} \geq 0.25
+    \end{equation*}
+    for $k \geq 2$ 
+\end{proof}
+\begin{claim}
+    For $f(n)$ which is defined by \newline
+    \begin{equation*}
+        f(n) = \begin{cases}
+               1               & n \leq N^{\frac{1}{k}}\\
+               1 + f(n - \frac{n^{1/k}}{2}) & \text{otherwise}
+           \end{cases}
+    \end{equation*}
+    It is true that $f(n) \leq 4n^{1-\frac{1}{k}}$.
+\end{claim}
+\begin{proof}
+Let us prove it by induction: \newline
+
+a. Induction base (for $n \leq N^{1/k}$)\newline
+\begin{equation*}
+   f(n) = 1 < 4 \leq 4n^{1-\frac{1}{k}}
+\end{equation*}
+
+b. The induction step\newline
+
+By definition, we know that \newline
+\begin{equation*}
+  f(n) = 1 + f(n - \frac{n^{1/k}}{2})
+\end{equation*}
+
+In this point, we can use the inductive hypothesis \newline
+\begin{equation*}
+  1 + f(n - \frac{n^{1/k}}{2}) \leq 1 + 4(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}}
+\end{equation*}
+
+Using the previous claim:
+\begin{equation*}
+   (n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq n^{1-\frac{1}{k}}-0.25
+\end{equation*}
+
+\begin{equation*}
+  1 + 4(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq 1 + 4(n^{1-\frac{1}{k}}-0.25)
+\end{equation*}
+
+Now we got exactly what we needed. \newline
+
+\begin{equation*}
+  1 + 4(n^{1-\frac{1}{k}}-0.25) = 4(n^{1-\frac{1}{k}})
+\end{equation*}
+
+To summarize, we proved that \newline
+
+\begin{equation*}
+  f(n) \leq 4n^{1-\frac{1}{k}}
+\end{equation*}
+
+\end{proof}
+\paragraph{Error Analysis}
+Let there be a round $r$. In this round, we error only if there was no significant player (in $U_r$) and therefore the coordinator answered "not disjoint" but actually the inputs were disjoint.
+\begin{equation*}
+  \mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \text{ i is not signficant})
+\end{equation*}
+
+Using the definition of "significant player" we may rewrite it as:
+\begin{equation*}
+  \mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
+
+As proved in lemma 1.2, if the inputs are disjoint, there is a good player. $DISJ = \bigcup_{j = 1}^k D_j(U_r)$ 
+\begin{equation*}
+  \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) = \mu(\bigcup_{j = 1}^k D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
+
+Using union bound we may consider the sum of these probabilities.
+\begin{equation*}
+  \mu(\bigcup_{j = 1}^k D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
+
+For every element in the sum, we relax the event the only the specific player is good.
+\begin{equation*}
+  \sum_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
+
+At this point, we stop the calculation and consider a specific element in this sum. Every element is actually the event in which a player is good but not significant or in other words, the player is good but the probability that he is good is small. Using this definition it is pretty clear that the probability of this event is small. \newline
+Let us consider the expectation of this probability over the player's input.
+\begin{equation*}
+  \mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)]
+\end{equation*}
+
+Now the player's input is constant and the event that he is significance is also a constant.
+\begin{equation*}
+  \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)] = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) | X_j = x_j) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}]
+\end{equation*}
+
+Recall the definition of significance player $\gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[D_i (U) \given \rv{X}_i = x_i \right]$.
+\begin{equation*}
+  \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) | X_j = x_j) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}]
+\end{equation*}
+
+Now we got an expectation over a non-negative r.v ($\gamma_j(x_j, U_r)$) multiplied by the indicator of the event it is in smaller than $\frac{\epsilon}{kN^{1-\frac{1}{k}}}$. We may replace the r.v with $\frac{\epsilon}{kN^{1-\frac{1}{k}}}$.
+\begin{equation*}
+  \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] \leq \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\frac{\epsilon}{kN^{1-\frac{1}{k}}} \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}
+\end{equation*}
+
+At this point, we finished considering the specific element (case in which a player is good but not significant) and we can resume the calculation of the whole error in round $r$.  \newline
+\begin{equation*}
+  \sum_j \mu(DISJ_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \frac{\epsilon}{kN^{1-\frac{1}{k}}} = k\frac{\epsilon}{kN^{1-\frac{1}{k}}} = \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
+
+To conclude, we just proved that the error in a specific round $r$:
+\begin{equation*}
+  \mu(\text{Err in round r}) \leq \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
+
+Now we are consider the overall error of the protocol (summing over all rounds):
+\begin{equation*}
+  \mu(Err) = \sum_{r} \mu(\text{Err in round r}) \leq \#\{\text{number of rounds}\} \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
+
+In our protocol there are $O(N^{1-\frac{1}{k}})$ so
+\begin{equation*}
+  \mu(Err) \in O(\epsilon)
+\end{equation*}
+
+\paragraph{Communication Analysis}
+Let us first analyze the expected communication for a single round: \newline
+
+1. Every player sends a bit whether he is significant or not - $k$ bits.\newline
+
+2. The coordinator informs everyone who is the chosen significant - $klogk$ bits. \newline
+
+3. The index $j$ of $A_{i-1}^{(j)}$ is sent. \newline
+
+4. The player uses lemma 2.1 - $k\log(N)$ bits. \newline
+
+Let us calculate the 3rd part - $j$. \newline
+This index is a random variable which has a geometric distribution since $A_{i-1}^{(j)}$ are independent. \newline
+
+Recall that $j$ is chosen where $i$ is good in $U$. \newline
+Therefore we are looking for the following probability:
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i]
+\end{equation*}
+
+Since $D_i(U) = DISJ \cap \{\text{i is good in U}\}$ (by definition), $\{\text{i is good in U}\} \subseteq D_i(U)$ which leads to 
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i] \geq \Pr[D_i(U) | X_i = x_i]
+\end{equation*}
+
+By definition of $\gamma_i(x_i, U)$:
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i] \geq \Pr[D_i(U) | X_i = x_i] = \gamma_i(x_i, U)
+\end{equation*}
+
+Since i is significant
+\begin{equation*}
+    \gamma_i(x_i, U) \geq \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
+
+To conclude
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i] \geq \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
+
+Now we can calculate easily the size of j
+\begin{equation*}
+    \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{i is good in U}| X_i = x_i]} \leq \frac{1}{\gamma_i(x_i, U)} \leq \frac{kN^{1-\frac{1}{k}}}{\epsilon}
+\end{equation*}
+
+By Jensen's inequality
+\begin{equation*}
+    \mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{kN^{1-\frac{1}{k}}}{\epsilon}) \leq \log(N) + \log(k) + \log(\frac{1}{\epsilon})
+\end{equation*}
+
+So in total the cost of the round is 
+\begin{equation*}
+    k + k\log(k) + k(\log(N) + \log(k) + \log(\frac{1}{\epsilon})) + k\log(N) \in O(k(\log(N) + \log(\frac{1}{\epsilon}))
+\end{equation*}
+The protocol operates at most $4(N^{1-\frac{1}{k}})$ rounds. \newline
+For the round where we terminate, we pay at most $kN^{\frac{1}{k}} \log(N)$. \newline
+So the total communication cost is  
+\begin{equation*}
+    O(kN^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(N)))
+\end{equation*}

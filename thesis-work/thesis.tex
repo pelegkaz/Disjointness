@@ -235,10 +235,19 @@
 %%  of your thesis at a time by using `\includeonly'.                 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\chapter{Introduction}
+\include{intro}
+\chapter{Related Work}
+\include{related}
+\chapter{Preliminaries}
+\include{prelim}
 \chapter{Upper bound for small parties}
+\include{overview}
 \include{seq_disj}
-
+\include{protocol}
+\include{properties}
 \chapter{Upper bound for large parties}
+\include{protocol2}
 \chapter{Lower bound for $AND_k$ for small parties}
 %% *** Include chapter files here. ***
 
@@ -249,7 +258,7 @@
 \bibliographystyle{alpha}
 %% *** Set the bibliography file. ***
 %% ("thesis.bib" by default; change as needed)
-% \bibliography{refs}
+\bibliography{refs}
 
 %% This adds the hebrew abstract and back cover to the thesis.
 \includepdf[pages=-]{hebrew-abstract.pdf}

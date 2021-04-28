@@ -1,0 +1,116 @@
+\section{Protocol and Properties}
+\paragraph{Critical Indexes}
+Let us name an index $i$ critical if:
+\begin{equation*}
+    \Pr[i \in \bigcap^{k}_{j=1}{X_j}] > \frac{\epsilon}{n}
+\end{equation*}
+This is a global term (not for a specific player).
+\paragraph{The Protocol}
+The protocol is pretty simple and straight-forward using the fact that there is a small number of zeros in the input.
+\begin{enumerate}[(1)]
+    \item Without any communication, the players calculate what are the critical indexes (using the knowledge about the distribution but not about any current input): $U = \{i | \Pr[i \in \bigcap^{k}_{j=1}{X_j}] > \frac{\epsilon}{n}\}$.
+    \item Every player $j$ sends the indexes of his critical zeros to the coordinator: $Y_j= U \setminus X_j$
+    \item The coordinator declares intersection iff $\bigcup_j Y_j \neq U$.
+\end{enumerate}
+\paragraph{Communication}
+The only communication done in this protocol is done in stage 2. 
+In this stage, every player sends his critical zeros. 
+We should calculate the expectation for the number of critical zeros for all players and pay $\log(n)$ for each one. \newline
+Let us examine a specific critical index $i$. \newline
+Let us denote:
+\begin{equation*}
+    p_{ij} = \Pr[i \in X_j]
+\end{equation*}
+By definition of critical index
+\begin{equation*} 
+    \Pr[i \in \bigcap^{k}_{j=1}{X_j}] > \frac{\epsilon}{n}
+\end{equation*}
+Since $\mu$ is a product distribution
+\begin{equation*} 
+    \Pr[i \in \bigcap^{k}_{j=1}{X_j}] = \prod_{j=1}^{k}p_{ij}
+\end{equation*}
+Combining these two equations:
+\begin{equation*} 
+    \prod_{j=1}^{k}p_{ij} > \frac{\epsilon}{n}
+\end{equation*}
+Using Lagrange multipliers:
+\begin{equation*}
+    \sum_{j=1}^{k}p_{ij} \geq k \left(\frac{\epsilon}{n} \right)^{\frac{1}{k}}
+\end{equation*}
+At this point, let us examine the zeros in index i
+\begin{equation*}
+    \mathop{\mathbb{E}}[\text{Zeros in i}] = k - \sum_{j=1}^{k}p_{ij} \leq k \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right)
+\end{equation*}
+The total number of zeros:
+\begin{equation*}
+    \mathop{\mathbb{E}}[\text{Zeros}] = \sum_{i=1}^n\mathop{\mathbb{E}}[\text{Zeros in i}] \leq nk\left(1-\left(\frac{\epsilon}{n}\right)^{1/k}\right)
+\end{equation*}
+Using log definition
+\begin{equation*}
+    nk\left(1-\left(\frac{\epsilon}{n}\right)^{1/k}\right) = nk\left(1-e^{\frac{\log{\frac{\epsilon}{n}}}{k}}\right)
+\end{equation*}
+since $k \in \omega(\log(n))$
+\begin{equation*}
+    \frac{\log{\frac{\epsilon}{n}}}{k} = -\frac{\log{\frac{n}{\epsilon}}}{k} \rightarrow 0^{-}
+\end{equation*}
+Now we can use the limit $x \sim 1-e^x$ for $x \rightarrow 0^{-}$ 
+\begin{equation*}
+      nk\left(1-e^{\frac{\log{\frac{\epsilon}{n}}}{k}}\right) \sim nk\frac{\log{\frac{n}{\epsilon}}}{k} = n\log{\frac{n}{\epsilon}}
+\end{equation*}
+So total expected communication complexity for this protocol is
+\begin{equation*}
+    k + n\log{\frac{n}{\epsilon}}\log n
+\end{equation*}
+\paragraph{Error}
+We error only if there is an intersection outiside important indexes (in this case we falsly output disjoint).
+\begin{equation*}
+    \Pr[\text{ERROR}] = \Pr[\bigcup_{i \notin U} \{i \in \bigcap_j X_j\}]
+\end{equation*}
+Using union bound
+\begin{equation*}
+    \Pr[\bigcup_{i \notin U} \{i \in \bigcap_j X_j\}]\leq \sum_{i \notin U} \Pr[i \in \bigcap_j X_j] 
+\end{equation*}
+Using the definition of uncritical index $\Pr[i \in \bigcap^{k}_{j=1}{X_j}] \leq \frac{\epsilon}{n}$
+\begin{equation*}
+    \sum_{i \notin U} \Pr[i \in \bigcap_j X_j] \leq n\frac{\epsilon}{n} = \epsilon
+\end{equation*}
+\begin{claim}
+TODO-Move to appendix? \newline
+For $p_1, p_2, ... , p_k \in [0,1]$ \newline
+If
+\begin{equation*}
+    \prod_{i=1}^{k}p_i \geq \frac{\epsilon}{n}
+\end{equation*}
+We can know that
+\begin{equation*}
+    \sum_{i=1}^{k}p_i \geq k\left(\frac{\epsilon}{n}\right)^{1/k}
+\end{equation*}
+\end{claim}
+\begin{proof}
+By lagrange multipliers let us denote a target function 
+\begin{equation*}
+    f(x_1, ... , x_k) = \sum_{i=1}^{k}x_i
+\end{equation*}
+A constraint function
+\begin{equation*}
+    g(x_1, ... , x_k) = \prod_{i=1}^{k}x_i - \frac{\epsilon}{n} 
+\end{equation*}
+Lagrange function
+\begin{equation*}
+    \mathcal{L}(x_1, ... , x_k, \lambda) = \sum_{i=1}^{k}x_i - \lambda\left(\prod_{i=1}^{k}x_i - \frac{\epsilon}{n}  \right)
+\end{equation*}
+\begin{align*}
+    \frac{\partial\mathcal{L}}{\partial x_i} = 1 - \lambda\prod_{j \neq i}x_j  \\
+    \frac{\partial\mathcal{L}}{\partial \lambda} = \prod_{i=1}^{k}x_i - \frac{\epsilon}{n}
+\end{align*}
+By (2):
+\begin{align*}
+    \prod_{i=1}^{k}x_i = \frac{\epsilon}{n} \\
+    1 = \frac{\lambda\frac{\epsilon}{n}}{x_i} \\ 
+    x_i = \lambda\frac{\epsilon}{n} \\
+    \left(\lambda\frac{\epsilon}{n}\right)^k = \frac{\epsilon}{n} \\
+    \lambda = \left(\frac{\epsilon}{n}\right)^{\frac{1}{k} - 1} \\
+    x_i = \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}} \\
+    f_{\text{min}} = k\left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}
+\end{align*}
+\end{proof}

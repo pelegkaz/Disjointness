@@ -1,0 +1,31 @@
+\section{The Protocol}
+
+For a given product distribution $\mu : \left(\set{0,1}^N\right)^k \rightarrow [0,1]$, we describe a protocol that errs with probability $\epsilon$.
+Our protocol uses public randomness and has $\tilde{O}(kN^{1-\frac{1}{k}})$ bits of expected communication.
+
+Initially, $U = [N]$, and $n = |U| = N$.
+The protocol proceeds in iterations, and in each iteration, we either halt and output 0,
+or we reduce the size of the universe by a $1/N^{1/k}$-fraction.
+Eventually, when $|U| \leq N^{1-1/k}$, each player $i$ announces $x_i \cap U$.
+We then halt and output 1 if $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$, or 0 otherwise.
+
+Each iteration proceeds as follows:
+
+\begin{enumerate}[(1)]
+  \item Termination condition: if $|U| \leq N^{1 - 1/k}$, each player $i$ sends $x_i$ to the coordinator, who computes and outputs the answer. 
+  \item Otherwise, the coordinator asks each player $i$ whether $i$ is significant in $U$ (i.e., whether $\gamma_i(x_i, U) \geq \eps / kN^{1-\frac{1}{k}}$).
+  \item If no player is significant, the coordinator outputs ``not disjoint''. Otherwise, let $i$ be the
+    first significant player. The coordinator informs every player that player $i$ has been selected.
+  \item The coordinator and the players use the public randomness to sample \TODO{how many needed?}
+    sets $A_{i-1}^{(1)},\ldots$ from the distribution of $\rv{A}_{i-1}(U)$.
+  \item Player $i$ finds the index $j$ of the first set $A_{i-1}^{(j)}(U)$ such that player $i$ is critical.
+    It sends the index $j$ to the coordinator, who forwards it to the other players.
+  \item The participants use the protocol from lemma 2.1 in order to discover $B \subseteq A_{i-1}^{(j)} \setminus X_i $ where $ |B| > \frac{n^{1/k}}{2}$ 
+  \item All participants set:
+    \begin{itemize}
+      \item $U \leftarrow U \setminus B$,
+      \item $n \leftarrow |U|$,
+      \item $x_i \leftarrow x_i \cap U$,
+      \item $\mu \leftarrow \mu $ (not updated)
+    \end{itemize}
+\end{enumerate}
