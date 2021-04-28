@@ -1,0 +1,93 @@
+\section{Sequential Point of View}
+\label{sec:seq_disj}
+
+Consider a process where we start with some universe $U$ (where $\bigcap_{i = 1}^k x_i \subseteq U$),
+and gradually intersect it with more and more players' inputs, 
+obtaining a sequence of sets
+\begin{equation*}
+    \bigcap_{j = 1}^k x_j = U \cap \bigcap_{j = 1}^k x_j \subseteq  U \cap \bigcap_{j = 1}^{k-1} x_j \subseteq \ldots \subseteq  U \cap x_1 \cap x_2 \subseteq  U \cap x_1 \subseteq U
+\end{equation*}
+Let us denote these sets $A_i(U) = U \cap (\bigcap_{j \leq i} x_j)$ (and in particular, $A_0(U) = U$).
+\begin{equation*}
+    \bigcap_{j = 1}^k x_j = A_k(U) \subseteq A_{k-1}(U) \subseteq \ldots \subseteq A_1(U) \subseteq A_0(U) = U
+\end{equation*}
+
+We omit the universe $U$ from our notation when it is clear from the context. \newline
+Pay attention that any element that is missing from some $A_i$ is definitely not in the intersection.
+Our goal is to try to find two consecutive sets $A_i, A_{i+1}$ such that $A_{i+1}$ is \emph{significantly smaller} than $A_i$,
+and then use this fact to eliminate many elements from consideration, reducing the universe size.
+
+\begin{definition}
+  With respect to a universe $U \subseteq [N]$ of size $n = |U| > 0$ and inputs $x_1,\ldots,x_k \subseteq [N]$,
+  we say that an index $i \in [k]$ is \emph{good} if
+  \begin{enumerate}
+    \item $|A_i(U)| / |A_{i-1}(U)| < 1/n^{1/k}$, and
+    \item $|A_{i-1}(U)| \geq n^{1-(i-1)/k}$.
+  \end{enumerate}
+  \label{def:good}
+\end{definition}
+
+\begin{lemma}
+  Fix a universe $U \subseteq [N]$ of size $|U| = n > 0$ and inputs $x_1,\ldots,x_k \subseteq [N]$,
+  and suppose that $\bigcap_{i = 1}^k x_i = \emptyset$.
+  Then there is some good index $i \in [k]$.
+  \label{lemma:narrow}
+\end{lemma}
+\begin{proof}
+  We first prove that there is an index $j \in [k]$ that satisfies the first property in Def.~\ref{def:good}, and then we show
+  that the minimal such index $j$ also has the second property.
+
+  Let $j \in [k]$ be the maximal index such that 
+  \begin{equation*}
+    A_{j-1} \neq \emptyset.
+  \end{equation*}
+  There is such a $j$, because $A_0 = U \neq \emptyset$.
+
+  Observe that $A_{j} = \emptyset$:
+  if $j < k$ then this is immediate (otherwise $j$ would not be maximal),
+  and
+  if $j = k$, then $A_j = A_k = U \cap \bigcap_{i=1}^k x_i = \emptyset$ by assumption.
+  Thus,
+  \begin{equation*}
+    \frac{|A_j|}{|A_{j-1}|} = \frac{0}{|A_{j-1}|} = 0 < \frac{1}{n^{1/k}},
+  \end{equation*}
+  so we know that (1) holds for $j$.
+
+
+  Let $j^{\ast}$ denote the minimal index in $[k]$ that satisfies (1).
+  Because of its minimality, for all $i \in [j^\ast-1]$ we have
+  \begin{equation*}
+    \frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{1/k}}.
+  \end{equation*}
+  Therefore,
+  \begin{align*}
+    \frac{|A_{j^\ast - 1}|}{|A_0|} = 
+    \frac{|A_{j^\ast - 1}|}{|A_{j^\ast-2}|} \cdot \frac{|A_{j^\ast-2}|}{|A_{j^\ast-3}|} \cdot \ldots \cdot \frac{|A_1|}{|A_0|}
+    \geq
+    \left(  \frac{1}{n^{1/k}} \right)^{j^\ast - 1}
+    =
+    \frac{1}{n^{\frac{j^\ast - 1}{k}}}.
+  \end{align*}
+  Since $|A_0| = n$, 
+  \begin{align*}
+    |A_{j^\ast - 1}| \geq n^{1 - \frac{j^\ast-1}{k}}.
+  \end{align*}
+\end{proof}
+
+Let $D_i(U)$ be an indicator for the event that $\bigcap_{j = 1}^k x_j = \emptyset$ and in addition $i$ is a good index
+with respect to the universe $U$.
+The lemma implies that for any $U \subseteq [n]$ and inputs $x_1,\ldots,x_n$ such that $\bigcap_{i = 1}^k x_i \subseteq U$,
+we have
+$\bigcap_{i = 1}^k x_i = \emptyset$
+iff $\bigvee_{i = 1}^k D_i(U) = 1$.
+As usual, we omit the universe $U$ from our notation where possible.
+
+\paragraph{Significant players.}
+A player $i \in [k]$ does not know whether or not $i$ is good,
+as this depends on the inputs of the other players.
+However, player $i$ can compute the \emph{probability} that the conditions hold:
+define
+\begin{equation*}
+  \gamma_i = \gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[ D_i(U) \given \rv{X}_i = x_i \right].
+\end{equation*}
+We say that player $i$ is \emph{significant} if $\gamma_i \geq \eps / (kN^{1-1/k})$.
