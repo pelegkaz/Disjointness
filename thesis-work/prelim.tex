@@ -71,3 +71,17 @@ For and $f, \mu$ and $\epsilon > 0$,
 
 
 \section{Information Theory}
+\begin{definition}
+KL-Divergence for $D_{KL}(\Dfrac{a}{b})$ is defined by
+\begin{equation*} 
+    D_{KL}(\Dfrac{a}{b}) = \sum_{x \in \Omega} a(x)\log \left(\frac{a(x)}{b(x)}\right)
+\end{equation*}
+
+\begin{lemma}
+    For $X, Y, Z$ random variables
+    \begin{equation*}
+        I(X;Y|Z) = \mathbb{E}_{Y,Z}[D_{KL}\left(\Dfrac{X|Y,Z}{X|Z}\right)]
+    \end{equation*}
+\end{lemma}
+
+\end{definition}

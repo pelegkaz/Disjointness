@@ -8,22 +8,6 @@ We are going to bound the information cost for a protocol that solves $AND_k$. O
 2 - Distinguishing this input is leaking some information (specifically KL-Divergence) \newline
 3 - Concluding this for the general information cost of the protocol \newline
 \paragraph{Definitions}
-
-\begin{definition}
-KL-Divergence for $D_{KL}(\Dfrac{a}{b})$ is defined by
-\begin{equation*} 
-    D_{KL}(\Dfrac{a}{b}) = \sum_{x \in \Omega} a(x)\log \left(\frac{a(x)}{b(x)}\right)
-\end{equation*}
-
-\begin{lemma}
-    For $X, Y, Z$ random variables
-    \begin{equation*}
-        I(X;Y|Z) = \mathbb{E}_{Y,Z}[D_{KL}\left(\Dfrac{X|Y,Z}{X|Z}\right)]
-    \end{equation*}
-\end{lemma}
-
-\end{definition}
-
 \begin{definition}
     Denote two sets of transcripts: \newline
     $T_1$ - transcripts which are ended with positive answers (there is an intersection). \newline

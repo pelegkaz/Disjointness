@@ -36,4 +36,11 @@
 \theoremstyle{plain}
 
 \renewcommand{\include}{\input}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\DeclareMathOperator{\poly}{poly}
 
+\newcommand{\Dfrac}[2]{%
+  \ooalign{%
+    $\genfrac{}{}{1.2pt}1{#1}{#2}$\cr%
+    $\color{white}\genfrac{}{}{.4pt}1{\phantom{#1}}{\phantom{#2}}$}%
+}
