@@ -2,9 +2,8 @@
 For a vector $x$ of length $n$, we let $x_{-i}$ denote the vector of length $n-1$ obtained by dropping the $i$-th coordinate of $x$ (where $i \in [n]$).
 
 \paragraph{Communication complexity.}
-The \emph{communication complexity} of a protocol $\Pi$ (randomized or deterministic), denoted by $\CC(\Pi)$, is defined as the maximum total number of bits
-sent by the players to the referee in any execution of the protocol on any input.%
-\footnote{Another reasonable definition for randomized protocols is to take the maximum over all inputs of the \emph{expected} total number of bits sent. For two players this is asymptotically equivalent to the definition above~\cite{KN96}. For $k > 2$ players, the expectation may be smaller than the maximum by a factor of $\log(k)$.}
+The \emph{communication complexity} of a protocol $\Pi$ (randomized or deterministic), denoted by $\CC(\Pi)$, is defined as the maximum total number of bits of communication
+sent in any execution of the protocol on any input.
 
 For a function $f$, the \emph{deterministic communication complexity of $f$} is defined as
 \begin{equation*}
@@ -15,7 +14,7 @@ where the minimum is taken over all deterministic protocols that compute $f$ wit
 	\Rsim_\eps(f) = \min_{\Pi : \text{$\Pi$ computes $f$ with error $\eps$}} \CC(\Pi).
 \end{equation*}
 
-\pragraph{Distributional v.s. Randomized}
+\paragraph{Distributional v.s. Randomized}
 The following is a direct relations among randomized communication complexity and distributional communication complexity
 \begin{theorem}
 For and $f, \mu$ and $\epsilon > 0$,
@@ -23,3 +22,11 @@ For and $f, \mu$ and $\epsilon > 0$,
 	R_{\epsilon}(f)\geq R^{pub}_{\epsilon}(f)\geq D^{\mu}_{\epsilon}(f),
 \end{equation*}
 \end{theorem}
+
+\paragraph{Multi-party Communcation Complexity}
+Let $f$ be a boolean function defined on $k$ inputs with the same length $n$.
+\begin{equation*}
+    f: \{0, 1\}^{nk} \rightarrow \{0, 1\}
+\end{equation*}
+We usually denote $f(x_1, ... , x_k)$ where $x_i \in \{0, 1\}^{n}$. \newline
+k parties wish to collaboratively evaluate f; the ith party knows only her input argument $x_i$; and each party has unlimited computational power. They share a blackboard, viewed by all parties, where they can exchange messages. The objective is to minimize the number of bits written on the board.
