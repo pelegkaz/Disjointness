@@ -1,15 +1,47 @@
-\paragraph{Notation.}
+\section{Notation}
 For a vector $x$ of length $n$, we let $x_{-i}$ denote the vector of length $n-1$ obtained by dropping the $i$-th coordinate of $x$ (where $i \in [n]$).
 
-\paragraph{Communication complexity.}
-The \emph{communication complexity} of a protocol $\Pi$ (randomized or deterministic), denoted by $\CC(\Pi)$, is defined as the maximum total number of bits of communication
-sent in any execution of the protocol on any input.
-
-For a function $f$, the \emph{deterministic communication complexity of $f$} is defined as
+\section{Multi-party Communication complexity}
+\paragraph{Multi-party Protocol}
+Let $f$ be a boolean function defined on $k$ inputs with the same length $n$.
 \begin{equation*}
-	\Dsim(f) = \min_{\Pi} \CC(\Pi),
+    f: \{0, 1\}^{nk} \rightarrow \{0, 1\}
 \end{equation*}
-where the minimum is taken over all deterministic protocols that compute $f$ with no errors. The \emph{private-coin $\eps$-error communication complexity of $f$} is defined as
+We usually denote $f(x_1, ... , x_k)$ where $x_i \in \{0, 1\}^{n}$. \newline
+k parties wish to collaboratively evaluate f; the ith party knows only her input argument $x_i$; and each party has unlimited computational power. They share a blackboard, viewed by all parties, where they can exchange messages. The objective is to minimize the number of bits written on the board. 
+
+\paragraph{Multi-party Variations}
+There are two variations of multi-party protocol which will not be discussed in this paper:
+\begin{itemize}
+    \item NOF (Number on Forhead) - Every party knows each input argument except hers.
+    \item Coordinator (Different communication scheme) - There is additional party named "coordinator" which has private communication channel with each player. 
+\end{itemize}
+
+\paragraph{Deterministic Communication Complexity}
+For a function $f$, let $\Pi$ be a deterministic protocol
+computing it. Given inputs $x = (x_1, . . . , x_k)$ we denote the transcript by $\Pi(x)$. The cost of
+$\Pi$ is the maximal length of a transcript:
+\begin{equation*}
+    \CC(\Pi) = \max_x(|\Pi(x)|)    
+\end{equation*}
+The \emph{deterministic communication complexity} of a function $f$ is denoted by $D(f)$ and is the minimal cost of a protocol
+computing f:
+\begin{equation*}
+    D(f) = \min_\Pi(\CC(\Pi))
+\end{equation*}
+where the minimum is taken over all deterministic protocols that compute $f$ with no errors.
+
+\paragraph{Randomized Communication Complexity} Randomized protocol is a protocol in which every player in addition to his input can use a random string to determine his message. The are two models of randomized communication complexity, based on whether or not the strings used by the different players are the same or not (public or private coins). \newline
+We say that a protocol computes a function $f$ with error up to $\epsilon$ if 
+\begin{equation*}
+    \Pr_R[\pi(x;R) \text{ computes $f$ incorrectly}] \leq \epsilon 
+\end{equation*}
+where $R$ is the random string (private or public). \newline
+For random protocols we define $\CC(\Pi)$ as the expected length of $\Pi$.
+\begin{equation*}
+    \CC(\Pi) = \max_x(\mathbb{E}_{R}[|\pi(x, R)|])
+\end{equation*}
+The \emph{private-coin $\eps$-error communication complexity of $f$} is defined as
 \begin{equation*}
 	\Rsim_\eps(f) = \min_{\Pi : \text{$\Pi$ computes $f$ with error $\eps$}} \CC(\Pi).
 \end{equation*}
@@ -23,10 +55,5 @@ For and $f, \mu$ and $\epsilon > 0$,
 \end{equation*}
 \end{theorem}
 
-\paragraph{Multi-party Communcation Complexity}
-Let $f$ be a boolean function defined on $k$ inputs with the same length $n$.
-\begin{equation*}
-    f: \{0, 1\}^{nk} \rightarrow \{0, 1\}
-\end{equation*}
-We usually denote $f(x_1, ... , x_k)$ where $x_i \in \{0, 1\}^{n}$. \newline
-k parties wish to collaboratively evaluate f; the ith party knows only her input argument $x_i$; and each party has unlimited computational power. They share a blackboard, viewed by all parties, where they can exchange messages. The objective is to minimize the number of bits written on the board.
+
+\section{Information Theory}
