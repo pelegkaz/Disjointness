@@ -6,8 +6,10 @@ For all product distributions $\mu$,
     D^{\mu}(\text{DISJ}_n) \in O(\sqrt{n}\log{n})
 \end{equation*}
 \end{theorem}
-They presented a protocol that maintains a universe set $U$ where $\bigcup_{i=1}^k X_i \subseteq U$. The protocol operates in iterations where in every iteration it reduces the universe's size. \newline
-The protocol uses the fact that the input's distribution is a product distribution in the way its reduces the universe's size: \newline
+They presented a protocol that maintains a universe set $U$ where $\bigcup_{i=1}^k X_i \subseteq U$ throughout the protocol. \newline
+The protocol operates in iterations where in every iteration it reduces the universe's size. \newline
+The fact that the input's distribution is a product distribution is used in the part it reduces the universe's size.
+Every iteration operates as follows: \newline
 \begin{enumerate}
     \item If Alice or Bob has a small input, calculate the precise solution and halt.
     \item Bob calculate the probability for disjointness in the current universe over Alice's input distribution (Bob knows his own input).
@@ -15,4 +17,6 @@ The protocol uses the fact that the input's distribution is a product distributi
     \item Otherwise, Bob finds in the public randomness a sample of Alice's input which is disjoint to his and sends the index of the sample to Alice.
     \item They both reduce the universe by the sample set (which is disjoint to Bob's input).
 \end{enumerate}
-In this protocol there are few important points. it depends strongly on the fact that we are in product distribution settings. It uses this fact where Bob can calculate the probability for disjointness given its input and also both of them can sample Alice's input using the public randomness. Moreover, the index of the sample is short since the probability for disjointness isn't insignificant.
+In this protocol there are few important points. It depends strongly on the independence of the inputs where firstly Bob can calculate the probability for disjointness given its input and secondly both of them can sample Alice's input using the public randomness. Moreover, the index of the sample is short since the probability for disjointness isn't insignificant. \newline
+This protocol is not easily extended to multiplayer settings since in multiplayer, we need somehow choose who talks and which event's probability is used. \newline
+In the following paper, I tried to solve this issue using a sequential point of view for the disjointness problem.
