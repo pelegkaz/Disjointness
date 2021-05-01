@@ -1,2 +1,25 @@
 \paragraph{Notation.}
 For a vector $x$ of length $n$, we let $x_{-i}$ denote the vector of length $n-1$ obtained by dropping the $i$-th coordinate of $x$ (where $i \in [n]$).
+
+\paragraph{Communication complexity.}
+The \emph{communication complexity} of a protocol $\Pi$ (randomized or deterministic), denoted by $\CC(\Pi)$, is defined as the maximum total number of bits
+sent by the players to the referee in any execution of the protocol on any input.%
+\footnote{Another reasonable definition for randomized protocols is to take the maximum over all inputs of the \emph{expected} total number of bits sent. For two players this is asymptotically equivalent to the definition above~\cite{KN96}. For $k > 2$ players, the expectation may be smaller than the maximum by a factor of $\log(k)$.}
+
+For a function $f$, the \emph{deterministic communication complexity of $f$} is defined as
+\begin{equation*}
+	\Dsim(f) = \min_{\Pi} \CC(\Pi),
+\end{equation*}
+where the minimum is taken over all deterministic protocols that compute $f$ with no errors. The \emph{private-coin $\eps$-error communication complexity of $f$} is defined as
+\begin{equation*}
+	\Rsim_\eps(f) = \min_{\Pi : \text{$\Pi$ computes $f$ with error $\eps$}} \CC(\Pi).
+\end{equation*}
+
+\pragraph{Distributional v.s. Randomized}
+The following is a direct relations among randomized communication complexity and distributional communication complexity
+\begin{theorem}
+For and $f, \mu$ and $\epsilon > 0$,
+\begin{equation*}
+	R_{\epsilon}(f)\geq R^{pub}_{\epsilon}(f)\geq D^{\mu}_{\epsilon}(f),
+\end{equation*}
+\end{theorem}
