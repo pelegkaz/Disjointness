@@ -1,0 +1,43 @@
+\section{k-n relation analysis}
+Let us pay attention that the mentioned upper bound may be not significant in some cases. Let us pay attention to the case in which $k = \alpha\log(n)$.
+\begin{equation*}
+    n^{1/k} = n^{\frac{1}{\alpha\log(n)}} = 2^{\frac{\log(n)}{\alpha\log(n)}} = 2^{1/\alpha}
+\end{equation*}
+In this case
+\begin{equation*}
+    n^{1-\frac{1}{k}} > n/2 \in \Omega(n)
+\end{equation*}
+It may seems that our protocol is not very helpful in this case. \newline
+Let us consider even bigger number of players: $k \in \omega(\log(n))$. \newline
+Now things act differently - For hard distribution most of the elements in the players' input should be 1. 
+\section{$O(k + n\log^{2}(n))$-Protocol}
+Let us present a protocol which is useful only where we have many players ($k \in \omega(\log(n))$. In this case, most of the bits in our input should be 1's. For simplicity, let us denote
+\begin{equation*}
+    k = \log(n) \alpha(n)
+\end{equation*}
+
+
+\section{Extra}
+\paragraph{Binary Distribution}
+Let us consider a specific interesting distribution for $n = 2^{k-1}$. We think of $X_i \subseteq \{0, 1, ... , n-1\} $ \newline
+For $i \in [k-1]$
+  \[
+    X_i=\left\{
+                \begin{array}{ll}
+                  \{0 \leq m \leq n-1 \| m_{i-1} = 0\} \text{ w.p 0.5} \\
+                  \{0 \leq m \leq n-1 \| m_{i-1} = 1\} \text{ w.p 0.5}
+                \end{array}
+              \right.
+  \]
+and for $i = k$
+  \[
+    X_k=\left\{
+                \begin{array}{ll}
+                  \{0 \leq m \leq n-1 \| \underset{i=1}{\overset{k-1}{\oplus}} m_i = 0\} \text{ w.p 0.5} \\
+                  \{0 \leq m \leq n-1 \| \underset{i=1}{\overset{k-1}{\oplus}} m_i = 1\} \text{ w.p 0.5}
+                \end{array}
+              \right.
+  \]
+where $m_i$ is the $i$'th bit of m in binary representation. ($m_i \mathrel{\mathop:}= ( m \mathop{\&} 2^{i-1} ) \gg i-1 $). \\
+Let us pay attention for some simple properties. First of all $\forall_i |X_i| = \frac{n}{2}$. Moreover, it does not matter if we permute the players, for $i < k, |A_i| = 0.5|A_{i-1}|$ and generally for $i < k, |A_i| = 2^{k-1-i}$. $\Pr[DISJ] = 0.5$. The thing is that this distribution has a little entropy ($k$).
+\section{Appendix}
