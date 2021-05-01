@@ -45,7 +45,21 @@ The \emph{private-coin $\eps$-error communication complexity of $f$} is defined 
 \begin{equation*}
 	\Rsim_\eps(f) = \min_{\Pi : \text{$\Pi$ computes $f$ with error $\eps$}} \CC(\Pi).
 \end{equation*}
+The \emph{public-coin $\eps$-error communication complexity of $f$} is defined similarly and denoted $R^{pub}_{\epsilon}(f)$.
 
+\paragraph{Distributional Communication Complexity} For a distribution $\mu$ over the inputs $\{0,1\}^{nk}$ and $\eps > 0$, $\Pi$ is a \emph{$\mu$-distributional $\eps$-error protocol of $f$} if 
+\begin{equation*}
+    \Pr_{x \sim \mu}[\Pi(x) \text{ computes $f$ incorrectly}] \leq \eps
+\end{equation*}
+The length of such protocol is 
+\begin{equation*}
+    |\Pi| = \mathbb{E}_{x \sim \mu}[\Pi(x)]
+\end{equation*}
+The \emph{$\mu$-distributional $\eps$-error communication complexity of $f$} defined as 
+\begin{equation*}
+    D^{\mu}_{\epsilon}(f) = \min_{\text{$\Pi$: $\mu$-distributional $\eps$-error}}(|\Pi|)
+\end{equation*}
+In this paper, we allow distributional protocol use random strings.
 \paragraph{Distributional v.s. Randomized}
 The following is a direct relations among randomized communication complexity and distributional communication complexity
 \begin{theorem}
