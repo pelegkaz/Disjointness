@@ -1,0 +1,81 @@
+# LaTeX auxiliary files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.lb
+
+# Intermediate documents
+*.dvi
+*.xdv
+*-converted-to.*
+
+# Bibliography auxiliary files
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# Build tool auxiliary files
+*.fdb_latexmk
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+*.pdfsync(busy)
+
+# Build tool directories
+latex.out/
+
+# Package-specific auxiliary files
+*.alg
+*.loa
+*.acn
+*.acr
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.maf
+*.mtc*
+*.slf*
+*.slt*
+*.stc*
+*.nlg
+*.nlo
+*.nls
+*.tdo
+*.lol
+*.nav
+*.snm
+*.vrb
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex.gz(busy)
+
+# Editor backup files
+*~
+*.bak
+*.sav
+*.backup
+*.tmp
+*.swp
+*.swo
+*.DS_Store
+
+# Output files
+*.pdf
+*.ps
+*.eps

@@ -87,6 +87,196 @@
 
 \maketitle
 
+
+\section{Introduction}
+Yao's two-party communication complexity is a well-studied model. The most simple settings are the deterministic settings. In these settings, we want to find an algorithm that gets the exact solution for every input. This model has two somewhat similar extensions. The first one is the randomized settings. In this model, every player gets a random string (private or public) and can use it in the protocol. In this case, we want the protocol to solve the problem with an error of up to $\epsilon$ (over the randomized strings). \newline
+Another model is when the inputs themselves are randomized. In this model, we need to design a protocol that solves the problem with an error of up to $\epsilon$ for every distribution on the inputs. Another interesting problem is to design a protocol that solves the problem for every product distribution (in which the players' inputs are independent. \newline
+One of the most important problems (sometimes called the "mother of problems") is the Set Disjointness problem. In this problem, every player gets an n-bit array and they are asked whether there is an index $i$ where the $i$'th bit is turned on in all of their inputs. \newline
+This problem has been studied thoroughly on different models. It has been proved that every randomized protocol must use $\Omega(n)$ in order to achieve constant error bound from $\frac{1}{2}$.  Also, it has been proved that the distributional communication complexity of this problem is also $\Omega(n)$ using the corruption methods. Another interesting question is what happens when we limit ourselves to product distribution. In this case, a tight bound of $\Theta(\sqrt(n))$ has been proved but only for two players. \newline
+In this paper, we tried to expand this bound for every number of players $k$. We have succeeded to prove the upper bound of $O(kn^{\frac{1}{k}})$. 
+In the two-player protocol, Bob reveals a large number of his zeros to Alice using the public randomness and the fact that the inputs are drawn from known product distribution. This method is not easy to generalize since every player may eliminate $\frac{n}{k}$ zeros 
+\subsection{----}
+
+\begin{lemma}
+  Suppose we have a set $A \subseteq [N]$ which is known to all players, and a set $A_i \subseteq A$ that is known to some player $i \in [k]$.
+  Let $m, n \in \nat$ be such that $m \leq |A| \leq n$, and assume further that $|A_i| \leq |A|/m$.
+  Then there is a deterministic protocol where only player $i$ speaks,
+  that allows all players to learn a set $B \subseteq A \setminus A_i$
+  of size $|B| \geq m/2$,
+  using $\log n$ bits of communication.
+  \label{lemma:reveal_zeroes}
+\end{lemma}
+\begin{proof}
+  Fix in advance a partition of $A$ into sets $B_1,\ldots,B_{\ell}$,
+  where $|B_j| = m/2$ for each $j = 1,\ldots,\ell-1$,
+  and the last set has size $m/2 \leq B_{\ell} \leq m - 1$.
+  Note that we have $\ell > |A_i|$: \newline
+  each $B_j$ comprises $m/2$ elements, therefore:
+  \begin{equation*}
+    \ell \geq \frac{|A|}{m/2} - 1
+  \end{equation*}
+  
+  Simplifying the expression and using $A_i$'s size assumption:
+  \begin{equation*}
+    \frac{|A|}{m/2} - 1 =  2\frac{|A|}{m} - 1 > \frac{|A|}{m} \geq |A_i|.
+  \end{equation*}
+   
+  
+  Therefore, there exists $j \in [\ell]$ such that $B_j \cap A_i = \emptyset$:
+  assume by contradiction that $A_i$ intersects all $\ell$ sets $B_1,\ldots,B_{\ell}$. 
+  \begin{equation*}
+  |A_i| = |\bigcup_{j=1}^{\ell}\left(B_j \cap A_i \right)| \geq \sum_{j=1}^{\ell} |B_j \cap A_i| \geq \sum_{j=1}^{\ell}1 = \ell
+  \end{equation*}
+
+  The protocol is therefore to have player $i$ send the index $j \in [\ell]$ of a set $B_j$
+  such that $A_i \cap B_j = \emptyset$.
+  The requirements are satisfied: we have $B_j \subseteq A \setminus A_i$,
+  and $|B_j| \geq m / 2$.
+  Specifying the index $j$ requires $\log \ell \leq \log n$ bits.
+  
+\end{proof}
+
+
+
+\subsection{Overview of the Protocol}
+Throughout the protocol, we maintain a \emph{universe}, $U \subseteq [N]$,
+with the property that $\bigcap_i x_i \subseteq U$.
+Initially, $U = [N]$.
+
+The protocol operates in \emph{iterations}, where each iteration has two possible outcomes:
+\begin{enumerate}[I.]
+  \item We eliminate at least a $1/\Theta(|U|^{1/k})$-fraction of elements from $U$
+  \item We halt and guess 0 as the answer. This output is not always correct, but it is correct with high probability over the inputs.
+\end{enumerate}
+The protocol operates in iterations until the universe is small enough ($|U| < N^{\frac{1}{k}}$). This happens after at most $4N^{1 - 1/k}$ iterations. At this point each player $i$ shares his input $x_i \cap U$,
+and the players calculate the exact answer and output it (output 1 iff $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$). \newline
+\newline
+Let us dive in to the method to eliminate a significant fraction of elements from the universe.
+
+\paragraph{Finding a player that can reduce the universe size.}
+Consider a process where we start with some universe $U$ (where $\bigcap_{i = 1}^k x_i \subseteq U$),
+and gradually intersect it with more and more players' inputs, 
+obtaining a sequence of sets
+\begin{equation*}
+    \bigcap_{j = 1}^k x_j = U \cap \bigcap_{j = 1}^k x_j \subseteq  U \cap \bigcap_{j = 1}^{k-1} x_j \subseteq \ldots \subseteq  U \cap x_1 \cap x_2 \subseteq  U \cap x_1 \subseteq U
+\end{equation*}
+Let us denote these sets $A_i(U) = U \cap (\bigcap_{j \leq i} x_j)$ (and in particular, $A_0(U) = U$).
+\begin{equation*}
+    \bigcap_{j = 1}^k x_j = A_k(U) \subseteq A_{k-1}(U) \subseteq \ldots \subseteq A_1(U) \subseteq A_0(U) = U
+\end{equation*}
+
+We omit the universe $U$ from our notation when it is clear from the context. \newline
+Pay attention that any element that is missing from some $A_i$ is definitely not in the intersection.
+Our goal is to try to find two consecutive sets $A_i, A_{i+1}$ such that $A_{i+1}$ is \emph{significantly smaller} than $A_i$,
+and then use this fact to eliminate many elements from consideration, reducing the universe size.
+
+\begin{definition}
+  With respect to a universe $U \subseteq [N]$ of size $n = |U| > 0$ and inputs $x_1,\ldots,x_k \subseteq [N]$,
+  we say that an index $i \in [k]$ is \emph{good} if
+  \begin{enumerate}
+    \item $|A_i(U)| / |A_{i-1}(U)| < 1/n^{1/k}$, and
+    \item $|A_{i-1}(U)| \geq n^{1-(i-1)/k}$.
+  \end{enumerate}
+  \label{def:good}
+\end{definition}
+
+\begin{lemma}
+  Fix a universe $U \subseteq [N]$ of size $|U| = n > 0$ and inputs $x_1,\ldots,x_k \subseteq [N]$,
+  and suppose that $\bigcap_{i = 1}^k x_i = \emptyset$.
+  Then there is some good index $i \in [k]$.
+  \label{lemma:narrow}
+\end{lemma}
+\begin{proof}
+  We first prove that there is an index $j \in [k]$ that satisfies the first property in Def.~\ref{def:good}, and then we show
+  that the minimal such index $j$ also has the second property.
+
+  Let $j \in [k]$ be the maximal index such that 
+  \begin{equation*}
+    A_{j-1} \neq \emptyset.
+  \end{equation*}
+  There is such a $j$, because $A_0 = U \neq \emptyset$.
+
+  Observe that $A_{j} = \emptyset$:
+  if $j < k$ then this is immediate (otherwise $j$ would not be maximal),
+  and
+  if $j = k$, then $A_j = A_k = U \cap \bigcap_{i=1}^k x_i = \emptyset$ by assumption.
+  Thus,
+  \begin{equation*}
+    \frac{|A_j|}{|A_{j-1}|} = \frac{0}{|A_{j-1}|} = 0 < \frac{1}{n^{1/k}},
+  \end{equation*}
+  so we know that (1) holds for $j$.
+
+
+  Let $j^{\ast}$ denote the minimal index in $[k]$ that satisfies (1).
+  Because of its minimality, for all $i \in [j^\ast-1]$ we have
+  \begin{equation*}
+    \frac{|A_i|}{|A_{i-1}|} \geq \frac{1}{n^{1/k}}.
+  \end{equation*}
+  Therefore,
+  \begin{align*}
+    \frac{|A_{j^\ast - 1}|}{|A_0|} = 
+    \frac{|A_{j^\ast - 1}|}{|A_{j^\ast-2}|} \cdot \frac{|A_{j^\ast-2}|}{|A_{j^\ast-3}|} \cdot \ldots \cdot \frac{|A_1|}{|A_0|}
+    \geq
+    \left(  \frac{1}{n^{1/k}} \right)^{j^\ast - 1}
+    =
+    \frac{1}{n^{\frac{j^\ast - 1}{k}}}.
+  \end{align*}
+  Since $|A_0| = n$, 
+  \begin{align*}
+    |A_{j^\ast - 1}| \geq n^{1 - \frac{j^\ast-1}{k}}.
+  \end{align*}
+\end{proof}
+
+Let $D_i(U)$ be an indicator for the event that $\bigcap_{j = 1}^k x_j = \emptyset$ and in addition $i$ is a good index
+with respect to the universe $U$.
+The lemma implies that for any $U \subseteq [n]$ and inputs $x_1,\ldots,x_n$ such that $\bigcap_{i = 1}^k x_i \subseteq U$,
+we have
+$\bigcap_{i = 1}^k x_i = \emptyset$
+iff $\bigvee_{i = 1}^k D_i(U) = 1$.
+As usual, we omit the universe $U$ from our notation where possible.
+
+\paragraph{Significant players.}
+A player $i \in [k]$ does not know whether or not $i$ is good,
+as this depends on the inputs of the other players.
+However, player $i$ can compute the \emph{probability} that the conditions hold:
+define
+\begin{equation*}
+  \gamma_i = \gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[ D_i(U) \given \rv{X}_i = x_i \right].
+\end{equation*}
+We say that player $i$ is \emph{significant} if $\gamma_i \geq \eps / (kN^{1-1/k})$.
+
+\subsection{The Protocol}
+
+For a given product distribution $\mu : \left(\set{0,1}^N\right)^k \rightarrow [0,1]$, we describe a protocol that errs with probability $\epsilon$.
+Our protocol uses public randomness and has $\tilde{O}(kN^{1-\frac{1}{k}})$ bits of expected communication.
+
+Initially, $U = [N]$, and $n = |U| = N$.
+The protocol proceeds in iterations, and in each iteration, we either halt and output 0,
+or we reduce the size of the universe by a $1/N^{1/k}$-fraction.
+Eventually, when $|U| \leq N^{1-1/k}$, each player $i$ announces $x_i \cap U$.
+We then halt and output 1 if $\bigcap_{i = 1}^k (x_i \cap U) = \emptyset$, or 0 otherwise.
+
+Each iteration proceeds as follows:
+
+\begin{enumerate}[(1)]
+  \item Termination condition: if $|U| \leq N^{1 - 1/k}$, each player $i$ sends $x_i$ to the coordinator, who computes and outputs the answer. 
+  \item Otherwise, the coordinator asks each player $i$ whether $i$ is significant in $U$ (i.e., whether $\gamma_i(x_i, U) \geq \eps / kN^{1-\frac{1}{k}}$).
+  \item If no player is significant, the coordinator outputs ``not disjoint''. Otherwise, let $i$ be the
+    first significant player. The coordinator informs every player that player $i$ has been selected.
+  \item The coordinator and the players use the public randomness to sample \TODO{how many needed?}
+    sets $A_{i-1}^{(1)},\ldots$ from the distribution of $\rv{A}_{i-1}(U)$.
+  \item Player $i$ finds the index $j$ of the first set $A_{i-1}^{(j)}(U)$ such that player $i$ is critical.
+    It sends the index $j$ to the coordinator, who forwards it to the other players.
+  \item The participants use the protocol from lemma 2.1 in order to discover $B \subseteq A_{i-1}^{(j)} \setminus X_i $ where $ |B| > \frac{n^{1/k}}{2}$ 
+  \item All participants set:
+    \begin{itemize}
+      \item $U \leftarrow U \setminus B$,
+      \item $n \leftarrow |U|$,
+      \item $x_i \leftarrow x_i \cap U$,
+      \item $\mu \leftarrow \mu $ (not updated)
+    \end{itemize}
+\end{enumerate}
+
 %\begin{algorithm}[H]
   %\SetAlgoLined
   %initialization\;
@@ -128,6 +318,726 @@
 
 
 
+\subsection{Properties of Our Protocol}
+Our protocol uses random coins and is described in the coordinator model. It uses an expected value of $O(kn^{1-\frac{1}{k}})$ bits of communication between the players.
+\subsection{Analysis}
+\paragraph{Rounds analysis}
+We argue that the protocol should run only $4N^{1-\frac{1}{k}}$ rounds. As described above, every round where $|U| = n$, we omit $\frac{n^{1-\frac{1}{k}}}{2}$ indexes. Therefore if $f(n)$ is the function of number of rounds when starting with universe sized $n$, we can define it by
+    \begin{equation*}
+        f(n) = \begin{cases}
+               1               & n \leq N^{\frac{1}{k}}\\
+               1 + f(n - \frac{n^{1/k}}{2}) & \text{otherwise}
+           \end{cases}
+    \end{equation*}
+We use two simple technical claims in order to prove that $f(n) \leq 4n^{1-\frac{1}{k}}$.
+\begin{claim}
+    For $k \geq 2$ and every $n$: $n^{1 - \frac{1}{k}} - \left(n-\frac{n^{1/k}}{2}\right)^{1-\frac{1}{k}} \geq 0.25$
+\end{claim}
+\begin{proof}
+    Let us define a function $g(x) = x^{1-\frac{1}{k}}$. We want to analyze:
+    \begin{equation*}
+        n^{1 - \frac{1}{k}} - \left(n-\frac{n^{1/k}}{2}\right)^{1-\frac{1}{k}} = g(n) - g\left (n-\frac{n^{1/k}}{2}\right)
+    \end{equation*}
+    By Lagrange's theorem, there exists a $c \in [0, \frac{n^{1/k}}{2}]$ such that
+    \begin{equation*}
+        g(n) - g\left( n-\frac{n^{1/k}}{2}\right) = \frac{n^{1/k}}{2} g'(n-c)
+    \end{equation*}
+    By calculation: 
+    \begin{equation*}
+        g'(x) = \left(1-\frac{1}{k}\right)x^{-1/k}
+    \end{equation*}
+    Therefore 
+    \begin{equation*}
+        g(n) - g\left( n-\frac{n^{1/k}}{2}\right) = \frac{n^{1/k}}{2} \left(1-\frac{1}{k}\right) (n-c)^{-1/k} = \frac{(1-\frac{1}{k})}{2} \left(\frac{n}{n-c}\right)^{1/k} \geq \frac{(1-\frac{1}{k})}{2} \geq 0.25
+    \end{equation*}
+    for $k \geq 2$ 
+\end{proof}
+\begin{claim}
+    For $f(n)$ which is defined by \newline
+    \begin{equation*}
+        f(n) = \begin{cases}
+               1               & n \leq N^{\frac{1}{k}}\\
+               1 + f(n - \frac{n^{1/k}}{2}) & \text{otherwise}
+           \end{cases}
+    \end{equation*}
+    It is true that $f(n) \leq 4n^{1-\frac{1}{k}}$.
+\end{claim}
+\begin{proof}
+Let us prove it by induction: \newline
+
+a. Induction base (for $n \leq N^{1/k}$)\newline
+\begin{equation*}
+   f(n) = 1 < 4 \leq 4n^{1-\frac{1}{k}}
+\end{equation*}
+
+b. The induction step\newline
+
+By definition, we know that \newline
+\begin{equation*}
+  f(n) = 1 + f(n - \frac{n^{1/k}}{2})
+\end{equation*}
+
+In this point, we can use the inductive hypothesis \newline
+\begin{equation*}
+  1 + f(n - \frac{n^{1/k}}{2}) \leq 1 + 4(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}}
+\end{equation*}
+
+Using the previous claim:
+\begin{equation*}
+   (n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq n^{1-\frac{1}{k}}-0.25
+\end{equation*}
+
+\begin{equation*}
+  1 + 4(n - \frac{n^{1/k}}{2})^{1-\frac{1}{k}} \leq 1 + 4(n^{1-\frac{1}{k}}-0.25)
+\end{equation*}
+
+Now we got exactly what we needed. \newline
+
+\begin{equation*}
+  1 + 4(n^{1-\frac{1}{k}}-0.25) = 4(n^{1-\frac{1}{k}})
+\end{equation*}
+
+To summarize, we proved that \newline
+
+\begin{equation*}
+  f(n) \leq 4n^{1-\frac{1}{k}}
+\end{equation*}
+
+\end{proof}
+\paragraph{Error Analysis}
+Let there be a round $r$. In this round, we error only if there was no significant player (in $U_r$) and therefore the coordinator answered "not disjoint" but actually the inputs were disjoint.
+\begin{equation*}
+  \mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \text{ i is not signficant})
+\end{equation*}
+
+Using the definition of "significant player" we may rewrite it as:
+\begin{equation*}
+  \mu(\text{Err in round r}) \leq \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
+
+As proved in lemma 1.2, if the inputs are disjoint, there is a good player. $DISJ = \bigcup_{j = 1}^k D_j(U_r)$ 
+\begin{equation*}
+  \mu(DISJ \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) = \mu(\bigcup_{j = 1}^k D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
+
+Using union bound we may consider the sum of these probabilities.
+\begin{equation*}
+  \mu(\bigcup_{j = 1}^k D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
+
+For every element in the sum, we relax the event the only the specific player is good.
+\begin{equation*}
+  \sum_j \mu(D_j(U_r) \land \forall_i \gamma_i(X_i, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}})
+\end{equation*}
+
+At this point, we stop the calculation and consider a specific element in this sum. Every element is actually the event in which a player is good but not significant or in other words, the player is good but the probability that he is good is small. Using this definition it is pretty clear that the probability of this event is small. \newline
+Let us consider the expectation of this probability over the player's input.
+\begin{equation*}
+  \mu(D_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)]
+\end{equation*}
+
+Now the player's input is constant and the event that he is significance is also a constant.
+\begin{equation*}
+  \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) \land \gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}} | X_j = x_j)] = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) | X_j = x_j) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}]
+\end{equation*}
+
+Recall the definition of significance player $\gamma_i(x_i, U) \coloneq \Pr_{(\rv{X}_{-i}) \sim \mu}\left[D_i (U) \given \rv{X}_i = x_i \right]$.
+\begin{equation*}
+  \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\mu(D_j(U_r) | X_j = x_j) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] = \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}]
+\end{equation*}
+
+Now we got an expectation over a non-negative r.v ($\gamma_j(x_j, U_r)$) multiplied by the indicator of the event it is in smaller than $\frac{\epsilon}{kN^{1-\frac{1}{k}}}$. We may replace the r.v with $\frac{\epsilon}{kN^{1-\frac{1}{k}}}$.
+\begin{equation*}
+  \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\gamma_j(x_j, U_r) \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] \leq \underset{x_j \sim \mu}{\mathop{\mathbb{E}}}[\frac{\epsilon}{kN^{1-\frac{1}{k}}} \mathbbm{1}_{\gamma_j(x_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}}] \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}
+\end{equation*}
+
+At this point, we finished considering the specific element (case in which a player is good but not significant) and we can resume the calculation of the whole error in round $r$.  \newline
+\begin{equation*}
+  \sum_j \mu(DISJ_j(U_r) \land \gamma_j(X_j, U_r) \leq \frac{\epsilon}{kN^{1-\frac{1}{k}}}) \leq \sum_j \frac{\epsilon}{kN^{1-\frac{1}{k}}} = k\frac{\epsilon}{kN^{1-\frac{1}{k}}} = \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
+
+To conclude, we just proved that the error in a specific round $r$:
+\begin{equation*}
+  \mu(\text{Err in round r}) \leq \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
+
+Now we are consider the overall error of the protocol (summing over all rounds):
+\begin{equation*}
+  \mu(Err) = \sum_{r} \mu(\text{Err in round r}) \leq \#\{\text{number of rounds}\} \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
+
+In our protocol there are $O(N^{1-\frac{1}{k}})$ so
+\begin{equation*}
+  \mu(Err) \in O(\epsilon)
+\end{equation*}
+
+\paragraph{Communication Analysis}
+Let us first analyze the expected communication for a single round: \newline
+
+1. Every player sends a bit whether he is significant or not - $k$ bits.\newline
+
+2. The coordinator informs everyone who is the chosen significant - $klogk$ bits. \newline
+
+3. The index $j$ of $A_{i-1}^{(j)}$ is sent. \newline
+
+4. The player uses lemma 2.1 - $k\log(N)$ bits. \newline
+
+Let us calculate the 3rd part - $j$. \newline
+This index is a random variable which has a geometric distribution since $A_{i-1}^{(j)}$ are independent. \newline
+
+Recall that $j$ is chosen where $i$ is good in $U$. \newline
+Therefore we are looking for the following probability:
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i]
+\end{equation*}
+
+Since $D_i(U) = DISJ \cap \{\text{i is good in U}\}$ (by definition), $\{\text{i is good in U}\} \subseteq D_i(U)$ which leads to 
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i] \geq \Pr[D_i(U) | X_i = x_i]
+\end{equation*}
+
+By definition of $\gamma_i(x_i, U)$:
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i] \geq \Pr[D_i(U) | X_i = x_i] = \gamma_i(x_i, U)
+\end{equation*}
+
+Since i is significant
+\begin{equation*}
+    \gamma_i(x_i, U) \geq \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
+
+To conclude
+\begin{equation*}
+    \Pr[\text{i is good in U}| X_i = x_i] \geq \frac{\epsilon}{N^{1-\frac{1}{k}}}
+\end{equation*}
+
+Now we can calculate easily the size of j
+\begin{equation*}
+    \mathop{\mathbb{E}} [J] = \frac{1}{\Pr[\text{i is good in U}| X_i = x_i]} \leq \frac{1}{\gamma_i(x_i, U)} \leq \frac{kN^{1-\frac{1}{k}}}{\epsilon}
+\end{equation*}
+
+By Jensen's inequality
+\begin{equation*}
+    \mathop{\mathbb{E}} [\log(J)] \leq \log(\mathop{\mathbb{E}} [J]) \leq \log(\frac{kN^{1-\frac{1}{k}}}{\epsilon}) \leq \log(N) + \log(k) + \log(\frac{1}{\epsilon})
+\end{equation*}
+
+So in total the cost of the round is 
+\begin{equation*}
+    k + k\log(k) + k(\log(N) + \log(k) + \log(\frac{1}{\epsilon})) + k\log(N) \in O(k(\log(N) + \log(\frac{1}{\epsilon}))
+\end{equation*}
+The protocol operates at most $4(N^{1-\frac{1}{k}})$ rounds. \newline
+For the round where we terminate, we pay at most $kN^{\frac{1}{k}} \log(N)$. \newline
+So the total communication cost is  
+\begin{equation*}
+    O(kN^{1-\frac{1}{k}}(\log(\frac{1}{\epsilon}) + \log(N)))
+\end{equation*}
+\section{k-n relation analysis}
+Let us pay attention that the mentioned upper bound may be not significant in some cases. Let us pay attention to the case in which $k = \alpha\log(n)$.
+\begin{equation*}
+    n^{1/k} = n^{\frac{1}{\alpha\log(n)}} = 2^{\frac{\log(n)}{\alpha\log(n)}} = 2^{1/\alpha}
+\end{equation*}
+In this case
+\begin{equation*}
+    n^{1-\frac{1}{k}} > n/2 \in \Omega(n)
+\end{equation*}
+It may seems that our protocol is not very helpful in this case. \newline
+Let us consider even bigger number of players: $k \in \omega(\log(n))$. \newline
+Now things act differently - For hard distribution most of the elements in the players' input should be 1. 
+\section{$O(k + n\log^{2}(n))$-Protocol}
+Let us present a protocol which is useful only where we have many players ($k \in \omega(\log(n))$. In this case, most of the bits in our input should be 1's. For simplicity, let us denote
+\begin{equation*}
+    k = \log(n) \alpha(n)
+\end{equation*}
+\paragraph{Critical Indexes}
+Let us name an index $i$ critical if:
+\begin{equation*}
+    \Pr[i \in \bigcap^{k}_{j=1}{X_j}] > \frac{\epsilon}{n}
+\end{equation*}
+This is a global term (not for a specific player).
+\subsection{The Protocol}
+The protocol is pretty simple and straight-forward using the fact that there is a small number of zeros in the input.
+\begin{enumerate}[(1)]
+    \item Without any communication, the players calculate what are the critical indexes (using the knowledge about the distribution but not about any current input): $U = \{i | \Pr[i \in \bigcap^{k}_{j=1}{X_j}] > \frac{\epsilon}{n}\}$.
+    \item Every player $j$ sends the indexes of his critical zeros to the coordinator: $Y_j= U \setminus X_j$
+    \item The coordinator declares intersection iff $\bigcup_j Y_j \neq U$.
+\end{enumerate}
+\paragraph{Communication}
+The only communication done in this protocol is done in stage 2. 
+In this stage, every player sends his critical zeros. 
+We should calculate the expectation for the number of critical zeros for all players and pay $\log(n)$ for each one. \newline
+Let us examine a specific critical index $i$. \newline
+Let us denote:
+\begin{equation*}
+    p_{ij} = \Pr[i \in X_j]
+\end{equation*}
+By definition of critical index
+\begin{equation*} 
+    \Pr[i \in \bigcap^{k}_{j=1}{X_j}] > \frac{\epsilon}{n}
+\end{equation*}
+Since $\mu$ is a product distribution
+\begin{equation*} 
+    \Pr[i \in \bigcap^{k}_{j=1}{X_j}] = \prod_{j=1}^{k}p_{ij}
+\end{equation*}
+Combining these two equations:
+\begin{equation*} 
+    \prod_{j=1}^{k}p_{ij} > \frac{\epsilon}{n}
+\end{equation*}
+Using Lagrange multipliers:
+\begin{equation*}
+    \sum_{j=1}^{k}p_{ij} \geq k \left(\frac{\epsilon}{n} \right)^{\frac{1}{k}}
+\end{equation*}
+At this point, let us examine the zeros in index i
+\begin{equation*}
+    \mathop{\mathbb{E}}[\text{Zeros in i}] = k - \sum_{j=1}^{k}p_{ij} \leq k \left(1 - \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}\right)
+\end{equation*}
+The total number of zeros:
+\begin{equation*}
+    \mathop{\mathbb{E}}[\text{Zeros}] = \sum_{i=1}^n\mathop{\mathbb{E}}[\text{Zeros in i}] \leq nk\left(1-\left(\frac{\epsilon}{n}\right)^{1/k}\right)
+\end{equation*}
+Using log definition
+\begin{equation*}
+    nk\left(1-\left(\frac{\epsilon}{n}\right)^{1/k}\right) = nk\left(1-e^{\frac{\log{\frac{\epsilon}{n}}}{k}}\right)
+\end{equation*}
+since $k \in \omega(\log(n))$
+\begin{equation*}
+    \frac{\log{\frac{\epsilon}{n}}}{k} = -\frac{\log{\frac{n}{\epsilon}}}{k} \rightarrow 0^{-}
+\end{equation*}
+Now we can use the limit $x \sim 1-e^x$ for $x \rightarrow 0^{-}$ 
+\begin{equation*}
+      nk\left(1-e^{\frac{\log{\frac{\epsilon}{n}}}{k}}\right) \sim nk\frac{\log{\frac{n}{\epsilon}}}{k} = n\log{\frac{n}{\epsilon}}
+\end{equation*}
+So total expected communication complexity for this protocol is
+\begin{equation*}
+    k + n\log{\frac{n}{\epsilon}}\log n
+\end{equation*}
+\paragraph{Error}
+We error only if there is an intersection outiside important indexes (in this case we falsly output disjoint).
+\begin{equation*}
+    \Pr[\text{ERROR}] = \Pr[\bigcup_{i \notin U} \{i \in \bigcap_j X_j\}]
+\end{equation*}
+Using union bound
+\begin{equation*}
+    \Pr[\bigcup_{i \notin U} \{i \in \bigcap_j X_j\}]\leq \sum_{i \notin U} \Pr[i \in \bigcap_j X_j] 
+\end{equation*}
+Using the definition of uncritical index $\Pr[i \in \bigcap^{k}_{j=1}{X_j}] \leq \frac{\epsilon}{n}$
+\begin{equation*}
+    \sum_{i \notin U} \Pr[i \in \bigcap_j X_j] \leq n\frac{\epsilon}{n} = \epsilon
+\end{equation*}
+\begin{claim}
+TODO-Move to appendix? \newline
+For $p_1, p_2, ... , p_k \in [0,1]$ \newline
+If
+\begin{equation*}
+    \prod_{i=1}^{k}p_i \geq \frac{\epsilon}{n}
+\end{equation*}
+We can know that
+\begin{equation*}
+    \sum_{i=1}^{k}p_i \geq k\left(\frac{\epsilon}{n}\right)^{1/k}
+\end{equation*}
+\end{claim}
+\begin{proof}
+By lagrange multipliers let us denote a target function 
+\begin{equation*}
+    f(x_1, ... , x_k) = \sum_{i=1}^{k}x_i
+\end{equation*}
+A constraint function
+\begin{equation*}
+    g(x_1, ... , x_k) = \prod_{i=1}^{k}x_i - \frac{\epsilon}{n} 
+\end{equation*}
+Lagrange function
+\begin{equation*}
+    \mathcal{L}(x_1, ... , x_k, \lambda) = \sum_{i=1}^{k}x_i - \lambda\left(\prod_{i=1}^{k}x_i - \frac{\epsilon}{n}  \right)
+\end{equation*}
+\begin{align*}
+    \frac{\partial\mathcal{L}}{\partial x_i} = 1 - \lambda\prod_{j \neq i}x_j  \\
+    \frac{\partial\mathcal{L}}{\partial \lambda} = \prod_{i=1}^{k}x_i - \frac{\epsilon}{n}
+\end{align*}
+By (2):
+\begin{align*}
+    \prod_{i=1}^{k}x_i = \frac{\epsilon}{n} \\
+    1 = \frac{\lambda\frac{\epsilon}{n}}{x_i} \\ 
+    x_i = \lambda\frac{\epsilon}{n} \\
+    \left(\lambda\frac{\epsilon}{n}\right)^k = \frac{\epsilon}{n} \\
+    \lambda = \left(\frac{\epsilon}{n}\right)^{\frac{1}{k} - 1} \\
+    x_i = \left(\frac{\epsilon}{n}\right)^{\frac{1}{k}} \\
+    f_{\text{min}} = k\left(\frac{\epsilon}{n}\right)^{\frac{1}{k}}
+\end{align*}
+\end{proof}
+\section{Lower Bound}
+\paragraph{Introduction}
+Usually in lower bound using information theory techniques, we firstly move to the problem of disjointness where $n=1$ denoted as $\text{AND}_k$ which is the problem where every player has one bit and they need to answer whether they all got 1 or not. After moving to this problem, we calculate how much information is needed in order to solve it.
+\subsection{$AND_k$ Information Cost}
+\paragraph{Introduction}
+We are going to bound the information cost for a protocol that solves $AND_k$. Our analysis is divided into three blocks: \newline
+1 - Using the error of the protocol in order to conclude it must know some information about specific player's input. \newline
+2 - Distinguishing this input is leaking some information (specifically KL-Divergence) \newline
+3 - Concluding this for the general information cost of the protocol \newline
+\paragraph{Definitions}
+
+\begin{definition}
+KL-Divergence for $D_{KL}(\Dfrac{a}{b})$ is defined by
+\begin{equation*} 
+    D_{KL}(\Dfrac{a}{b}) = \sum_{x \in \Omega} a(x)\log \left(\frac{a(x)}{b(x)}\right)
+\end{equation*}
+
+\begin{lemma}
+    For $X, Y, Z$ random variables
+    \begin{equation*}
+        I(X;Y|Z) = \mathbb{E}_{Y,Z}[D_{KL}\left(\Dfrac{X|Y,Z}{X|Z}\right)]
+    \end{equation*}
+\end{lemma}
+
+\end{definition}
+
+\begin{definition}
+    Denote two sets of transcripts: \newline
+    $T_1$ - transcripts which are ended with positive answers (there is an intersection). \newline
+    $T_0$ - transcripts which are ended with negative answers (there is no intersection).
+\end{definition}
+
+\paragraph{Protocol properties}
+For a transcript $\pi$ and player $i$ there is a function $q_i(\pi, x_i) \in [0,1]$ where
+\begin{equation*}
+    Pr[\pi | x] = \prod_{i=1}^{k}q_i(\pi, x_i )
+\end{equation*}
+
+\begin{definition}
+\begin{equation*}
+    \lambda _i (\pi) = \frac{q_i(\pi, 0)}{q_i(\pi, 1)}
+\end{equation*}
+We should think about this as how much this transcript prefers that $x_i = 0$ over $x_i = 1$.
+\end{definition}
+
+\begin{definition}
+For $\alpha \in \mathbb{R}$ where $\alpha \geq 1$, let us define a set of transcripts 
+\begin{equation*}
+    A = \{\pi | \forall_{i \in [k]} \lambda_i (\pi) < \alpha \}
+\end{equation*}
+\end{definition}
+
+
+\paragraph{Part 1 - Protocol Error Analysis}
+\begin{lemma}
+For any input $x \in \{0,1\}^k$, and any transcript $\pi$. For $Z(x) = \{i \in k | x_i = 0\}$, it is true that  \newline
+\begin{equation*}
+    \frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \prod_{i \in Z(x)} \lambda_i(\pi)
+\end{equation*}
+\end{lemma}
+\begin{proof}
+By definition of $q$ function
+\begin{equation*}
+    \frac{Pr[\pi | X = x]}{Pr[\pi | X = 1^k]} = \frac{\prod_{i \in [k]} q_i (\pi, x_i)}{\prod_{i \in [k]} q_i (\pi, 1)}
+\end{equation*}
+By definition of $Z(x)$
+\begin{equation*}
+    \frac{\prod_{i \in [k]} q_i (\pi, x_i)}{\prod_{i \in [k]} q_i (\pi, 1)} = \prod_{i \in Z(x)} \frac{q_i (\pi, 0)}{q_i (\pi, 1)}
+\end{equation*}
+By definition of $\lambda_i (\pi)$
+\begin{equation*}
+    \prod_{i \in Z(x)} \frac{q_i (\pi, 0)}{q_i (\pi, 1)} = \prod_{i \in Z(x)} \lambda_i (\pi)
+\end{equation*}
+\end{proof}
+
+\begin{lemma}
+    \begin{equation*}
+        \Pr[A| x = 0^k] \leq \epsilon (1 + \alpha ^k)
+    \end{equation*}
+    The set in which the transcripts do not prefer 0 over 1 is not very common under $x = 0^k$.
+\end{lemma}
+\begin{proof}
+For $T_0, T_1$ defined as mentioned, let us bound the probability for $A \bigcap T_0$ and $A \bigcap T_1$. \newline
+
+1. For $A \bigcap T_0$: \newline
+Let there be $\pi \in A \bigcap T_0$. \newline
+For this $\pi$, let us use the previous lemma for $x = 0^k$
+\begin{equation*}
+    \frac{Pr[\pi | X = 0^k]}{Pr[\pi | X = 1^k]} = \prod_{i \in Z(0^k)} \lambda_i(\pi)
+\end{equation*}
+Since $Z(0^k) = [k]$
+\begin{equation*}
+    \frac{Pr[\pi | X = 0^k]}{Pr[\pi | X = 1^k]} = \prod_{i \in [k]} \lambda_i(\pi)
+\end{equation*}
+Since $\pi \in A$, we know that $\forall_{i \in [k]}\lambda_i(\pi) < \alpha$
+\begin{equation*}
+    \frac{Pr[\pi | X = 0^k]}{Pr[\pi | X = 1^k]} < \alpha^{k}
+\end{equation*}
+Summing over all $\pi \in A \bigcap T_0 $
+\begin{equation*}
+    \Pr[A \bigcap T_0 | x = 0^k] < \alpha ^k \Pr[A \bigcap T_0 | x = 1^k]
+\end{equation*}
+Since $A \bigcap T_0 \subseteq T_0$
+\begin{equation*}
+    \alpha ^k \Pr[A \bigcap T_0 | x = 1^k] \leq \alpha ^k \Pr[T_0 | x = 1^k]
+\end{equation*}
+Since the answer of disjointness is 1 for the input $x=1^k$, we know that $\{T_0 | x=1^k\} = \{\text{ERROR} | x=1^k\}$ .
+\begin{equation*}
+    \alpha ^k \Pr[T_0 | x = 1^k] = \alpha ^k \Pr[\text{ERROR} | x = 1^k]
+\end{equation*}
+For a protocol which errors $\epsilon$ for any input
+\begin{equation*}
+    \Pr[\text{ERROR} | x = 1^k] \leq \epsilon
+\end{equation*}
+We now have that 
+\begin{equation*}
+    \Pr[A \bigcap T_0 | x = 0^k] \leq \alpha^k \epsilon
+\end{equation*}
+2. For $A \bigcap T_1$: \newline
+Since $A \bigcap T_1 \subseteq T_1$
+\begin{equation*}
+    \Pr[A \bigcap T_1 | x = 0^k] \leq \Pr[T_1 | x = 0^k]
+\end{equation*}
+Since the answer of disjointness is 0 for the input $x=0^k$, we know that $\{T_1 | x=0^k\} = \{\text{ERROR} | x=0^k\}$ .
+\begin{equation*}
+    \Pr[T_1 | x = 0^k] = \Pr[\text{ERROR} | x = 0^k]
+\end{equation*}
+For a protocol which errors $\epsilon$ for any input
+\begin{equation*}
+    \Pr[\text{ERROR} | x = 0^k] \leq \epsilon
+\end{equation*}
+We now have that 
+\begin{equation*}
+    \Pr[A \bigcap T_1 | x = 0^k] \leq \epsilon
+\end{equation*}
+
+3. To conclude: \newline
+\begin{equation*}
+    \Pr[A| x = 0^k] = \leq \Pr[A \bigcap T_0 | x = 0^k] + \Pr[A \bigcap T_1 | x = 0^k] < \epsilon (1 + \alpha ^k)
+\end{equation*}
+\end{proof}
+
+\begin{lemma}
+    For $A_{i}^\complement = \{\pi | \lambda_i(\pi) \geq \alpha\}$, there exists $i$ where
+    \begin{equation*}
+    \Pr[A_{i}^\complement| x = 0^k] \geq \frac{1 - \epsilon (1 + \alpha ^k)}{k}
+    \end{equation*}
+\end{lemma}
+\begin{proof}
+Using the previous lemma,
+\begin{equation*}
+    \Pr[A| x = 0^k] \leq \epsilon (1 + \alpha ^k)
+\end{equation*}
+Using set compliment
+\begin{equation*}
+    \Pr[A^\complement| x = 0^k] \geq 1 - \epsilon (1 + \alpha ^k)
+\end{equation*}
+Since $A^\complement = \{\pi | \exists_i \lambda_i(\pi) \geq \alpha\}$, we know that 
+\begin{equation*}
+    A^\complement = \bigcup_{i} A_{i}^\complement
+\end{equation*}
+Therefore 
+\begin{equation*}
+     \sum_{i=1}^{k} \Pr[A_i^\complement| x = 0^k] \geq \Pr[A^\complement| x = 0^k]
+\end{equation*}
+Combining these facts
+\begin{equation*}
+    \sum_{i=1}^{k} \Pr[A_i^\complement| x = 0^k] \geq 1 - \epsilon (1 + \alpha ^k)
+\end{equation*}
+Therefore there exists $i$ where 
+\begin{equation*}
+    \Pr[A_{i}^\complement| x = 0^k] \geq \frac{1 - \epsilon (1 + \alpha ^k)}{k}
+    \end{equation*}
+\end{proof}
+
+That is the finish line of this part. We got a set of transcripts that has a nice probability under $x = 0^k$ where the transcripts prefer strongly 0 over 1 for some index. We may use this technique in different ways depends on our distribution of inputs. For small $k$ our distribution gives a high probability for $0^k$ which is pretty convenient. For other distribution, we want to use the other method. \newline
+This is a rough method in order to use the fact that the protocol has to be "biased" in terms of $\lambda_i$ in order to have a low error. \newline
+\paragraph{Part 2 - Divergence}
+In this part, we are going to show that the set we found in the last part is contributing large enough divergence. This will be enough since $x = 0^k$ has a high probability under our distribution. \newline
+Let us analyze the connection between $\lambda_i(\pi)$ to its divergence. \newline
+\begin{lemma}
+    For 0-1 distribution $\mu$, player $i$ and transcript $\pi$
+    \begin{equation*}
+        \Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi] = \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}
+    \end{equation*}
+    \begin{equation*}
+        \Pr[X_i = 1 | X_{-i}=0^{k-1}, \pi] = \frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)}
+    \end{equation*}
+\end{lemma}
+\begin{proof}
+    By Bayes  theorem
+    \begin{equation*}
+        \Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi] = \frac{\Pr[\pi | X=0^k]\Pr[X_i=0|X_{-i}=0^{k-1}]}{Pr[\pi|X_{-i} = 0^{k-1}]} = 
+    \end{equation*}
+    By the law of total probability for $\pi|X_{-i} = 0^{k-1}$ with $X_i=0,1$
+    \begin{equation*}
+        \frac{\Pr[\pi | X=0^k]\Pr[X_i=0|X_{-i}=0^{k-1}]}{Pr[\pi,X_i=0|X_{-i} = 0^{k-1}] + Pr[\pi,X_i=1|X_{-i} = 0^{k-1}]} = 
+    \end{equation*}
+    Using conditional probability for the denominator
+    \begin{equation*}
+        \frac{\Pr[\pi | X=0^k]\Pr[X_i=0|X_{-i}=0^{k-1}]}{\Pr[\pi | X=0^k]\Pr[X_i=0|X_{-i}=0^{k-1}] + \Pr[\pi | X=0^{i-1}10^{k-i}]\Pr[X_i=1|X_{-i}=0^{k-1}]} =
+    \end{equation*}
+    Since the input is drawn using product distribution
+    \begin{equation*}
+        \frac{\Pr[\pi | X=0^k]\mu(0)}{\Pr[\pi | X=0^k]\mu(0) + \Pr[\pi | X=0^{i-1}10^{k-i}]\mu(1)} = 
+    \end{equation*}
+    Divide both with $\Pr[\pi | X=0^k]$
+    \begin{equation*}
+        \frac{\mu(0)}{\mu(0) + \frac{\Pr[\pi | X=0^{i-1}10^{k-i}]}{\Pr[\pi | X=0^k]}\mu(1)} = 
+    \end{equation*}
+    Using the definition of $\lambda_i(\pi)$
+    \begin{equation*}
+        \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}
+    \end{equation*}
+    This proves the first equation.
+    For the second equation
+    \begin{equation*}
+        \Pr[X_i = 1 | X_{-i}=0^{k-1}, \pi] = 1 - \Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi]
+    \end{equation*}
+    Using the first equation
+    \begin{equation*}
+        1 - \Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi] = 1 - \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}
+    \end{equation*}
+    Some algebraic expansion
+    \begin{equation*}
+        1 - \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}} = \frac{\frac{\mu(1)}{\lambda_i(\pi)}}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}} = \frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)}
+    \end{equation*}
+\end{proof}
+\begin{lemma}
+    For a specific transcript $\pi$ and player $i$ where $\lambda_i(\pi) \geq \alpha$, for big enough $n$
+    \begin{equation*}
+        D_{KL}\left(\Dfrac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i} = 0^{k-1}} \right) \geq \frac{\mu(1)}{4}
+    \end{equation*}
+\end{lemma}
+\begin{proof}
+By definition of KL-Divergence
+\begin{equation*}
+    D_{KL}\left(\Dfrac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i} = 0^{k-1}} \right) = 
+\end{equation*}
+\begin{equation*}
+    \Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi]\log\left(\frac{\Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi]}{\Pr[X_i = 0 | X_{-i}=0^{k-1}]}\right) +
+\end{equation*}
+\begin{equation*}
+    \Pr[X_i = 1 | X_{-i}=0^{k-1}, \pi]\log\left(\frac{\Pr[X_i = 1 | X_{-i}=0^{k-1}, \pi]}{\Pr[X_i = 1 | X_{-i}=0^{k-1}]}\right)
+\end{equation*}
+\paragraph{Part 1 of the divergence:}
+Since the input is drawn using product distribution
+\begin{equation*}
+    \Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi]\log\left(\frac{\Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi]}{\Pr[X_i = 0 | X_{-i}=0^{k-1}]}\right) = \Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi]\log\left(\frac{\Pr[X_i = 0 | X_{-i}=0^{k-1}, \pi]}{\mu(0)}\right) = 
+\end{equation*}
+Using the previous lemma
+\begin{equation*}
+    \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}\log\left(\frac{\frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}}{\mu(0)}\right) = 
+\end{equation*}
+Some algebraic expansion
+\begin{equation*}
+    \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}\log\left(\frac{1}{\mu(0) + \frac{\mu(1)}{\lambda_i(\pi)}}\right) \geq
+\end{equation*}
+Using $\lambda_i(\pi) \geq \alpha$
+\begin{equation*}
+    \frac{\mu(0)}{\mu(0) + \frac{\mu(1)}{\alpha}}\log\left(\frac{1}{\mu(0) + \frac{\mu(1)}{\alpha}}\right) =
+\end{equation*}
+Since $\mu(0) = 1 - \mu(1)$
+\begin{equation*}
+    \frac{\mu(0)}{1 - \mu(1) + \frac{\mu(1)}{\alpha}}\log\left(\frac{1}{1 - \mu(1) + \frac{\mu(1)}{\alpha}}\right) = 
+\end{equation*}
+Some algebraic expansion
+\begin{equation*}
+    \frac{\mu(0)}{1 - \mu(1)(1 -\frac{1}{\alpha})}\log\left(\frac{1}{1 - \mu(1)(1 -\frac{1}{\alpha})}\right) =
+\end{equation*}
+Some more algebraic expansion
+\begin{equation*}
+    \frac{\mu(0)}{1 - \mu(1)(1 -\frac{1}{\alpha})}\log\left(1 + \frac{\mu(1)(1 -\frac{1}{\alpha})}{1 - \mu(1)(1 -\frac{1}{\alpha})}\right) \geq
+\end{equation*}
+Using $\log(1+x) \sim x$ for $x \rightarrow 0$
+\begin{equation*}
+    \frac{\mu(0)(\mu(1)(1 -\frac{1}{\alpha}))}{2\left(1 - \mu(1)(1 -\frac{1}{\alpha})\right)^2} \geq \frac{\mu(1)}{2}
+\end{equation*}
+
+\paragraph{Part 2 of the divergence:}
+Since the input is drawn using product distribution
+\begin{equation*}
+    \Pr[X_i = 1 | X_{-i}=0^{k-1}, \pi]\log\left(\frac{\Pr[X_i = 1 | X_{-i}=0^{k-1}, \pi]}{\Pr[X_i = 1 | X_{-i}=0^{k-1}]}\right) = \Pr[X_i = 1 | X_{-i}=0^{k-1}, \pi]\log\left(\frac{\Pr[X_i = 1 | X_{-i}=0^{k-1}, \pi]}{\mu(1)}\right) = 
+\end{equation*}
+Using the previous lemma
+\begin{equation*}
+    \frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)}\log\left(\frac{\frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)}}{\mu(1)}\right) = 
+\end{equation*}
+Some algebraic expansion
+\begin{equation*}
+    \frac{\mu(1)}{\lambda_i(\pi)\mu(0) + \mu(1)}\log\left(\frac{1}{\lambda_i(\pi)\mu(0) + \mu(1)}\right) = -\mu(1) \frac{\log(\lambda_i(\pi)\mu(0) + \mu(1))}{\lambda_i(\pi)\mu(0) + \mu(1)}
+\end{equation*}
+Pay attention that since $ \mu(1) \geq 0$, $\mu(0) \geq \frac{1}{2}$ and $\lambda_i(\pi) \geq \alpha$
+\begin{equation*}
+    \lambda_i(\pi)\mu(0) + \mu(1) \geq \lambda_i(\pi)\mu(0) \geq \frac{\lambda_i(\pi)}{2} \geq \frac{\alpha}{2}
+\end{equation*}
+Since $\frac{log(x)}{x} \rightarrow 0$ when $x \rightarrow \infty$, for big enough $\alpha$
+\begin{equation*}
+    -\mu(1) \frac{\log(\lambda_i(\pi)\mu(0) + \mu(1))}{\lambda_i(\pi)\mu(0) + \mu(1)} \geq -\frac{\mu(1)}{4}
+\end{equation*}
+\paragraph{For conclusion}
+If $\lambda_i(\pi) \geq \alpha$, for big enough $n$:
+\begin{equation*}
+     D_{KL}\left(\Dfrac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i} = 0^{k-1}} \right) \geq \frac{\mu(1)}{2} -\frac{\mu(1)}{4} = \frac{\mu(1)}{4}
+\end{equation*}
+\end{proof}
+
+\paragraph{Part 3 - Information Summary}
+\begin{theorem}
+\begin{equation*}
+    I(X;\Pi) \in \Omega\left(\frac{n^{-\frac{1}{k}}}{k}\right)
+\end{equation*}
+\end{theorem}
+\begin{proof}
+By definition of $X$
+\begin{equation*}
+    I(X;\Pi) = I(X_i,X_{-i};\Pi)
+\end{equation*}
+Using chain rule for mutual information
+\begin{equation*}
+    I(X_i,X_{-i};\Pi) = I(X_{-i}; \Pi) + I(X_i;\Pi|X_{-i})
+\end{equation*}
+Since mutual information is nonnegative
+\begin{equation*}
+    \overbrace{I(X_{-i}; \Pi)}^{\geq 0} + I(X_i;\Pi|X_{-i}) \geq I(X_i;\Pi|X_{-i})
+\end{equation*}
+Using the mutual information - kl-divergence relation
+\begin{equation*}
+    I(X_i;\Pi|X_{-i}) = \mathbb{E}_{x, \pi \sim \mu} \left( D_{KL}\left(\Dfrac{X_i | \pi, X_{-i}}{X_i | X_{-i}} \right) \right)
+\end{equation*}
+Picking only a specific element ($x=0^k$) in the expectation sum
+\begin{equation*}
+    \mathbb{E}_{x, \pi \sim \mu} \left( D_{KL}\left(\Dfrac{X_i | \pi, X_{-i}}{X_i | X_{-i}} \right) \right) \geq \mu(0^k) \mathbb{E}_{\pi \sim x = 0^k} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right)
+\end{equation*}
+Looking only at transcripts in $A_{i}^\complement$
+\begin{equation*}
+    \mu(0^k) \mathbb{E}_{\pi \sim x = 0^k} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq \mu(0^k) \Pr[A_{i}^\complement| x = 0^k] \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right)
+\end{equation*}
+Using Part 1
+\begin{equation*}
+    \mu(0^k) \Pr[A_{i}^\complement| x = 0^k] \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq \mu(0^k) \frac{1 - \epsilon (1 + \alpha ^k)}{k} \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right)
+\end{equation*}
+Using Part 2
+\begin{equation*}
+    \mu(0^k) \frac{1 - \epsilon (1 + \alpha ^k)}{k} \mathbb{E}_{\pi \sim x = 0^k| \pi \in A_{i}^\complement} \left( D\left(\frac{X_i | \pi, X_{-i} = 0^{k-1}}{X_i | X_{-i}} \right) \right) \geq \mu(0^k) \frac{1 - \epsilon (1 + \alpha ^k)}{k} \frac{\mu(1)}{4}
+\end{equation*}
+Since $\mu(1) = n^{-\frac{1}{k}}$ and $\mu(0) = 1 - n^{-\frac{1}{k}}$
+\begin{equation*}
+    \mu(0^k) \frac{1 - \epsilon (1 + \alpha ^k)}{k} \frac{\mu(1)}{4} = \left (1 - n^{-\frac{1}{k}} \right)^{k} \cdot \frac{1 - \epsilon (1 + \alpha ^k)}{k} \cdot \frac{n^{-\frac{1}{k}}}{4} \in \Omega\left(\frac{n^{-\frac{1}{k}}}{k}\right)
+\end{equation*}
+\end{proof}
+\section{Extra}
+\paragraph{Binary Distribution}
+Let us consider a specific interesting distribution for $n = 2^{k-1}$. We think of $X_i \subseteq \{0, 1, ... , n-1\} $ \newline
+For $i \in [k-1]$
+  \[
+    X_i=\left\{
+                \begin{array}{ll}
+                  \{0 \leq m \leq n-1 \| m_{i-1} = 0\} \text{ w.p 0.5} \\
+                  \{0 \leq m \leq n-1 \| m_{i-1} = 1\} \text{ w.p 0.5}
+                \end{array}
+              \right.
+  \]
+and for $i = k$
+  \[
+    X_k=\left\{
+                \begin{array}{ll}
+                  \{0 \leq m \leq n-1 \| \underset{i=1}{\overset{k-1}{\oplus}} m_i = 0\} \text{ w.p 0.5} \\
+                  \{0 \leq m \leq n-1 \| \underset{i=1}{\overset{k-1}{\oplus}} m_i = 1\} \text{ w.p 0.5}
+                \end{array}
+              \right.
+  \]
+where $m_i$ is the $i$'th bit of m in binary representation. ($m_i \mathrel{\mathop:}= ( m \mathop{\&} 2^{i-1} ) \gg i-1 $). \\
+Let us pay attention for some simple properties. First of all $\forall_i |X_i| = \frac{n}{2}$. Moreover, it does not matter if we permute the players, for $i < k, |A_i| = 0.5|A_{i-1}|$ and generally for $i < k, |A_i| = 2^{k-1-i}$. $\Pr[DISJ] = 0.5$. The thing is that this distribution has a little entropy ($k$).
+\section{Appendix}
 
 
 \subsection{TODO}
