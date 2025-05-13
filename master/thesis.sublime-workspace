@@ -1,0 +1,859 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"simpl",
+				"simplies_"
+			],
+			[
+				"phi",
+				"varphi	\\varphi"
+			],
+			[
+				"var",
+				"varphi	\\varphi"
+			],
+			[
+				"em",
+				"emptyset"
+			],
+			[
+				"Pa",
+				"PacketData"
+			],
+			[
+				"lem",
+				"lemref"
+			],
+			[
+				"emp",
+				"emptyset"
+			],
+			[
+				"pa",
+				"paragraph"
+			],
+			[
+				"ma",
+				"mathcal"
+			],
+			[
+				"math",
+				"mathcal"
+			],
+			[
+				"bt",
+				"btuple"
+			],
+			[
+				"deter",
+				"determinizable"
+			],
+			[
+				"Forward",
+				"ForwardFunc"
+			],
+			[
+				"chan",
+				"changebar"
+			],
+			[
+				"sq",
+				"sqsubseteq"
+			],
+			[
+				"Si",
+				"SinglePort_i"
+			],
+			[
+				"sqs",
+				"sqsubseteq"
+			],
+			[
+				"pro",
+				"progressing"
+			],
+			[
+				"pr",
+				"progressing"
+			],
+			[
+				"Ab",
+				"AbsPackets"
+			],
+			[
+				"For",
+				"ForwardFunc"
+			],
+			[
+				"Forwar",
+				"ForwardRel"
+			],
+			[
+				"Ord",
+				"OrderMatters"
+			],
+			[
+				"del",
+				"delta_m"
+			],
+			[
+				"Sin",
+				"SinglePort"
+			],
+			[
+				"item",
+				"itemize"
+			],
+			[
+				"ite",
+				"itemize"
+			],
+			[
+				"S",
+				"SinglePort"
+			],
+			[
+				"Sta",
+				"StateData"
+			],
+			[
+				"de",
+				"destination"
+			],
+			[
+				"sing",
+				"SinglePort"
+			],
+			[
+				"com",
+				"complexityLowerBounds"
+			],
+			[
+				"sy",
+				"SymbToFiniteState"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 104.0,
+		"last_filter": "open Note",
+		"selected_items":
+		[
+			[
+				"open Note",
+				"Evernote: Open Evernote Note"
+			],
+			[
+				"new note",
+				"Evernote: New empty note"
+			],
+			[
+				"open eve",
+				"Evernote: Open Evernote Note"
+			],
+			[
+				"git diff",
+				"Git: Diff All Files"
+			],
+			[
+				"status",
+				"Git: Status"
+			],
+			[
+				"commit",
+				"Git: Commit"
+			],
+			[
+				"git add",
+				"Git: Add All"
+			],
+			[
+				"add",
+				"Git: Add..."
+			],
+			[
+				"comm",
+				"Git: Commit"
+			],
+			[
+				"commi",
+				"Git: Commit"
+			],
+			[
+				"git stat",
+				"Git: Status"
+			],
+			[
+				"stat",
+				"Git: Status"
+			],
+			[
+				"diuff",
+				"Git: Diff Current File"
+			],
+			[
+				"sta",
+				"Git: Status"
+			],
+			[
+				"diff",
+				"Git: Diff Current File"
+			],
+			[
+				"statu",
+				"Git: Status"
+			],
+			[
+				"git commit",
+				"Git: Commit"
+			],
+			[
+				"git status",
+				"Git: Status"
+			],
+			[
+				"git comm",
+				"Git: Commit"
+			],
+			[
+				"git add ",
+				"Git: Add All"
+			],
+			[
+				"upper",
+				"Convert Case: Upper Case"
+			],
+			[
+				"Status",
+				"Git: Status"
+			],
+			[
+				"git diff all",
+				"Git: Diff All Files (Ignore Whitespace)"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"remove p",
+				"Package Control: Remove Package"
+			],
+			[
+				"packa contr remoe",
+				"Package Control: Remove Package"
+			],
+			[
+				"open note",
+				"Evernote: Open Evernote Note"
+			],
+			[
+				"git s",
+				"Git: Status"
+			],
+			[
+				"evernote open",
+				"Evernote: Open Evernote Note"
+			],
+			[
+				"open",
+				"Evernote: Open Evernote Note"
+			],
+			[
+				"git commi",
+				"Git: Commit"
+			],
+			[
+				"delte note",
+				"Evernote: Delete Note"
+			],
+			[
+				"amend",
+				"Git: Amend Commit"
+			],
+			[
+				"git push",
+				"Git: Push"
+			],
+			[
+				"evernote delete",
+				"Evernote: Delete Note"
+			],
+			[
+				"evernote",
+				"Evernote: Open Evernote Note"
+			],
+			[
+				"everno open",
+				"Evernote: Open Evernote Note"
+			],
+			[
+				"new not",
+				"Evernote: New empty note"
+			],
+			[
+				"new Note",
+				"Evernote: New empty note"
+			],
+			[
+				"evenote new note",
+				"Evernote: Create New Notebook"
+			],
+			[
+				"evernote note",
+				"Evernote: Search Note"
+			],
+			[
+				"coq",
+				"SublimeCoq: Run"
+			],
+			[
+				"git c",
+				"Git: Commit"
+			],
+			[
+				"git add all",
+				"Git: Add All"
+			],
+			[
+				"git statu",
+				"Git: Status"
+			],
+			[
+				"latex ",
+				"LaTeXTools: Jump to PDF"
+			],
+			[
+				"git ignore",
+				"Git: Update Project Ignored Files"
+			],
+			[
+				"brows",
+				"Preferences: Browse Packages"
+			],
+			[
+				"package control install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/kalevalp/Documents/university/tau-thesis-template"
+	],
+	"file_history":
+	[
+		"/C/Users/kalevalp/Documents/university/tau-thesis-template/macros.tex",
+		"/C/Users/kalevalp/Documents/university/tau-thesis-template/ut-thesis.cls",
+		"/C/Users/kalevalp/Documents/university/tau-thesis-template/thesis.tex",
+		"/C/Users/kalevalp/Documents/university/tau-thesis-template/refs.bib",
+		"/C/Users/kalevalp/Documents/university/tau-thesis-template/acknowledgements.tex",
+		"/C/Users/kalevalp/Documents/university/tau-thesis-template/abstract.tex",
+		"/C/Users/kalevalp/Documents/university/tau-thesis-template/formal.tex",
+		"/C/Users/kalevalp/Documents/university/tau-thesis-template/complexity-upper.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/refs.bib",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/intro.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/formal.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/macros.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/thesis.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/complexity-upper.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/acknowledgements.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/classes.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/thesis.sublime-project",
+		"/C/Users/kalevalp/AppData/Roaming/Sublime Text 3/Packages/User/LaTeXTools.sublime-settings",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis orr/acknowledgements.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/notes.txt",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/related.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/ComplexityOfAMDL.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/complexity-lower.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/progressing-np.tex",
+		"/C/Users/kalevalp/Documents/tmp/hebexample-1.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/classes.aux",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/complexity-lower.aux",
+		"/C/Users/kalevalp/AppData/Roaming/Sublime Text 3/Packages/EasyDiff/easy_diff.sublime-settings",
+		"/C/Users/kalevalp/Documents/gPodder/Logs/2016-05-03.log",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/kalev-thesis-draft-5-final.pdf",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/abstract-semantics.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/fifo-undecidability.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/kalev-thesis-draft-2.pdf",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/snapl_intro.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/overview2.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/old/intro-short.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/old/formal3.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/old/formal2.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/old/classes.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/old/amdl-classes.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/justification.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/intro-overview.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/abstract.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/abstract2.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/amdl.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/classes-fsm.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/classes2.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/formal4.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/fsm2.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/plmw-at-pldi-2016--scholarship-submission.txt",
+		"/C/Windows/Logs/CBS/CBS.log",
+		"/C/Users/kalevalp/Downloads/Deutsch15-5-2008.tex",
+		"/C/Users/kalevalp/AppData/Roaming/Sublime Text 3/Packages/Git/Git.sublime-settings",
+		"/C/Users/kalevalp/AppData/Roaming/Sublime Text 3/Packages/User/Sublime-Coq.sublime-settings",
+		"/C/Users/kalevalp/AppData/Roaming/Sublime Text 3/Packages/Sublime-Coq/Sublime-Coq.sublime-settings",
+		"/C/Users/kalevalp/AppData/Roaming/Sublime Text 3/Packages/User/Evernote.sublime-settings",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/thesis.bbl",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/benchmarks.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/classes-symbolic.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas16submission-cameraready/classes-fsm-short.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/classes-symbolic.tex",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/ut-thesis.cls",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/kalev-thesis-draft-1.pdf",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/thesis.pdf",
+		"/C/Users/kalevalp/Desktop/README.md",
+		"/C/Users/kalevalp/AppData/Roaming/Sublime Text 3/Packages/Evernote/README.md",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/thesis.log",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/unordered-increasing.tex",
+		"/C/Users/kalevalp/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/kalevalp/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/.gitignore",
+		"/C/Users/kalevalp/AppData/Roaming/Sublime Text 3/Packages/User/Distraction Free.sublime-settings",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/thesis-tex/thesis.sublime-workspace",
+		"/C/Users/kalevalp/AppData/Roaming/Sublime Text 3/Packages/LaTeXTools/README.markdown",
+		"/C/Users/kalevalp/Documents/university/msc/thesis/tacas2016-scholarship-request"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			"C:\\Users\\kalevalp\\Documents\\university\\msc\\thesis\\thesis-tex,*.tex,C:\\Users\\kalevalp\\Documents\\university\\msc\\thesis\\tacas16submission-cameraready",
+			"C:\\Users\\kalevalp\\Documents\\university\\msc\\thesis\\thesis-tex,*.tex",
+			"C:\\Users\\kalevalp\\Documents\\university\\msc\\thesis\\thesis-tex\\*.tex",
+			"C:\\Users\\kalevalp\\Documents\\university\\msc\\thesis\\thesis-tex",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"sub",
+			"logicblox",
+			"CC79",
+			"\\by",
+			"xspace",
+			"\\it",
+			"\\ie",
+			"proof",
+			"lemma",
+			"\\scalemath",
+			"os",
+			"equiv",
+			"^\\mathcal{P}",
+			"|S|",
+			"max",
+			"delta_m",
+			"max",
+			"\\implies",
+			"implies",
+			"imply",
+			"\\ph",
+			"\\phi",
+			"\\emptyset",
+			"\\empty",
+			"\\phi",
+			"build",
+			"The complexity upper bounds we present are under the assumption ",
+			"<<<<",
+			"simple",
+			"EXPSPACE",
+			"}).",
+			"we conside",
+			"distinguish ",
+			"default",
+			"trusted",
+			"peterson",
+			"\\math",
+			"_j",
+			"_ח",
+			"int",
+			"that",
+			"is bounded b",
+			"R_i",
+			"sigma",
+			"Sigma",
+			"fig",
+			"figref",
+			"fig:",
+			"fig",
+			"in the following",
+			"shall",
+			"in the following",
+			"for ever",
+			"R_i",
+			"bounded by",
+			"delta",
+			"<",
+			">",
+			"<",
+			"AMDLIffFiniteState",
+			"inclusion",
+			"contain",
+			"diff --",
+			"-diff",
+			"--diff",
+			"diff",
+			"modeling",
+			"behavior",
+			"transition",
+			"ForwardRel",
+			"forw",
+			"modeled",
+			"under the FIFO semantics",
+			"add figure",
+			"todo",
+			"TODO\nTODO",
+			"arrive to",
+			"arrive at",
+			"modelling",
+			"modeling",
+			"behavior",
+			"forms",
+			"two followin",
+			"definition",
+			"remark",
+			"lemref",
+			"FiniteStateToSymb",
+			"forwa",
+			"forwad",
+			"url",
+			"ForwardFunc",
+			"Therefore",
+			"therefore",
+			"lemma",
+			"AMDLIffFiniteState",
+			"higman",
+			"classes-symbolic",
+			"\\todo",
+			"\\item Constant equality ($v=d$). Consume the dimension of value $d$ for variable $v$.\n",
+			"fireable",
+			"firable",
+			"todo",
+			"h_0",
+			"input",
+			"todo",
+			"todo\\",
+			"todo",
+			"\\\\sq.*seteq",
+			"\\sq.*seteq",
+			"\\sqsupseteq",
+			"\\include",
+			"\\input",
+			"m_{p,\\SinglePort}",
+			"m_{p,\\sin}",
+			"m_{R,e}",
+			"m_{p,pr}",
+			"h_P",
+			"\\input",
+			"include",
+			"diff --git",
+			"\\input",
+			"\\include",
+			"\\input",
+			"input",
+			"lemma",
+			"\\tconnected",
+			"\\begin{tabbing}",
+			"Ex:proxy"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"behaviour",
+			"\\mathit{PacketData}"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 146.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 100.0
+	},
+	"output.latextools":
+	{
+		"height": 124.0
+	},
+	"output.markdown":
+	{
+		"height": 100.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 100.0
+	},
+	"pinned_build_system": "",
+	"project": "thesis.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"the",
+				"thesis.tex"
+			],
+			[
+				"mac",
+				"macros.tex"
+			],
+			[
+				"re",
+				"refs.bib"
+			],
+			[
+				"macro",
+				"macros.tex"
+			],
+			[
+				"thesis",
+				"thesis.tex"
+			],
+			[
+				"upper",
+				"complexity-upper.tex"
+			],
+			[
+				"thes",
+				"thesis.tex"
+			],
+			[
+				"ack",
+				"acknowledgements.tex"
+			],
+			[
+				"macros",
+				"macros.tex"
+			],
+			[
+				"ackn",
+				"acknowledgements.tex"
+			],
+			[
+				"upp",
+				"complexity-upper.tex"
+			],
+			[
+				"",
+				"complexity-upper.tex"
+			],
+			[
+				"compl",
+				"complexity-upper.tex"
+			],
+			[
+				"thesi",
+				"thesis.tex"
+			],
+			[
+				"ac",
+				"acknowledgements.tex"
+			],
+			[
+				"note",
+				"notes.txt"
+			],
+			[
+				"notes",
+				"notes.txt"
+			],
+			[
+				"refs.",
+				"refs.bib"
+			],
+			[
+				"classe",
+				"classes.tex"
+			],
+			[
+				"formal",
+				"formal.tex"
+			],
+			[
+				"class",
+				"classes.tex"
+			],
+			[
+				"lowe",
+				"complexity-lower.tex"
+			],
+			[
+				"the.te",
+				"thesis.tex"
+			],
+			[
+				"thestex",
+				"thesis.tex"
+			],
+			[
+				"thesitex",
+				"thesis.tex"
+			],
+			[
+				"thesis.tex",
+				"thesis.tex"
+			],
+			[
+				"forma",
+				"formal.tex"
+			],
+			[
+				"maco",
+				"macros.tex"
+			],
+			[
+				"classes",
+				"classes.tex"
+			],
+			[
+				"abstra",
+				"abstract-semantics.tex"
+			],
+			[
+				"iunde",
+				"fifo-undecidability.tex"
+			],
+			[
+				"undeci",
+				"fifo-undecidability.tex"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 234.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
