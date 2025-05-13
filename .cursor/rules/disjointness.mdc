@@ -1,0 +1,42 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Communication Complexity Thesis Work
+
+## Key Documents
+- Main proof draft: @Disj-CC.pdf
+- Related paper: @stoc21.pdf
+- LaTeX source: @Disj-CC.tex
+
+## Project Structure
+- `thesis-work/` - Contain the main working directory in which we will write the thesis document
+- `examples/` - Contains example code and proofs
+
+## Important Notes
+- The thesis focuses on Communication Complexity
+- Latex files sit in `thesis-work/`
+- Build system uses latexmk (evidenced by .fdb_latexmk file)
+
+## Common Tasks
+1. Editing the main thesis:
+   - Edit different tex files in `thesis-work\` using the ideas from `Disj-CC.tex`
+   - Build using latexmk
+   - Check output in `thesis-work\thesis.pdf`
+
+2. Referencing the STOC paper:
+   - Use `stoc21.pdf` for reference
+   - Cite in LaTeX using appropriate citation key
+
+## Build Process
+The thesis is built using latexmk, which generates several auxiliary files:
+- `.aux` - Auxiliary information
+- `.log` - Build log
+- `.out` - PDF bookmarks and links
+- `.fls` - File list
+- `.fdb_latexmk` - latexmk database
+
+## Version Control
+- Git repository initialized
+- `.gitignore` configured for LaTeX build artifacts
