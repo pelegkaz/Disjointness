@@ -1,0 +1,74 @@
+\documentclass[11pt]{article}
+
+% Encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% Page layout
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% Math and environments
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+
+% Lists and colors
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+
+% Project macros and theorem environments
+\input{macros}
+
+\title{Protocol Compression for Similar Known Distribution}
+\author{Peleg}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+abstract 
+\end{abstract}
+
+\section{Introduction}
+intro
+
+\begin{definition}
+A \emph{code} is a mapping from messages to strings over an alphabet.
+\end{definition}
+
+\begin{theorem}
+This is a sample theorem environment.
+\end{theorem}
+
+\begin{proof}
+This is a placeholder proof.
+\begin{align*}
+    I 
+    &= I(\Pi; X \mid Y) + I(\Pi; Y \mid X) \\
+    &= \mathbb{E}_{(x, y) \sim \mu} 
+       \left[ D\big( \pi_{xy} \,\|\, \pi_y \big)
+            + D\big( \pi_{xy} \,\|\, \pi_x \big) \right] \\
+    &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
+       \left[
+          \log \frac{\pi_{xy}(\ell)}{\pi_y(\ell)}
+          + \log \frac{\pi_{xy}(\ell)}{\pi_x(\ell)}
+       \right] \\
+    &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
+       \left[
+          \log \frac{p_x(\ell)}{q_y(\ell)}
+          + \log \frac{p_y(\ell)}{q_x(\ell)}
+       \right].
+\end{align*}
+\end{proof}
+
+\bibliographystyle{alpha}
+\bibliography{refs}
+
+\end{document}
+

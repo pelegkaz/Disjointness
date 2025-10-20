@@ -1,0 +1,29 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.run.xml
+*.pdfsync
+*.nav
+*.snm
+*.vrb
+*.dvi
+*.xdv
+
+# Editors and OS
+.DS_Store
+*.swp
+*.swo
+
+# Build directories
+_build/
+latex.out/
+auto/
+
