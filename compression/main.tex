@@ -39,7 +39,42 @@ abstract
 intro
 
 \begin{definition}
-A \emph{code} is a mapping from messages to strings over an alphabet.
+Notation and transcript distributions for a two-party public-coin protocol:
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+  \item $x$ and $y$ denote Alice's and Bob's inputs, respectively. A complete transcript is denoted by $\ell$.
+  \item Let $\Pi$ be the transcript random variable. Define
+  \[
+    \pi_{xy}(\ell) \coloneqq \Pr[\Pi=\ell \mid X=x, Y=y].
+  \]
+  For alternating protocols, this factors as
+  \[
+    \pi_{xy}(\ell) = p_x(\ell)\, p_y(\ell),
+  \]
+  where $p_x(\ell)$ aggregates the probabilities of Alice's messages in $\ell$ conditioned on $X=x$ (and the public randomness), and $p_y(\ell)$ aggregates the probabilities of Bob's messages in $\ell$ conditioned on $Y=y$ (Alice estimation on Bob's messages).
+  \item The $x$-marginal transcript distribution is
+  \[
+    \pi_x(\ell) \coloneqq p_x(\ell)\, q_x(\ell),
+  \]
+  where $q_x(\ell)$ is the probability of Bob's messages in $\ell$ under the conditional distribution $Y\mid X=x$. Similarly,
+  \[
+    \pi_y(\ell) \coloneqq p_y(\ell)\, q_y(\ell),
+  \]
+  where $q_y(\ell)$ is the probability of Alice's messages in $\ell$ under $X\mid Y=y$ (Bob's estimation on Alice's messages given only his input).
+\end{itemize}
+
+Similar-known-distribution setting: the players do not know the true input distribution, but they know some reference transcript distributions. We write these as $\tilde{\pi}_x$ and $\tilde{\pi}_y$, which share the same local factors $p_x$ and $p_y$:
+\[
+  \tilde{\pi}_x(\ell) = p_x(\ell)\, \tilde{q}_x(\ell)
+  \quad\text{and}\quad
+  \tilde{\pi}_y(\ell) = p_y(\ell)\, \tilde{q}_y(\ell).
+\]
+
+We measure the difference between the known distribution and the original distribution using Kullback--Leibler divergence $D(\cdot\,\|\,\cdot)$ and define
+\[
+  D_x \coloneqq D\big(\tilde{\pi}_x \,\|\, \pi_x\big),\qquad
+  D_y \coloneqq D\big(\tilde{\pi}_y \,\|\, \pi_y\big),\qquad
+  D \coloneqq D_x + D_y.
+\]
 \end{definition}
 
 \begin{theorem}
@@ -55,15 +90,47 @@ This is a placeholder proof.
        \left[ D\big( \pi_{xy} \,\|\, \pi_y \big)
             + D\big( \pi_{xy} \,\|\, \pi_x \big) \right] \\
     &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
+        \left[
+            \log \frac{\pi_{xy}(\ell)}{\pi_y(\ell)}
+            + \log \frac{\pi_{xy}(\ell)}{\pi_x(\ell)}
+        \right] \\
+    &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
        \left[
-          \log \frac{\pi_{xy}(\ell)}{\pi_y(\ell)}
-          + \log \frac{\pi_{xy}(\ell)}{\pi_x(\ell)}
+          \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_y}(\ell)}
+          + \log \frac{\tilde{\pi_y}(\ell)}{\pi_y(\ell)}
+          + \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_x}(\ell)}
+          + \log \frac{\tilde{\pi_x}(\ell)}{\pi_x(\ell)}
        \right] \\
     &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
        \left[
-          \log \frac{p_x(\ell)}{q_y(\ell)}
-          + \log \frac{p_y(\ell)}{q_x(\ell)}
-       \right].
+          \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_y}(\ell)}
+          + \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_x}(\ell)}
+          - \log \frac{\pi_y(\ell)}{\tilde{\pi_y}(\ell)}
+          - \log \frac{\pi_x(\ell)}{\tilde{\pi_x}(\ell)}
+       \right] \\
+    &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
+       \left[
+          \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_y}(\ell)}
+          + \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_x}(\ell)}
+        \right]
+          - D_y
+          - D_x
+        \\       
+    &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
+       \left[
+          \log \frac{p_x(\ell)}{\tilde{q}_y(\ell)}
+          + \log \frac{p_y(\ell)}{\tilde{q}_x(\ell)}
+       \right]
+       - D_y
+       - D_x .
+\end{align*}
+
+\begin{align*}
+    I + D_y + D_x = \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
+    \left[
+       \log \frac{p_x(\ell)}{\tilde{q}_y(\ell)}
+       + \log \frac{p_y(\ell)}{\tilde{q}_x(\ell)}
+    \right]
 \end{align*}
 \end{proof}
 

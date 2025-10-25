@@ -27,3 +27,23 @@
 % Tighter lists
 \setlist{nosep}
 
+
+% Visual styling for the definition environment (no content changes)
+\usepackage{mdframed}
+\mdfdefinestyle{definitionstyle}{
+  skipabove=8pt,
+  skipbelow=8pt,
+  linewidth=0.8pt,
+  linecolor=blue!50!black,
+  backgroundcolor=blue!3,
+  leftline=true,
+  rightline=false,
+  topline=false,
+  bottomline=false,
+  innerleftmargin=8pt,
+  innerrightmargin=8pt,
+  innertopmargin=6pt,
+  innerbottommargin=6pt,
+  roundcorner=3pt
+}
+\surroundwithmdframed[style=definitionstyle]{definition}
