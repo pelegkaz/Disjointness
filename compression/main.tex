@@ -25,7 +25,7 @@
 \input{macros}
 
 \title{Protocol Compression for Similar Known Distribution}
-\author{Peleg}
+\author{Peleg Kazaz}
 \date{\today}
 
 \begin{document}
@@ -36,7 +36,6 @@ abstract
 \end{abstract}
 
 \section{Introduction}
-intro
 
 \begin{definition}
 Notation and transcript distributions for a two-party public-coin protocol:
@@ -78,61 +77,94 @@ We measure the difference between the known distribution and the original distri
 \end{definition}
 
 \begin{theorem}
-This is a sample theorem environment.
+Let $\pi$ be a public-coin two-party protocol on inputs $(X,Y) \sim \mu$ and let $I \coloneqq IC_{\mu}(\pi)$. Assume the players have access to a reference distribution $\tilde{\mu}$ that induces transcript marginals $\tilde{\pi}_x, \tilde{\pi}_y$ with
+\[
+  D_x \coloneqq D(\tilde{\pi}_x \,\|\, \pi_x),\qquad
+  D_y \coloneqq D(\tilde{\pi}_y \,\|\, \pi_y),\qquad
+  D \coloneqq D_x + D_y.
+\]
+Then for every $\varepsilon > 0$, there exists a protocol $\tau$ that $\varepsilon$-simulates $\pi$ under $\mu$ and has communication
+\[
+  \norm{\tau} \le 2^{\,O\left(\frac{I + D}{\varepsilon}\right)}.
+\]
 \end{theorem}
 
 \begin{proof}
-This is a placeholder proof.
+We start by relating the distance between Alice and Bob's estimations on each other's messages to the information complexity of $\pi$ and the divergence $D$ between the known (reference) distribution and the true distribution. The key is that if both the information cost $I$ and the total divergence $D$ are small, then the players estimation errors are also small. \\
+
+Directly from definitions:
+\[
+I = I(\Pi; X \mid Y) + I(\Pi; Y \mid X) = \mathbb{E}_{(x,y)\sim\mu} \left[ D\big( \pi_{xy} \,\|\, \pi_y \big) + D\big( \pi_{xy} \,\|\, \pi_x \big) \right] = \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} \left[ \log \frac{\pi_{xy}(\ell)}{\pi_y(\ell)} + \log \frac{\pi_{xy}(\ell)}{\pi_x(\ell)} \right].
+\]
+
+Integrating the known distribution into the estimation error:
 \begin{align*}
-    I 
-    &= I(\Pi; X \mid Y) + I(\Pi; Y \mid X) \\
-    &= \mathbb{E}_{(x, y) \sim \mu} 
-       \left[ D\big( \pi_{xy} \,\|\, \pi_y \big)
-            + D\big( \pi_{xy} \,\|\, \pi_x \big) \right] \\
-    &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
-        \left[
-            \log \frac{\pi_{xy}(\ell)}{\pi_y(\ell)}
-            + \log \frac{\pi_{xy}(\ell)}{\pi_x(\ell)}
-        \right] \\
+    I
     &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
        \left[
-          \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_y}(\ell)}
-          + \log \frac{\tilde{\pi_y}(\ell)}{\pi_y(\ell)}
-          + \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_x}(\ell)}
-          + \log \frac{\tilde{\pi_x}(\ell)}{\pi_x(\ell)}
+          \log \frac{\pi_{xy}(\ell)}{\tilde{\pi}_y(\ell)}
+          + \log \frac{\tilde{\pi}_y(\ell)}{\pi_y(\ell)}
+          + \log \frac{\pi_{xy}(\ell)}{\tilde{\pi}_x(\ell)}
+          + \log \frac{\tilde{\pi}_x(\ell)}{\pi_x(\ell)}
        \right] \\
     &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
        \left[
-          \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_y}(\ell)}
-          + \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_x}(\ell)}
-          - \log \frac{\pi_y(\ell)}{\tilde{\pi_y}(\ell)}
-          - \log \frac{\pi_x(\ell)}{\tilde{\pi_x}(\ell)}
-       \right] \\
-    &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
-       \left[
-          \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_y}(\ell)}
-          + \log \frac{\pi_{xy}(\ell)}{\tilde{\pi_x}(\ell)}
-        \right]
+          \log \frac{\pi_{xy}(\ell)}{\tilde{\pi}_y(\ell)}
+          + \log \frac{\pi_{xy}(\ell)}{\tilde{\pi}_x(\ell)}
+       \right]
           - D_y
-          - D_x
-        \\       
+          - D_x \\
     &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
        \left[
           \log \frac{p_x(\ell)}{\tilde{q}_y(\ell)}
           + \log \frac{p_y(\ell)}{\tilde{q}_x(\ell)}
        \right]
-       - D_y
-       - D_x .
+       - D \,.
 \end{align*}
 
+Finally,
 \begin{align*}
-    I + D_y + D_x = \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
+    I + D 
+    &= \mathbb{E}_{x,y,\ell \sim \pi_{x,y}} 
     \left[
        \log \frac{p_x(\ell)}{\tilde{q}_y(\ell)}
        + \log \frac{p_y(\ell)}{\tilde{q}_x(\ell)}
-    \right]
+    \right] \,.
 \end{align*}
+
+\begin{lemma}
+Define the set of transcripts $B_{\varepsilon} \coloneqq \{ \, \ell : p_x(\ell) > 2^{(I+D+1)/\varepsilon} \, \tilde{q}_y(\ell) \text{ or } p_y(\ell) > 2^{(I+D+1)/\varepsilon} \, \tilde{q}_x(\ell) \}$. Then $\pi_{x,y}(B_{\varepsilon}) < \varepsilon$.
+\end{lemma}
+
+\begin{proof}
+   Using Markov's inequality and the previous equation,
+   \[
+     \Pr\!\left[ \log \frac{p_x(\ell)}{\tilde{q}_y(\ell)}
+     + \log \frac{p_y(\ell)}{\tilde{q}_x(\ell)} > \frac{I + D + 1}{\varepsilon} \right]
+     \le \frac{\varepsilon \, (I + D)}{I + D + 1}
+     < \varepsilon.
+   \]
+   Since $B_{\varepsilon} \subseteq \left\{ \ell : \log \frac{p_x(\ell)}{\tilde{q}_y(\ell)} + \log \frac{p_y(\ell)}{\tilde{q}_x(\ell)} > \tfrac{I + D + 1}{\varepsilon} \right\}$, the claim follows.
 \end{proof}
+
+\begin{remark}[Interpretation of the lemma]
+For most transcripts, if a message is unlikely to be sent by Alice, then Bob's estimate for this message is also small. Equivalently, except on an $\varepsilon$-fraction of transcripts, the players' estimations of each other's messages are close to the true behavior.
+\end{remark}
+\end{proof}
+
+\paragraph{Discussion.}
+What is $D$? In this work we measure the discrepancy via
+$D \coloneqq D_x + D_y = D(\tilde{\pi}_x\,\|\,\pi_x) + D(\tilde{\pi}_y\,\|\,\pi_y)$,
+which compares the reference transcript marginals to the true ones. A seemingly natural alternative, $D(\mu\,\|\,\tilde{\mu})$, is generally unsuitable.
+
+\begin{example}[Why $D(\mu\,\|\,\tilde{\mu})$ is inadequate]
+Consider distributions $\mu$ and $\tilde{\mu}$ over inputs with $X=Y$  (under both). 
+In this case, the modification of the original distribution is not disturbing the player's ability to estimate each other's messages.
+When observing the divergences, we pay attention that.
+The conditional distributions $Y\mid X$ and $X\mid Y$ are constant in both the original and the modified distributions, so the induced factors agree and $D = D_x + D_y = 0$.
+This fact matches the intuition.
+However, the divergence $D(\mu\,\|\,\tilde{\mu})$ can be arbitrarily large (even infinite). Thus $D(\mu\,\|\,\tilde{\mu})$ does not capture the relevant notion of discrepancy for compression.
+\end{example}
 
 \bibliographystyle{alpha}
 \bibliography{refs}
