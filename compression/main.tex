@@ -150,19 +150,23 @@ Define the set of transcripts $B_{\varepsilon} \coloneqq \{ \, \ell : p_x(\ell) 
 \begin{remark}[Interpretation of the lemma]
 For most transcripts, if a message is unlikely to be sent by Alice, then Bob's estimate for this message is also small. Equivalently, except on an $\varepsilon$-fraction of transcripts, the players' estimations of each other's messages are close to the true behavior.
 \end{remark}
+
+From this point, the protocol follows the original proof. The players interpret the public randomness as a list of $(\ell, \alpha_i, \beta_i)$ triples where $\ell$ is a transcript and $\alpha_i, \beta_i \in [0,1]$.
+Each player defines his set of candidates, transcripts that matches his estimated distribution for the other player.
+In order to find a common candidate, the players agree on a list of hash functions, and Alice sends the random hashes of the elements to Bob. 
 \end{proof}
 
 \paragraph{Discussion.}
 What is $D$? In this work we measure the discrepancy via
 $D \coloneqq D_x + D_y = D(\tilde{\pi}_x\,\|\,\pi_x) + D(\tilde{\pi}_y\,\|\,\pi_y)$,
-which compares the reference transcript marginals to the true ones. A seemingly natural alternative, $D(\mu\,\|\,\tilde{\mu})$, is generally unsuitable.
+which compares the reference transcript marginals to the true ones. One might wonder whether $D(\mu\,\|\,\tilde{\mu})$ is suitable as well, but the answer is no.
 
 \begin{example}[Why $D(\mu\,\|\,\tilde{\mu})$ is inadequate]
-Consider distributions $\mu$ and $\tilde{\mu}$ over inputs with $X=Y$  (under both). 
-In this case, the modification of the original distribution is not disturbing the player's ability to estimate each other's messages.
-When observing the divergences, we pay attention that.
-The conditional distributions $Y\mid X$ and $X\mid Y$ are constant in both the original and the modified distributions, so the induced factors agree and $D = D_x + D_y = 0$.
-This fact matches the intuition.
+Consider distributions $\mu$ and $\tilde{\mu}$ over inputs where $X=Y$  (under both). 
+In this case, each player knows exactly the other's input, therefore the distribution over its messages $q_x = p_y$. 
+Although the distributions could be different, the conditional distributions $Y\mid X$ and $X\mid Y$ are constant in both distributions.
+Therefore, every protocol can be easily compressed.
+When observing the different divergences, we notice that the induced factors agree and $D = D_x + D_y = 0$ as expected.
 However, the divergence $D(\mu\,\|\,\tilde{\mu})$ can be arbitrarily large (even infinite). Thus $D(\mu\,\|\,\tilde{\mu})$ does not capture the relevant notion of discrepancy for compression.
 \end{example}
 
